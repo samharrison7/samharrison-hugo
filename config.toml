@@ -1,0 +1,11 @@
+title = "Sam Harrison"
+baseURL = "https://example.com"
+languageCode = "en-us"
+theme = "hyde"
+
+[Menus]
+  main = [
+    {Name = "Test", URL = "#"},
+    {Name = "Another", URL = "#"}
+  ]
+
