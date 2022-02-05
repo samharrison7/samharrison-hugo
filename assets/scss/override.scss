@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@import 'myvariables';
+@import 'mybase';
+@import 'mytypography';
+@import 'mycomponents';
+@import 'myutilities';
+
+/* Header avatar */
+img.header-avatar {
+    width: 3rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+.navigation .navigation-title {
+    vertical-align: middle;
+}
+
+/* Index */
+.centered .about {
+    max-width: 70rem;
+    
+    h1 {
+        font-size: 4rem;
+        margin-bottom: 2rem;
+    }
+    h2 {
+        font-weight: 400;
+        font-size: 2.2rem;
+    }
+    ul li a {
+        color: $color-dark-gray;
+    }
+}
+
+/* Post metadata */
+.content .post .post-meta {
+    color: $color-dark-gray;
+    a {
+        color: $color-dark-gray;
+    }
+    .tags .tag {
+        background-color: $color-gray;
+        a {
+            color: $color-dark-gray;
+        }
+    }
+}
+

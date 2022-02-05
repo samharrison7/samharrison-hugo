@@ -1,0 +1,10 @@
+body {
+    background-color: #fff; 
+}
+hr {
+    border: 2px solid $color-light-gray;
+}
+
+.colorscheme-dark hr {
+    border-color: $color-inverted-light-gray;
+}

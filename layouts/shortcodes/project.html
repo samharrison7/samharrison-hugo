@@ -1,0 +1,17 @@
+<div class="project media">
+    {{ with .Get "img" }}
+        <span class="media-img">
+            <img src="{{ . }}"> 
+        </span>
+    {{ end }}
+    <span class="media-body">
+        <h4>{{ .Get "title" }}</h4>
+        <p>{{ .Inner | markdownify }}</p>
+        <div class="meta">
+            {{ with .Get "website" }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}
+            {{ with .Get "repo" }}<span class="item"><i class="fa fa-fw fa-github"></i><a href="{{ . }}" target="_blank">Code</a></span>{{ end }}
+            {{ with .Get "demo" }}<span class="item"><i class="fa fa-fw fa-area-chart"></i><a href="{{ . }}" target="_blank">Demo</a></span>{{ end }}
+            {{ with .Get "app" }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">App</a></span>{{ end }}
+        </div>
+    </span>
+</div>

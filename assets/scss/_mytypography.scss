@@ -1,0 +1,30 @@
+@import 'myvariables';
+
+.content article p {
+    text-align: left;
+    text-justify: left;
+    hyphens: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    .fa {
+        color: $color-dark-gray;
+    }
+}
+
+.text-muted {
+    color: $color-dark-gray;
+}
+
+.text-green {
+    color: $color-green;
+}
+
+.highlight > div, .highlight > pre {
+    background-color: $color-light-gray !important;
+    font-family: 'Source Code Pro', monospace;
+}
+code {
+    font-family: 'Source Code Pro', monospace;
+}

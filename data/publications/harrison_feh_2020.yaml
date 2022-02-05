@@ -1,0 +1,14 @@
+title: Fortran Error Handler
+type: Software
+authors:
+  - Sam Harrison
+  - Virginie Keller
+  - Richard J Williams
+  - Michael Hutchins
+  - Stephen Lofts
+publication: Zenodo
+doi: 10.5281/zenodo.4268262
+url: https://doi.org/10.5281/zenodo.4268262
+github: samharrison7/fortran-error-handler
+date: 2021-01-02
+selected: true 
