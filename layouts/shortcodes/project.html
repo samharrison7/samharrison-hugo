@@ -6,6 +6,9 @@
     {{ end }}
     <span class="media-body">
         <h4>{{ .Get "title" }}</h4>
+        {{ with .Get "dates" }}
+            <span class="dates">{{ . }}</span>
+        {{ end }}
         <p>{{ .Inner | markdownify }}</p>
         <div class="meta">
             {{ with .Get "website" }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}

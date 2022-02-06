@@ -1,0 +1,26 @@
+{{- if isset .Site.Params "utterances" -}}
+    <div id="utterances-light">
+    {{- if and (isset .Site.Params.utterances "repo") (not (eq .Site.Params.utterances.repo "" )) (eq (.Params.disable_comments | default false) false) -}}
+    <script src="https://utteranc.es/client.js"
+        repo= "{{ .Site.Params.utterances.repo }}"
+        issue-term="{{ default "title" .Site.Params.utterances.issueTerm }}"
+        {{ if isset .Site.Params.utterances "label" }}label="{{ .Site.Params.utterances.label }}"{{ end }}
+        theme="{{ default "github-light" .Site.Params.utterances.theme }}"
+        crossorigin="anonymous"
+        async>
+    </script>
+    {{- end -}}
+    </div>
+    <div id="utterances-dark">
+    {{- if and (isset .Site.Params.utterances "repo") (not (eq .Site.Params.utterances.repo "" )) (eq (.Params.disable_comments | default false) false) -}}
+    <script src="https://utteranc.es/client.js"
+        repo= "{{ .Site.Params.utterances.repo }}"
+        issue-term="{{ default "title" .Site.Params.utterances.issueTerm }}"
+        {{ if isset .Site.Params.utterances "label" }}label="{{ .Site.Params.utterances.label }}"{{ end }}
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+    </script>
+    {{- end -}}
+    </div>
+{{- end -}}

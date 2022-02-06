@@ -18,12 +18,26 @@ In my free time, I can usually be found running, walking, climbing or cycling in
 
 ## My Projects
 
-{{< project title="FRAGMENT-MNP" website="https://ceh.ac.uk/our-science/projects/fragment-mnp" img="plastic.jpg" demo="http://fragmentmnp.samharrison.science" >}}
+{{< project title="FRAGMENT-MNP"
+    dates="October 2021 to September 2023"
+    website="https://ceh.ac.uk/our-science/projects/fragment-mnp"
+    img="plastic.jpg"
+    demo="http://fragmentmnp.samharrison.science" >}}
 I am currently leading this project, funded by the European Chemicals Industry Council's Long-Range Research Initiative (Cefic-LRI), to develop a mechanistic model of micro- and nanoplastic fragmentation in the environment. The model will be a pragmatic, open-source tool to allow stakeholders to predict how a broad variety of polymers fragment under environmentally realistic ranges of degradation (e.g. photolysis, hydrolysis and biodegradation) and mechanical stresses. Understanding fragmentation is crucial in risk assessing plastics, due to the differential uptake and transport of different sized plastic particles.
 {{< /project >}}
 
-{{< project title="NanoFASE" website="http://nanofase.eu" repo="https://github.com/nerc-ceh/nanofase" img="nanofase.png" >}}
-The goal of this €11m European Commission Horizon 2020 project was to develop an exposure assessment framework for engineered nanomaterials. Central to this was the creation of a multimedia spatiotemporal model of nanomaterial fate and speciation in the environment, which I was responsible for developing. The so-called [NanoFASE model](https://github.com/nerc-ceh/nanofase) (Nanomaterial Fate And Speciation in the Environment) represents not only the state-of-the-art in nanomaterial exposure modelling, but alse one of the most advanced exposure models in existence, offering predictions of nanomaterial concentrations with spatiotemporal resolution across terrestrial and aquatic environments. The project finished in 2019, but we are continuing to develop the model in other nano-related projects, as well as extending its domain to other chemicals.
+{{< project title="Nanomaterial Safe(r)-by-Design projects"
+    dates="March 2020 to February 2024" >}}
+The [SAbyNA](https://sabyna.eu) and [ASINA](https://www.asina-project.eu/) projects are aiming to facilitate safe-by-design nanomaterial development. In these projects, I lead on assessing what safe-by-design means for environmental exposure assessment, and how currently available environmental exposure models can be used and optimised for safe-by-design purposes.
+{{< /project >}}
+
+
+{{< project title="NanoFASE"
+    dates="August 2015 to September 2019"
+    website="http://nanofase.eu"
+    repo="https://github.com/nerc-ceh/nanofase"
+    img="nanofase.png" >}}
+The goal of this €11m European Commission Horizon 2020 project was to develop an exposure assessment framework for engineered nanomaterials. Central to this was the creation of a multimedia spatiotemporal model of nanomaterial fate and speciation in the environment, which I was responsible for developing. The so-called [NanoFASE model](https://github.com/nerc-ceh/nanofase) (Nanomaterial Fate And Speciation in the Environment) represents not only the state-of-the-art in nanomaterial exposure modelling, but alse one of the more advanced exposure models in existence, offering predictions of nanomaterial concentrations with spatiotemporal resolution across terrestrial and aquatic environments. The project finished in 2019, but we are continuing to develop the model in other nano-related projects, as well as extending its domain to other chemicals.
 {{< /project >}}
 
 

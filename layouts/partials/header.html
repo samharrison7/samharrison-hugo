@@ -1,6 +1,6 @@
 <nav class="navigation">
   <section class="container">
-    <img class="header-avatar" src="/images/sam-header.jpg">
+    <img class="header-avatar" src='{{ "images/sam-header.jpg" | relURL }}'>
     <a class="navigation-title" href="{{ .Site.BaseURL | relLangURL }}">
       {{ .Site.Title }}
     </a>

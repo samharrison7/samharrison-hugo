@@ -79,6 +79,18 @@ a.button {
     flex: 1;
 }
 
+@media only screen and (max-width: 614px) {
+    .media {
+        flex-wrap: wrap;
+    }
+    .media-img {
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 2rem;
+    }
+}
+
+
 /* Project */
 .project {
     background-color: $color-light-gray;
@@ -93,14 +105,17 @@ a.button {
         margin-top: 0;
         margin-bottom: 0;
     }
+    .dates {
+        color: $color-dark-gray
+    }
     p {
         margin: 1rem 0;
     }
     .meta .item {
-        margin-left: 1.5rem;
+        margin-right: 1.5rem;
     }
-    .meta .item:first-child {
-        margin-left: 0;
+    .meta .item:last-child {
+        margin-right: 0;
     }
     i.fa {
         margin-right: 0.3rem;
@@ -135,6 +150,8 @@ a.button {
             border-radius: 4px;
             color: $color-dark-gray;
             font-size: 1.5rem;
+            white-space: nowrap;
+            line-height: 2;
             &.green {
                 background-color: $color-green;
                 color: #fff;
@@ -178,4 +195,21 @@ a.button {
 }
 li.me {
     font-weight: bold;
+}
+
+/* Utterances */
+.utterances {
+    margin-top: 3rem;
+    max-width: 100%;
+}
+#utterances-dark {
+    display: none;
+}
+.colorscheme-dark {
+    #utterances-dark {
+        display: block;
+    }
+    #utterances-light {
+        display: none;
+    }
 }
