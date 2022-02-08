@@ -1,0 +1,74 @@
+{{ define "title" }}
+    {{- if eq .Kind "term" -}}
+        {{- i18n .Data.Plural 1 | title -}}
+        {{- print ": " -}}
+    {{- end -}}
+    {{- i18n (lower .Title) | default .Title | title }} · {{ .Site.Title -}}
+{{ end }}
+{{ define "content" }}
+    <section class="container publications">
+        <h1 class="title">
+            <a class="title-link" href="{{ .Permalink | safeURL }}">
+            {{- if eq .Kind "term" -}}
+                {{- i18n .Data.Plural 1 | title -}}
+                {{- print ": " -}}
+            {{- end -}}
+            {{- i18n (lower .Title) | default .Title | title -}}
+            </a>
+        </h1>
+        {{ .Content }}
+        <hr>
+        <h2><i class="fa fa-star"></i>&nbsp;Selected Publications</h2>
+        <ul>
+            {{ range .Pages }}
+                {{ if eq .Params.selected true }}
+                    {{ $pub := .Params }}
+                    <li class="publication">
+                        <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ dateFormat (.Site.Params.dateFormat | default "2 January 2006" ) $pub.date }}</span>
+                        <h4><a class="title" href="{{ $pub.link }}" target="_blank">{{ $pub.title | markdownify }}</a></h4>
+                        {{ if eq $pub.type "Journal Article" }}
+                            <span class="tag blue"><i class="fa fa-book"></i>&nbsp;{{ $pub.type }}</span>
+                        {{ else if eq $pub.type "Software" }}
+                            <span class="tag green"><i class="fa fa-code"></i>&nbsp;{{ $pub.type }}</span>
+                        {{ end }}
+                        {{ with $pub.doi }}<a href="{{ $pub.link }}" target="_blank" class="tag"><i class="fa fa-link"></i>&nbsp;{{ . }}</a>{{ end }}
+                        <span class="tag publication">{{ $pub.publication }}</span>
+                        {{ with $pub.github }}<a href="https://github.com/{{ . }}" target="_blank" class="tag"><i class="fa fa-github"></i>&nbsp;{{ . }}</a>{{ end }}
+                        <!-- TODO: type (article, software, etc), DOI, selected publications -->
+                        <ul class="authors">
+                            {{ range $pub.authors }}
+                                <li {{ if in . "Sam Harrison" }}class="me"{{ end }}>{{ . }}</li>
+                            {{ end }}
+                        </ul>
+                    </li>
+                {{ end }}
+            {{ end }}
+        </ul>
+        <hr>
+
+        <h2>All Publications</h2>
+        <ul>
+            {{ range .Pages }}
+                {{ $pub := .Params }}
+                <li class="publication">
+                    <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ dateFormat (.Site.Params.dateFormat | default "2 January 2006" ) $pub.date }}</span>
+                    <h4><a class="title" href="{{ $pub.link }}" target="_blank">{{ $pub.title | markdownify }}</a></h4>
+                    {{ if eq $pub.type "Journal Article" }}
+                        <span class="tag blue"><i class="fa fa-book"></i>&nbsp;{{ $pub.type }}</span>
+                    {{ else if eq $pub.type "Software" }}
+                        <span class="tag green"><i class="fa fa-code"></i>&nbsp;{{ $pub.type }}</span>
+                    {{ end }}
+                    {{ with $pub.doi }}<a href="{{ $pub.link }}" target="_blank" class="tag"><i class="fa fa-link"></i>&nbsp;{{ . }}</a>{{ end }}
+                    <span class="tag publication">{{ $pub.publication }}</span>
+                    {{ with $pub.github }}<a href="https://github.com/{{ . }}" target="_blank" class="tag"><i class="fa fa-github"></i>&nbsp;{{ . }}</a>{{ end }}
+                    <!-- TODO: type (article, software, etc), DOI, selected publications -->
+                    <ul class="authors">
+                        {{ range $pub.authors }}
+                            <li {{ if in . "Sam Harrison" }}class="me"{{ end }}>{{ . }}</li>
+                        {{ end }}
+                    </ul>
+                </li>
+            {{ end }}
+        </ul>
+    </section>
+{{ end }}

@@ -16,6 +16,10 @@
             {{- i18n (lower .Title) | default .Title | title -}}
             </a>
         </h1>
+        {{ $urlSplit := split .Permalink "/" }}
+        {{ if in $urlSplit "tags" }}
+            {{ last 2 (split .Permalink "/") }}
+        {{ end }}
         {{ .Content }}
         <hr>
         <h2><i class="fa fa-star"></i>&nbsp;Selected Publications</h2>

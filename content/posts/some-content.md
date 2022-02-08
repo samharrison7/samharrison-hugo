@@ -1,7 +1,7 @@
 ---
 title: "Some Content"
 date: 2021-12-23T12:18:46Z
-tags: ['hello']
+tags: ['hello', 'nanofase', 'speed']
 categories: ['A category']
 draft: false
 ---

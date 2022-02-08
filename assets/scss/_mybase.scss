@@ -1,5 +1,6 @@
 body {
     background-color: #fff; 
+    line-height: 1.7;
 }
 hr {
     border: 2px solid $color-light-gray;
@@ -7,4 +8,8 @@ hr {
 
 .colorscheme-dark hr {
     border-color: $color-inverted-light-gray;
+}
+
+img {
+    image-rendering: -webkit-optimize-contrast;
 }

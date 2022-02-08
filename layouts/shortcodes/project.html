@@ -11,6 +11,23 @@
         {{ end }}
         <p>{{ .Inner | markdownify }}</p>
         <div class="meta">
+            {{/* Only create link to related posts if the tag specified exists */}}
+            {{ $sitetags := .Site.Taxonomies.tags }}
+            {{ with .Get "tag" }}
+                {{ $tag := . }}
+                {{ with (index $sitetags $tag) }}
+                    <span class="item"><i class="fa fa-fw fa-pencil"></i><a href="{{ (print "tags/" $tag "/") | relURL }}">Related posts</a></span>
+                {{ end }}
+                {{ $hasPublications := false }}
+                {{ range $.Site.Data.publications }}
+                    {{ if in .tags $tag }}
+                        {{ $hasPublications = true }}
+                    {{ end }}
+                {{ end }}
+                {{ if $hasPublications }}
+                    <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/tags/" $tag) | relURL }}">Related publications</a></span>
+                {{ end }}
+            {{ end }}
             {{ with .Get "website" }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}
             {{ with .Get "repo" }}<span class="item"><i class="fa fa-fw fa-github"></i><a href="{{ . }}" target="_blank">Code</a></span>{{ end }}
             {{ with .Get "demo" }}<span class="item"><i class="fa fa-fw fa-area-chart"></i><a href="{{ . }}" target="_blank">Demo</a></span>{{ end }}

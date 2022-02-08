@@ -100,7 +100,8 @@ connectsrc = ["'self'", "https://www.google-analytics.com"]
 category = "categories"
 series = "series"
 tag = "tags"
-author = "authors"
+# author = "authors"
+output = "outputs"
 
 [[params.social]]
 name = "Github"
