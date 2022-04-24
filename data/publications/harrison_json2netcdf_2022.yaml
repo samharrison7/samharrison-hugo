@@ -1,0 +1,13 @@
+title: json2netcdf
+type: Software
+authors: 
+  - Sam Harrison
+url: https://doi.org/10.5281/zenodo.6387830
+doi: 10.5281/zenodo.6387830
+publication: Zenodo
+github: samharrison7/json2netcdf
+package:
+  repo: PyPI
+  url: https://pypi.org/project/json2netcdf/1.1.2/
+date: 2022-03-27
+selected: true 

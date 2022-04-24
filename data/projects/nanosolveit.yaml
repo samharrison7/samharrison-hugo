@@ -6,6 +6,7 @@ tag: nanosolveit
 platform: https://cloud.nanosolveit.eu/
 website: https://nanosolveit.eu 
 selected: true
+tag: nanosolveit
 description: >-
   In the NanoSolveIT project, we are developing a *in silico* Integrated
   Approach to Testing and Assessment (IATA) for environment and human

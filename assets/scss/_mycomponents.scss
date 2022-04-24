@@ -160,6 +160,14 @@ a.button {
                 background-color: $color-blue;
                 color: #fff;
             }
+            &.orange {
+                background-color: $color-orange;
+                color: #fff;
+            }
+            &.yellow {
+                background-color: $color-orcid;
+                color: #fff;
+            }
         }
         a.tag {
             font-weight: 400;
