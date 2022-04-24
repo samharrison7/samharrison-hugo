@@ -21,5 +21,7 @@ fig.show(renderer='iframe')
 You'll need to look in the generated `.md` file to find the name of the generated `.html` file to copy:
 
 ```shell
-$ cp notebooks/iframe_figures/<figure_*.html> static/posts/<name>/
+$ cp notebooks/iframe_figures/<figure_*.html> static/posts/<name>/iframe_figures/
 ```
+
+If you don't wish to use the `renderer` argument in your notebook, the `PLOTLY_RENDERER` environment variable can be set to this value instead.

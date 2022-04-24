@@ -37,13 +37,24 @@ img.header-avatar {
 /* Post metadata */
 .content .post .post-meta {
     color: $color-dark-gray;
+    margin: 0rem 0 6rem 0;
+    font-size: 1.5rem;
     a {
         color: $color-dark-gray;
     }
     .tags .tag {
         background-color: $color-gray;
+        margin-right: 1rem;
         a {
             color: $color-dark-gray;
+            font-weight: 400;
+            &::before {
+                content: '#';
+                color: $color-green; 
+            }
+            &:hover {
+                text-decoration: none;
+            }
         }
     }
 }
