@@ -1,0 +1,16 @@
+title: NanoSolveIT
+start_date: 2019-02-01
+dates: February 2019 to January 2023
+img: nanosolveit.png
+tag: nanosolveit
+platform: https://cloud.nanosolveit.eu/
+website: https://nanosolveit.eu 
+selected: true
+description: >-
+  In the NanoSolveIT project, we are developing a *in silico* Integrated
+  Approach to Testing and Assessment (IATA) for environment and human
+  nanosafety, via a cloud platform of integrated models. This includes
+  providing user friendly interfaces to environmental exposure models
+  such as the [NanoFASE model](https://nanofase.cloud.nanosolveit.eu/) and
+  [SimpleBox4nano](https://rivm.nl/simplebox4nano), and linking this
+  to biotic uptake models in order to predict risk.

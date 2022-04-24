@@ -1,0 +1,6 @@
+name: hugo
+dependencies:
+  - python
+  - pip
+  pip:
+    - nb2hugo

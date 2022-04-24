@@ -1,0 +1,46 @@
+{{ define "title" }}
+  {{ .Title }} · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+    <section class="container page publications">
+    <article>
+        <header>
+        <h1 class="title">
+            <a class="title-link" href="{{ .Permalink | safeURL }}">
+            {{ .Title }}
+            </a>
+        </h1>
+        </header>
+
+        {{ .Content }}
+
+        <hr>
+
+        <ul>
+            {{ $project := .Params.project }}
+            {{ range sort $.Site.Data.publications "date" "desc" }}
+                {{ if in .tags $project }} 
+                    {{ $publication := . }}
+                    <li class="publication">
+                        <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ dateFormat (.Site.Params.dateFormat | default "2 January 2006" ) .date }}</span>
+                        <h4><a class="title" href="{{ .url }}" target="_blank">{{ .title | markdownify }}</a></h4>
+                        {{ if eq .type "Journal Article" }}
+                            <span class="tag blue"><i class="fa fa-book"></i>&nbsp;{{ .type }}</span>
+                        {{ else if eq .type "Software" }}
+                            <span class="tag green"><i class="fa fa-code"></i>&nbsp;{{ .type }}</span>
+                        {{ end }}
+                        {{ with .doi }}<a href="{{ $publication.url }}" target="_blank" class="tag"><i class="fa fa-link"></i>&nbsp;{{ . }}</a>{{ end }}
+                        <span class="tag publication">{{ .publication }}</span>
+                        {{ with .github }}<a href="https://github.com/{{ . }}" target="_blank" class="tag"><i class="fa fa-github"></i>&nbsp;{{ . }}</a>{{ end }}
+                        <ul class="authors">
+                            {{ range .authors }}
+                                <li {{ if in . "Sam Harrison" }}class="me"{{ end }}>{{ . }}</li>
+                            {{ end }}
+                        </ul>
+                    </li>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </article>
+    </section>
+{{ end }}

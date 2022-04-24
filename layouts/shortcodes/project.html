@@ -25,13 +25,16 @@
                     {{ end }}
                 {{ end }}
                 {{ if $hasPublications }}
-                    <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/tags/" $tag) | relURL }}">Related publications</a></span>
+                    {{ with $.Site.GetPage (print "/publications/" $tag) }}
+                        <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/" $tag) | relURL }}">Related publications</a></span>
+                    {{ end }}
                 {{ end }}
             {{ end }}
             {{ with .Get "website" }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}
             {{ with .Get "repo" }}<span class="item"><i class="fa fa-fw fa-github"></i><a href="{{ . }}" target="_blank">Code</a></span>{{ end }}
             {{ with .Get "demo" }}<span class="item"><i class="fa fa-fw fa-area-chart"></i><a href="{{ . }}" target="_blank">Demo</a></span>{{ end }}
             {{ with .Get "app" }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">App</a></span>{{ end }}
+            {{ with .Get "platform" }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">Platform</a></span>{{ end }}
         </div>
     </span>
 </div>
