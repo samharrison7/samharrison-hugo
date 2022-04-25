@@ -10,7 +10,7 @@ This website was built using [Hugo](https://gohugo.io) and lovingly adapted from
 
 ### Buy me a coffee!
 
-The site costs money to run! Please consider donating if you found any of the content useful.
+The site costs (a little bit of) money and (quite a lot of) time to run! Please consider donating if you find any of the content useful 🙂
 
 {{< kofi >}}
 
