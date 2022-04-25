@@ -1,4 +1,4 @@
-baseURL = "https://samharrison7.github.io/samharrison-hugo/"
+baseURL = "https://samharrison.science"
 title = "Sam Harrison"
 theme = "hugo-coder"
 languageCode = "en"
