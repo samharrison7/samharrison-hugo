@@ -1,0 +1,17 @@
+title: Bioturbation Model
+type: Software
+authors:
+  - Sam Harrison
+  - Virginie Keller
+  - Richard J Williams
+  - Michael Hutchins
+  - Stephen Lofts
+doi: 10.5281/zenodo.6387841
+url: https://doi.org/10.5281/zenodo.6387841
+github: samharrison7/bioturbation-model
+package:
+  repo: PyPI
+  url: https://pypi.org/project/bioturbation/1.0.1/
+date: 2022-03-27
+selected: true
+tags: ['nanofase', 'speed']

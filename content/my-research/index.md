@@ -10,7 +10,7 @@ I am a keen advocate of, [creator of and contributor to](https://github.com/samh
 
 In my free time, I can usually be found running, walking, climbing or cycling in the hills and mountains of the UK. I am a qualified winter mountain leader and have previously worked as a freelance outdoor instructor.
 
-{{< button href="../cv" icon="file" text="CV" >}}
+{{< button href="../CV.pdf" icon="file" text="CV" target="_blank" >}}
 {{< button href="../publications" icon="book" text="Publications" >}}
 {{< button href="https://orcid.org/0000-0001-8491-4720" target="_blank" icon="orcid" text="Orcid" color="orcid" >}}
 {{< button href="https://github.com/samharrison7" target="_blank" icon="github" text="GitHub" color="black" >}}
@@ -20,10 +20,31 @@ In my free time, I can usually be found running, walking, climbing or cycling in
 
 Below is a selection of some of the key projects that I have been or am currently involved in.
 
-{{< projects onlySelected=true >}}
+{{< button href="../projects" icon="list" text="All Projects" >}}
 
-{{< button href="../projects" icon="list" text="All Projects" class="mt3" >}}
+{{< projects onlySelected=true >}}
 
 ## Skills and Interests
 
+{{< gridlist >}}
+{{< icontext icon="leaf" >}}Environmental fate and exposure{{< /icontext >}}
+{{< icontext icon="circle-o" >}}Microplastics, nanomaterials, metals{{< /icontext >}}
+{{< icontext icon="code" >}}Research software engineering{{< /icontext >}}
+{{< icontext icon="cubes" >}}Integrated environmental modelling{{< /icontext >}}
+{{< icontext icon="superscript" >}}Computational science{{< /icontext >}}
+{{< icontext icon="sun" >}}X-ray absorption spectroscopy{{< /icontext >}}
+{{< icontext icon="python" >}}Main languages: Python, Fortran{{< /icontext >}}
+{{< icontext icon="link" >}}Web development{{< /icontext >}}
+{{< /gridlist >}}
+
+
 ## Committees and Memberships
+
+- [Society of Environmental Toxicology and Chemistry](https://setac.org) (SETAC)
+- [Society of Research Software Engineering](https://society-rse.org) (SocRSE)
+- OECD Working Party of Manufactured Nanomaterials
+- [NanoSafety Cluster](https://www.nanosafetycluster.eu/) Working Group C - Exposure and Hazard Assessment
+- [Software Sustainability Institute](https://software.ac.uk) Fellow
+- [NERC Constructing a Digital Environment](https://digitalenvironment.org) Expert Network
+- [Centre of Excellence in Environmental Data Science](https://ceeds.ac.uk) (CEEDS)
+- [Community Surface Dynamics Modeling System](https://csdms.colorado.edu/) (CSDMS)

@@ -38,9 +38,11 @@
                             <span class="tag yellow"><i class="fa fa-comments"></i>&nbsp;{{ .type }}</span>
                         {{ else if eq .type "Software" }}
                             <span class="tag green"><i class="fa fa-code"></i>&nbsp;{{ .type }}</span>
+                        {{ else if eq .type "Thesis" }}
+                            <span class="tag orange"><i class="fa fa-mortar-board"></i>&nbsp;{{ .type }}</span>
                         {{ end }}
                         {{ with .doi }}<a href="{{ $publication.url }}" target="_blank" class="tag"><i class="fa fa-link"></i>&nbsp;{{ . }}</a>{{ end }}
-                        <span class="tag publication">{{ .publication }}</span>
+                        {{ with .publication }}<span class="tag publication">{{ . }}</span>{{ end }}
                         {{ with .github }}<a href="https://github.com/{{ . }}" target="_blank" class="tag"><i class="fa fa-github"></i>&nbsp;{{ . }}</a>{{ end }}
                         {{ with .package }}<a href="{{ .url }}" target="_blank" class="tag"><i class="fa fa-cube"></i>&nbsp;{{ .repo }}</a>{{ end }}
                         <!-- TODO: type (article, software, etc), DOI, selected publications -->
@@ -70,9 +72,11 @@
                         <span class="tag yellow"><i class="fa fa-comments"></i>&nbsp;{{ .type }}</span>
                     {{ else if eq .type "Software" }}
                         <span class="tag green"><i class="fa fa-code"></i>&nbsp;{{ .type }}</span>
+                    {{ else if eq .type "Thesis" }}
+                        <span class="tag orange"><i class="fa fa-mortar-board"></i>&nbsp;{{ .type }}</span>
                     {{ end }}
                     {{ with .doi }}<a href="{{ $publication.url }}" target="_blank" class="tag"><i class="fa fa-link"></i>&nbsp;{{ . }}</a>{{ end }}
-                    <span class="tag publication">{{ .publication }}</span>
+                    {{ with .publication }}<span class="tag publication">{{ . }}</span>{{ end }}
                     {{ with .github }}<a href="https://github.com/{{ . }}" target="_blank" class="tag"><i class="fa fa-github"></i>&nbsp;{{ . }}</a>{{ end }}
                     {{ with .package }}<a href="{{ .url }}" target="_blank" class="tag"><i class="fa fa-cube"></i>&nbsp;{{ .repo }}</a>{{ end }}
                     <!-- TODO: type (article, software, etc), DOI, selected publications -->

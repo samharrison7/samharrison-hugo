@@ -5,48 +5,50 @@
     {{ $onlySelected = . }}
 {{ end }}
 
-{{ range sort $projects "start_date" "desc" }}
-    {{ if or (eq $onlySelected false) (and $onlySelected (eq .selected true)) }}
-        {{ $project := . }}
-        <div class="project media">
-            {{ with $project.img }}
-                <span class="media-img">
-                    <img src="{{ (print "images/" .) | relURL }}"> 
-                </span>
-            {{ end }}
-            <span class="media-body">
-                <h4>{{ $project.title }}</h4>
-                {{ with $project.dates }}
-                    <span class="dates">{{ . }}</span>
+<div class="projects">
+    {{ range sort $projects "start_date" "desc" }}
+        {{ if or (eq $onlySelected false) (and $onlySelected (eq .selected true)) }}
+            {{ $project := . }}
+            <div class="project media">
+                {{ with $project.img }}
+                    <span class="media-img">
+                        <img src="{{ (print "images/" .) | relURL }}"> 
+                    </span>
                 {{ end }}
-                <p>{{ $project.description | markdownify }}</p>
-                <div class="meta">
-                    {{/* Only create link to related posts if the tag specified exists */}}
-                    {{ $sitetags := $.Site.Taxonomies.tags }}
-                    {{ with $project.tag }}
-                        {{ $tag := . }}
-                        {{ with (index $sitetags $tag) }}
-                            <span class="item"><i class="fa fa-fw fa-pencil"></i><a href="{{ (print "tags/" $tag "/") | relURL }}">Related posts</a></span>
-                        {{ end }}
-                        {{ $hasPublications := false }}
-                        {{ range $.Site.Data.publications }}
-                            {{ if in .tags $tag }}
-                                {{ $hasPublications = true }}
-                            {{ end }}
-                        {{ end }}
-                        {{ if $hasPublications }}
-                            {{ with $.Site.GetPage (print "/publications/" $tag) }}
-                                <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/" $tag) | relURL }}">Related publications</a></span>
-                            {{ end }}
-                        {{ end }}
+                <span class="media-body">
+                    <h4>{{ $project.title }}</h4>
+                    {{ with $project.dates }}
+                        <span class="dates">{{ . }}</span>
                     {{ end }}
-                    {{ with $project.website }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}
-                    {{ with $project.repo }}<span class="item"><i class="fa fa-fw fa-github"></i><a href="{{ . }}" target="_blank">Code</a></span>{{ end }}
-                    {{ with $project.demo }}<span class="item"><i class="fa fa-fw fa-area-chart"></i><a href="{{ . }}" target="_blank">Demo</a></span>{{ end }}
-                    {{ with $project.app }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">App</a></span>{{ end }}
-                    {{ with $project.platform }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">Platform</a></span>{{ end }}
-                </div>
-            </span>
-        </div>
+                    <p>{{ $project.description | markdownify }}</p>
+                    <div class="meta">
+                        {{/* Only create link to related posts if the tag specified exists */}}
+                        {{ $sitetags := $.Site.Taxonomies.tags }}
+                        {{ with $project.tag }}
+                            {{ $tag := . }}
+                            {{ with (index $sitetags $tag) }}
+                                <span class="item"><i class="fa fa-fw fa-pencil"></i><a href="{{ (print "tags/" $tag "/") | relURL }}">Related posts</a></span>
+                            {{ end }}
+                            {{ $hasPublications := false }}
+                            {{ range $.Site.Data.publications }}
+                                {{ if in .tags $tag }}
+                                    {{ $hasPublications = true }}
+                                {{ end }}
+                            {{ end }}
+                            {{ if $hasPublications }}
+                                {{ with $.Site.GetPage (print "/publications/" $tag) }}
+                                    <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/" $tag) | relURL }}">Related outputs</a></span>
+                                {{ end }}
+                            {{ end }}
+                        {{ end }}
+                        {{ with $project.website }}<span class="item"><i class="fa fa-fw fa-link"></i><a href="{{ . }}" target="_blank">Website</a></span>{{ end }}
+                        {{ with $project.repo }}<span class="item"><i class="fa fa-fw fa-github"></i><a href="{{ . }}" target="_blank">Code</a></span>{{ end }}
+                        {{ with $project.demo }}<span class="item"><i class="fa fa-fw fa-area-chart"></i><a href="{{ . }}" target="_blank">Demo</a></span>{{ end }}
+                        {{ with $project.app }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">App</a></span>{{ end }}
+                        {{ with $project.platform }}<span class="item"><i class="fa fa-fw fa-dashboard"></i><a href="{{ . }}" target="_blank">Platform</a></span>{{ end }}
+                    </div>
+                </span>
+            </div>
+        {{ end }}
     {{ end }}
-{{ end }}
+</div>

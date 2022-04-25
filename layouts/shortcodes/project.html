@@ -26,7 +26,7 @@
                 {{ end }}
                 {{ if $hasPublications }}
                     {{ with $.Site.GetPage (print "/publications/" $tag) }}
-                        <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/" $tag) | relURL }}">Related publications</a></span>
+                        <span class="item"><i class="fa fa-fw fa-newspaper-o"></i><a href="{{ (print "publications/" $tag) | relURL }}">Related outputs</a></span>
                     {{ end }}
                 {{ end }}
             {{ end }}

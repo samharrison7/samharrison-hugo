@@ -1,6 +1,7 @@
 body {
     background-color: #fff; 
     line-height: 1.7;
+    overflow-x: hidden;
 }
 hr {
     border: 2px solid $color-light-gray;
@@ -12,4 +13,14 @@ hr {
 
 img {
     image-rendering: -webkit-optimize-contrast;
+}
+
+a:hover > sub {
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+footer {
+    border-top: 3px solid $color-light-gray;    
+    padding-top: 4rem;
 }

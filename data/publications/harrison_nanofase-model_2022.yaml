@@ -1,0 +1,13 @@
+title: NanoFASE model
+authors:
+  - Sam Harrison
+  - Virginie Keller
+  - Richard J Williams
+  - Michael Hutchins
+  - Stephen Lofts
+type: Software
+url: https://github.com/nerc-ceh/nanofase
+github: nerc-ceh/nanofase
+date: 2021-12-08
+tags: ['nanofase']
+selected: true
