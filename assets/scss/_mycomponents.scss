@@ -130,8 +130,8 @@ a.button {
     }
 }
 .colorscheme-dark {
-    .project {
-        background-color: $color-inverted-light-gray;
+    .project:not(:last-of-type) {
+        border-bottom: 3px solid $color-inverted-light-gray
     }
 }
 
@@ -151,6 +151,9 @@ a.button {
         h4 {
             margin-bottom: 1rem;
             margin-top: 0;
+            & > a {
+                font-weight: 600;
+            }
         }
         .tag {
             background-color: $color-light-gray;
@@ -272,7 +275,7 @@ table.dataframe {
     grid-template-columns: 1fr 1fr;
     div {
         display: flex;
-        padding: 1rem 0;
+        padding: 1rem 0 1rem 2rem;
         align-items: center;
     }
     i.fa {
@@ -293,6 +296,13 @@ table.dataframe {
         line-height: 1.3;
     }
 }
+
+@media only screen and (max-width: 614px) {
+    .gridlist {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* Full width elements inside fixed width container */
 .full-width {

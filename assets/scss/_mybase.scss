@@ -20,7 +20,20 @@ a:hover > sub {
     display: inline-block;
 }
 
-footer {
+article :not(.item) > a[target="_blank"]:not(.kofi-button, .button)::after {
+    font-family: 'ForkAwesome';
+    content: "\f08e";
+    color: $color-dark-gray;
+    padding: 0.5rem;
+    line-height: normal;
+    display: inline-block;
+}
+article :not(.item) > a[target="_blank"]:not(.kofi-button, .button):hover::after {
+    text-decoration: none !important;
+    display: inline-block;
+}
+
+article footer {
     border-top: 3px solid $color-light-gray;    
     padding-top: 4rem;
 }

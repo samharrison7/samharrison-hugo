@@ -47,6 +47,11 @@
                         {{ with .package }}<a href="{{ .url }}" target="_blank" class="tag"><i class="fa fa-cube"></i>&nbsp;{{ .repo }}</a>{{ end }}
                         <!-- TODO: type (article, software, etc), DOI, selected publications -->
                         <ul class="authors">
+                            {{ if eq (len .authors) 1 }}
+                                <i class="fa fa-user color-dark-gray"></i>
+                            {{ else }}
+                                <i class="fa fa-users color-dark-gray"></i>
+                            {{ end }}
                             {{ range .authors }}
                                 <li {{ if in . "Sam Harrison" }}class="me"{{ end }}>{{ . }}</li>
                             {{ end }}
@@ -81,6 +86,11 @@
                     {{ with .package }}<a href="{{ .url }}" target="_blank" class="tag"><i class="fa fa-cube"></i>&nbsp;{{ .repo }}</a>{{ end }}
                     <!-- TODO: type (article, software, etc), DOI, selected publications -->
                     <ul class="authors">
+                        {{ if eq (len .authors) 1 }}
+                            <i class="fa fa-user color-dark-gray"></i>
+                        {{ else }}
+                            <i class="fa fa-users color-dark-gray"></i>
+                        {{ end }}
                         {{ range .authors }}
                             <li {{ if in . "Sam Harrison" }}class="me"{{ end }}>{{ . }}</li>
                         {{ end }}

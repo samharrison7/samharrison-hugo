@@ -18,9 +18,11 @@
 
         <ul>
             {{ $project := .Params.project }}
+            {{ $n := 0 }}
             {{ range sort $.Site.Data.publications "date" "desc" }}
                 {{ if in .tags $project }} 
                     {{ $publication := . }}
+                    {{ $n = add $n 1 }}
                     <li class="publication">
                         <span class="date"><i class="fa fa-calendar"></i>&nbsp;{{ dateFormat (.Site.Params.dateFormat | default "2 January 2006" ) .date }}</span>
                         <h4><a class="title" href="{{ .url }}" target="_blank">{{ .title | markdownify }}</a></h4>
@@ -47,6 +49,9 @@
                         </ul>
                     </li>
                 {{ end }}
+            {{ end }}
+            {{ if eq $n 0 }}
+                <em>No publications found.</em>
             {{ end }}
         </ul>
     </article>
