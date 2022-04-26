@@ -55,8 +55,8 @@ katex = true
 # serverURL = "analytics.example.com" # Default value is plausible.io, overwrite this if you are self-hosting or using a custom domain
 
 # If you want to use goatcounter(https://goatcounter.com) for analytics, add this section
-# [params.goatCounter]
-# code = "code"
+[params.goatCounter]
+code = "samharrison7"
 
 # If you want to use Cloudflare Web Analytics(https://cloudflare.com) for analytics, add this section
 # [params.cloudflare]
@@ -68,8 +68,8 @@ katex = true
 # serverURL = "analytics.example.com" # For cloud-hosting, use provided URL, e.g. example.matomo.cloud
 
 # If you want to use Google Tag Manager(https://analytics.google.com/) for analytics, add this section
-[params.googleTagManager]
-id = "G-75Q9R37970"
+# [params.googleTagManager]
+# id = "G-75Q9R37970"
 
 [params.utterances]
 repo = "samharrison7/samharrison-hugo"
@@ -91,12 +91,11 @@ stylesrc = [
   "https://fonts.googleapis.com/",
   "https://cdn.jsdelivr.net/"
 ]
-scriptsrc = ["'self'", "'unsafe-inline'", "https://www.google-analytics.com",
-             "https://storage.ko-fi.com", "https://cdn.jsdelivr.net", "https://utteranc.es",
-             "https://www.googletagmanager.com"]
+scriptsrc = ["'self'", "'unsafe-inline'", "https://gc.zgo.at",
+             "https://storage.ko-fi.com", "https://cdn.jsdelivr.net", "https://utteranc.es"]
 prefetchsrc = ["'self'"]
 # connect-src directive – defines valid targets for to XMLHttpRequest (AJAX), WebSockets or EventSource
-connectsrc = ["'self'", "https://www.google-analytics.com", "https://www.googletagmanager.com"]
+connectsrc = ["'self'"]
 
 [taxonomies]
 category = "categories"
