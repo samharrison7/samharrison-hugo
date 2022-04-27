@@ -1,5 +1,6 @@
 ---
 title: "Publications and Outputs"
+description: "List of my research outputs, including journal articles, software and datasets"
 date: 2022-01-07T17:57:23Z
 draft: false
 ---

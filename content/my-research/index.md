@@ -1,5 +1,6 @@
 ---
 title: "My Research"
+description: "I'm Sam - an environmental modeller and self-proclaimed research software engineering at UKCEH, Lancaster."
 date: 2022-01-02T17:58:27Z
 draft: false
 ---

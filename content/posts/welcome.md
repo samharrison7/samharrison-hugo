@@ -2,7 +2,7 @@
 draft = false
 date = 2022-04-25T16:24:40+01:00
 title = "Welcome! 👋"
-description = ""
+description = "Welcome to my site!"
 slug = ""
 authors = []
 tags = []
