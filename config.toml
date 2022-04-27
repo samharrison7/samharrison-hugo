@@ -13,11 +13,12 @@ enableEmoji = true
 
 [params]
 author = "Sam Harrison"
-description = "Sam Harrison - Research scientist of UKCEH, specialising in environmental modelling and software sustainability"
+description = "Research scientist at UKCEH, specialising in environmental modelling and software sustainability"
 keywords = "environmental scientist,environmental modelling,research software,blog"
 info = ["Research scientist at UKCEH, specialising in environmental exposure modelling and software sustainability. Frequent fell runner, mountain climber and cyclist. Occasional violinist, pianist and guitarist."]
 avatarURL = "images/sam.jpg"
 images = ['images/sam.jpg']
+twitter = "@samharrison7"
 dateFormat = "2 January 2006"
 favicon_32 = "images/favicon32.png"
 favicon_64 = "images/favicon64.png"
