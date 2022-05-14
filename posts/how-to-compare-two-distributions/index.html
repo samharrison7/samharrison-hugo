@@ -1,0 +1,434 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=content-language content="en">
+<meta name=color-scheme content="light dark">
+<meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; prefetch-src 'self'; connect-src 'self';">
+<meta name=author content="Sam Harrison">
+<meta name=description content="A comparison of common methods to compare two empirical probability distributions in Python">
+<meta name=keywords content="environmental scientist,environmental modelling,research software,blog">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://samharrison.science/output_4_0.png">
+<meta name=twitter:title content="How to compare two empirical distributions">
+<meta name=twitter:description content="A comparison of common methods to compare two empirical probability distributions in Python">
+<meta property="og:title" content="How to compare two empirical distributions">
+<meta property="og:description" content="A comparison of common methods to compare two empirical probability distributions in Python">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://samharrison.science/posts/how-to-compare-two-distributions/"><meta property="og:image" content="https://samharrison.science/output_4_0.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-05-14T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-05-14T00:00:00+00:00">
+<title>
+How to compare two empirical distributions · Sam Harrison
+</title>
+<link rel=canonical href=https://samharrison.science/posts/how-to-compare-two-distributions/>
+<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/scss/override.min.2bb0ab8a74319f1c3dd61fb5eccd49b1387312d057cfbc3061c2824f4ee098f9.css integrity="sha256-K7CrinQxnxw91h+17M1JsThzEtBXz7wwYcKCT07gmPk=" crossorigin=anonymous media=screen>
+<link rel=icon type=image/png href=/images/favicon32.png sizes=32x32>
+<link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16>
+<link rel=apple-touch-icon href=/images/apple-touch-icon.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.92.1">
+</head>
+<body class="preload-transitions colorscheme-auto">
+<div class=float-container>
+<a id=dark-mode-toggle class=colorscheme-toggle>
+<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
+</a>
+</div>
+<main class=wrapper>
+<nav class=navigation>
+<section class=container>
+<img class=header-avatar src=/images/sam-header.jpg>
+<a class=navigation-title href=/>
+Sam Harrison
+</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle>
+<i class="fa fa-bars fa-fw" aria-hidden=true></i>
+</label>
+<ul class=navigation-list>
+<li class=navigation-item>
+<a class=navigation-link href=/my-research/>My Research</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/posts/>Blog</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/contact/>Contact</a>
+</li>
+</ul>
+</section>
+</nav>
+<div class=content>
+<section class="container post">
+<article>
+<header>
+<div class=post-title>
+<h1 class=title>
+<a class=title-link href=https://samharrison.science/posts/how-to-compare-two-distributions/>
+How to compare two empirical distributions
+</a>
+</h1>
+</div>
+<div class=post-meta>
+<div class=date>
+<span class=posted-on>
+<i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2022-05-14T00:00:00Z>
+14 May 2022
+</time>
+</span>
+<span class=reading-time>
+<i class="fa fa-clock-o" aria-hidden=true></i>
+11-minute read
+</span>
+</div>
+<div class=tags><span class=tag>
+<a href=/tags/probability/>probability</a>
+</span><span class=tag>
+<a href=/tags/python/>python</a>
+</span><span class=tag>
+<a href=/tags/scipy/>scipy</a>
+</span><span class=tag>
+<a href=/tags/stats/>stats</a>
+</span></div>
+</div>
+</header>
+<div>
+<p>The world is full of distributions - people&rsquo;s height, incomes, exam results, average temperatures, heights of trees, sizes of microplastic particles in the environment. It stands to reason that there will be times when we need to compare these distributions to see how similar (or different) they are. For example, were summer temperatures similar this year to last year? Do two groups of people who buy different products make similar incomes? Do modelled size distributions of microplastics match what we expect from observations?</p>
+<p>There are a whole host of statistical methods you can use to calculate this similarity, and the aim of this post is to show you how a few of the most common can be easily coded in Python. In doing so, we will start to explore some of the differences between the methods and why you might pick one over the other. What this article isn&rsquo;t is a rigorous mathematical guide to each of these tests - for that, I recommend that you refer to some of the linked references through this post.</p>
+<h2 id=the-problem>
+The problem
+<a class=heading-link href=#the-problem>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Let&rsquo;s start with three arbitrary normal distributions to demonstrate this. We will use SciPy&rsquo;s <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html target=_blank><code>stats.norm.rvs</code></a> method to generate these distributions by randomly sampling based on specified mean and variance values - basically, this lets us mimic &ldquo;real&rdquo; data that follows the specified distributions.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>numpy</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>np</span>
+<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>scipy</span> <span style=color:#00a>import</span> stats
+<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>matplotlib.pyplot</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>plt</span>
+plt.rcParams[<span style=color:#a50>&#39;figure.dpi&#39;</span>] = <span style=color:#099>100</span>
+
+<span style=color:#aaa;font-style:italic># Mean and variance of the distributions and sampling size</span>
+a_mean, a_var = <span style=color:#099>0.0</span>, <span style=color:#099>1.0</span>
+b_mean, b_var = <span style=color:#099>0.42</span>, <span style=color:#099>1.0</span>
+c_mean, c_var = <span style=color:#099>1.2</span>, <span style=color:#099>2</span>
+size = <span style=color:#099>1000</span>
+
+<span style=color:#aaa;font-style:italic># Create the distributions</span>
+data_a = stats.norm.rvs(a_mean, a_var, size)
+data_b = stats.norm.rvs(b_mean, b_var, size)
+data_c = stats.norm.rvs(c_mean, c_var, size)
+
+<span style=color:#aaa;font-style:italic># Plot the distributions as histograms to see what they</span>
+<span style=color:#aaa;font-style:italic># look like compared to each other</span>
+plt.hist(data_a, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;A&#39;</span>)
+plt.hist(data_b, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;B&#39;</span>)
+plt.hist(data_c, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;C&#39;</span>)
+plt.legend()
+plt.yticks([])
+plt.show()
+</code></pre></div><p><img src=output_4_0.png alt=png></p>
+<h2 id=comparing-the-means>
+Comparing the means
+<a class=heading-link href=#comparing-the-means>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Perhaps it is stating the obvious, but if you expect all of the other <a href=https://en.wikipedia.org/wiki/Moment_%28mathematics%29 target=_blank>moments of your distributions</a> (variance, skew and kurotis) to be similar, then comparing the means is a simple but effective way to see how different they are.</p>
+<p>If we take \(A\) as the reference distribution, to which we want to compare how similar \(B\) and \(C\) are, then we can simply calculate the difference between the means of \(B\) or \(C\) and \(A\):</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>plt.bar([<span style=color:#a50>&#39;Mean A to B&#39;</span>, <span style=color:#a50>&#39;Mean A to C&#39;</span>],
+        [data_b.mean() - data_a.mean(), data_c.mean() - data_a.mean()])
+plt.show()
+</code></pre></div><p><img src=output_6_0.png alt=png></p>
+<p>The rather obvious conclusion here is that \(B\) is <em>more similar</em> to \(A\) than \(C\). But, you will have noticed that the variance (width) of \(C\) is significantly different \(A\) and \(B\), and perhaps this naïve method is not so sensible for our distributions.</p>
+<h2 id=kolmogorov-smirnov-test>
+Kolmogorov-Smirnov test
+<a class=heading-link href=#kolmogorov-smirnov-test>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Apart from comparing means, calculating the <a href=https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test target=_blank>K-S distance</a> between distributions is perhaps the most common way of comparing distributions. The K-S distance is zero when distributions are identical, and 1 when they are very different. In other words, the bigger the K-S distance, the more different the distributions.</p>
+<p>The concept behind the K-S distance is simple to understand: When plotted as <em>empirical</em> cumulative probability distributions, it represents the biggest difference in probability between the two distributions. Calculating the K-S distance in Python is made straightforward by SciPy, which provides a <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kstest.html target=_blank><code>scipy.stats.kstest</code></a> function that does the hard work:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># Calculuate the K-S distance between A and B, and A and C</span>
+ks_a_b = stats.kstest(data_a, data_b)
+ks_a_c = stats.kstest(data_a, data_c)
+
+<span style=color:#aaa;font-style:italic># Plot this to compare the distributions</span>
+plt.bar([<span style=color:#a50>&#39;K-S A to B&#39;</span>, <span style=color:#a50>&#39;K-S A to C&#39;</span>],
+        [ks_a_b.statistic, ks_a_c.statistic])
+plt.show()
+</code></pre></div><p><img src=output_8_0.png alt=png></p>
+<div class="notice note">
+<div class=notice-title>
+<i class="fa fa-sticky-note" aria-hidden=true></i>Note
+</div>
+<div class=notice-content>Technically, we are performing a <em>two-sample</em> K-S test here, which is used to compare the underlying distributions of two independent samples. In contrast, the one-sample K-S test is used to compare the underlying distribution of a sample against a given distribution (such as the normal distribution). Internally, SciPy picks up that we have provided two independent samples and calls a separate <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ks_2samp.html target=_blank><code>scipy.stats.ks_2samp</code></a> method. We could have called this method directly.</div>
+</div>
+<p>As we said, the K-S distance represents the maximum distance between the empirical cumulative distribution functions (ECDFs) of our data. As an aside, we can generate and plot these ECDFs to make it easy to visualise what the K-S test is doing in practice. Let&rsquo;s do this to compare A and C:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># We can plot ECDFs by sorting the data and plotting it on the x-axis</span>
+<span style=color:#aaa;font-style:italic># against an equally spaced array from 0 to 1 on the y-axis, which can</span>
+<span style=color:#aaa;font-style:italic># be generated by NumPy&#39;s linspace or arange functions</span>
+x_a = np.sort(data_a)
+x_c = np.sort(data_c)
+ecdf_a = np.linspace(<span style=color:#099>0</span>, <span style=color:#099>1</span>, <span style=color:#0aa>len</span>(x_a), endpoint=<span style=color:#00a>False</span>)
+ecdf_c = np.linspace(<span style=color:#099>0</span>, <span style=color:#099>1</span>, <span style=color:#0aa>len</span>(x_c), endpoint=<span style=color:#00a>False</span>)
+
+<span style=color:#aaa;font-style:italic># Plot these ECDFs</span>
+plt.plot(x_a, ecdf_a)
+plt.plot(x_c, ecdf_c)
+plt.ylabel(<span style=color:#a50>&#39;ECDF&#39;</span>)
+
+<span style=color:#aaa;font-style:italic># We need to figure out at which x value the biggest distance between</span>
+<span style=color:#aaa;font-style:italic># the ECDFs is, in order to point this out on the graph. To do this, </span>
+<span style=color:#aaa;font-style:italic># we first need to interpolate one of the ECDFs</span>
+ecdf_a_interp = np.interp(x_a, x_c, ecdf_a)
+<span style=color:#aaa;font-style:italic># Then use argmax to get the index (arg) of the maximum value</span>
+ix = np.argmax(np.abs(ecdf_a_interp - ecdf_c))
+
+<span style=color:#aaa;font-style:italic># Plot this as an arrow indicating the distance between the curves</span>
+plt.annotate(
+    <span style=color:#a50>&#39;&#39;</span>, xy=(x_a[ix], ecdf_a[ix]),
+    xytext=(x_a[ix], ecdf_a[ix] - ks_a_c.statistic),
+    arrowprops={<span style=color:#a50>&#39;arrowstyle&#39;</span>: <span style=color:#a50>&#39;&lt;-&gt;, head_width=0.5, head_length=0.6&#39;</span>,
+                <span style=color:#a50>&#39;linestyle&#39;</span>: <span style=color:#a50>&#39;dashed&#39;</span>, <span style=color:#a50>&#39;color&#39;</span>: <span style=color:#a50>&#39;r&#39;</span>, <span style=color:#a50>&#39;linewidth&#39;</span>: <span style=color:#099>2</span>}
+)
+plt.xlim([-<span style=color:#099>4</span>,<span style=color:#099>5</span>])
+plt.show()
+</code></pre></div><p><img src=output_11_0.png alt=png></p>
+<p>Though the K-S test is (arguably) a more justifiable method than simply comparing means, it is still a relatively crude way of comparing distributions as it only assesses their maximum divergance and is therefore rather conservative.</p>
+<h2 id=anderson-darling-test>
+Anderson-Darling test
+<a class=heading-link href=#anderson-darling-test>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Another common test of similarity is the <a href=https://en.wikipedia.org/wiki/Anderson%E2%80%93Darling_test target=_blank>Anderson-Darling test</a>. This takes into account the entire difference between ECDFs, rather than just the maximum, and therefore is often regarded as a better measure of similarity.</p>
+<p>Again, we can use SciPy to calculate this statistic. We want to use the <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.anderson_ksamp.html target=_blank><code>scipy.stats.anderson_ksamp</code></a> method, as opposed to the <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.anderson.html target=_blank><code>scipy.stats.anderson</code></a> method, as we have two samples to compare. The later is for comparing one empirical distribution against a continuous distribution such as the normal distribution.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># We can use SciPy to calculate the Anderson-Darling test</span>
+ad_a_b = stats.anderson_ksamp([data_a, data_b])
+ad_a_c = stats.anderson_ksamp([data_a, data_c])
+
+<span style=color:#aaa;font-style:italic># Plot this to compare the distributions</span>
+plt.bar([<span style=color:#a50>&#39;A-D A to B&#39;</span>, <span style=color:#a50>&#39;A-D A to C&#39;</span>],
+        [ad_a_b.statistic, ad_a_c.statistic])
+plt.show()
+</code></pre></div><p><img src=output_14_1.png alt=png></p>
+<p>As you can see, compared to the previous tests, the difference between \(A\) and \(C\) is shown as more significant than the difference between \(A\) and \(B\). This makes sense: \(C\) is a much broader distribution (has a larger variance) than \(A\) and \(B\), and because the Anderson statistic takes into account the whole distribution, it picks this up. Comparing means and the K-S test ignore the shape of the distribution.</p>
+<h2 id=wasserstein-distance>
+Wasserstein distance
+<a class=heading-link href=#wasserstein-distance>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>The Wasserstein, or <a href=https://en.wikipedia.org/wiki/Earth_mover%27s_distance target=_blank>&ldquo;Earth Mover&rsquo;s Distance&rdquo;</a> is intuitively easy to understand: Imagine your distributions are two different piles of the same volume of soil. The Wasserstein distance is the minimum cost - defined as the amount of soil that needs to be moved multiplied by the distance it has to be moved - required to transform one pile into the other. In our case, another way of picturing it is as the area between the ECDFs of our data.</p>
+<p>SciPy has a handy function <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.wasserstein_distance.html target=_blank><code>scipy.stats.wasserstein_distance</code></a> that makes calculating the Wasserstein distance easy:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># Use SciPy to calculate the Wasserstein distance</span>
+wd_a_b = stats.wasserstein_distance(data_a, data_b)
+wd_a_c = stats.wasserstein_distance(data_a, data_c)
+
+<span style=color:#aaa;font-style:italic># Plot this to compare the distributions</span>
+plt.bar([<span style=color:#a50>&#39;WD A to B&#39;</span>, <span style=color:#a50>&#39;WD A to C&#39;</span>],
+        [wd_a_b, wd_a_c])
+plt.show()
+</code></pre></div><p><img src=output_16_0.png alt=png></p>
+<h2 id=methods-based-on-probability-densities>
+Methods based on probability densities
+<a class=heading-link href=#methods-based-on-probability-densities>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>The above methods only require the underlying sample data (<code>data_a</code> etc). There are host of methods that instead require the probability density function (PDF) of those data to be estimated. We can relatively easily approximate these using NumPy&rsquo;s <code>histogram</code> method (which is effectively what we were doing when we plotted the distributions as histograms above). Here we normalise the PDFs to sum to 1, but we don&rsquo;t strictly need to do this when passing them to SciPy, as this is usually taken care of internally. Still, it&rsquo;s a good practice to get into (especially if you are coding your own test, like we do later).</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># The x space we want to interpolate from and to</span>
+x_interp = np.linspace(data_a.min(), data_c.max(), size)
+
+<span style=color:#aaa;font-style:italic># The PDFs for A, B and C</span>
+pdf_a, _ = np.histogram(data_a, bins=x_interp)
+pdf_b, _ = np.histogram(data_b, bins=x_interp)
+pdf_c, _ = np.histogram(data_c, bins=x_interp)
+
+<span style=color:#aaa;font-style:italic># We need to normalise these to make them real PDFs that sum to 1</span>
+pdf_a = pdf_a / pdf_a.sum()
+pdf_b = pdf_b / pdf_b.sum()
+pdf_c = pdf_c / pdf_c.sum()
+</code></pre></div><h2 id=jenson-shannon-divergence>
+Jenson-Shannon divergence
+<a class=heading-link href=#jenson-shannon-divergence>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>The Jenson-Shannon (J-S) divergence is another popular method of calculating the distance between distributions. It is based on the famous Kullback-Leibler divergence, but is symmetric (\(JS(p || q)\) is the same as (\(JS(q || p)\) and always finite, whilst Kullback-Leibler is not. Similarly to other distances and divergences, it is 0 when the distributions are very similar. SciPy provides us another convenient method <a href=https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html target=_blank><code>scipy.spatial.distance.jensenshannon</code></a> to make our lives easier:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>scipy.spatial.distance</span>
+
+js_a_b = scipy.spatial.distance.jensenshannon(pdf_a, pdf_b)
+js_a_c = scipy.spatial.distance.jensenshannon(pdf_a, pdf_c)
+
+<span style=color:#aaa;font-style:italic># Plot this to compare the distributions</span>
+plt.bar([<span style=color:#a50>&#39;J-S A to B&#39;</span>, <span style=color:#a50>&#39;J-S A to C&#39;</span>],
+        [js_a_b, js_a_c])
+plt.show()
+</code></pre></div><p><img src=output_20_0.png alt=png></p>
+<h2 id=hellinger-distance>
+Hellinger distance
+<a class=heading-link href=#hellinger-distance>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Our final example is the <a href=https://en.wikipedia.org/wiki/Hellinger_distance target=_blank>Hellinger distance</a> \(H\), which is closely related to the <a href=https://en.wikipedia.org/wiki/Bhattacharyya_distance target=_blank>Bhattacharyya</a> coefficient \(BC\) and distance \(D_B\). In its continuous form, this approximates the area of the overlap between two distributions, effectively integrating this overlap. In its discrete form, \(BC\) given by:</p>
+<p>\[
+BC(P,Q) = \Sigma_{i=1}^{n} \sqrt{P_i Q_i}
+\]</p>
+<p>where \(P\) and \(Q\) are our PDFs, both of length \(n\) and over the same sample space. The Bhattacharyya distance is then defined as:</p>
+<p>\[
+D_B(P,Q) = -\ln(BC)
+\]</p>
+<p>The Hellinger distance is given by:</p>
+<p>\[
+H(P,Q) = \sqrt{1 - BC(P,Q)}
+\]</p>
+<p>\(BC\) and \(H\) are always between 0 and 1, whilst \(D_B\) is greater than 0 but has no upper bound. In constrast to the other statistical distances we have looked at here, \(BC\) is larger the more simliar the distributions are. This time, there is no SciPy method to rely on, but fortunately, as you can see from the above formulae, the calculation is rather straightforward:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># Calculate BC between A,B and A,C</span>
+bc_a_b = np.sum(np.sqrt(np.multiply(pdf_a, pdf_b)))
+bc_a_c = np.sum(np.sqrt(np.multiply(pdf_a, pdf_c)))
+
+<span style=color:#aaa;font-style:italic># Use these to calculate D_B</span>
+db_a_b = -np.log(bc_a_b)
+db_a_c = -np.log(bc_a_c)
+
+<span style=color:#aaa;font-style:italic># And the Hellinger distance</span>
+h_a_b = np.sqrt(<span style=color:#099>1</span> - bc_a_b)
+h_a_c = np.sqrt(<span style=color:#099>1</span> - bc_a_c)
+
+<span style=color:#aaa;font-style:italic># Plot D_B and H</span>
+x = np.arange(<span style=color:#099>2</span>)
+width = <span style=color:#099>0.2</span>
+plt.bar(x - width / <span style=color:#099>2</span>, [db_a_b, db_a_c], width, label=<span style=color:#a50>&#39;D_B&#39;</span>)
+plt.bar(x + width / <span style=color:#099>2</span>, [h_a_b, h_a_c], width, label=<span style=color:#a50>&#39;H&#39;</span>)
+plt.legend()
+plt.xticks(x, [<span style=color:#a50>&#39;A to B&#39;</span>, <span style=color:#a50>&#39;A to C&#39;</span>])
+plt.show()
+</code></pre></div><p><img src=output_22_0.png alt=png></p>
+<h2 id=what-about-far-apart-distributions>
+What about <em>far apart</em> distributions?
+<a class=heading-link href=#what-about-far-apart-distributions>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>You might have noticed that most of the above methods are some kind of measure of the overlap of distributions. But what if the distribution don&rsquo;t overlap - what if they are <em>far apart</em> and we want to test <em>how far apart</em> they are? Let&rsquo;s create two new distributions that are far away from \(A\):</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># Create the new distributions</span>
+data_d = stats.norm.rvs(<span style=color:#099>10</span>, <span style=color:#099>1</span>, size)
+data_e = stats.norm.rvs(<span style=color:#099>42</span>, <span style=color:#099>4.2</span>, size)
+
+<span style=color:#aaa;font-style:italic># And their PDFs</span>
+x_interp = np.linspace(data_a.min(), data_e.max(), size)
+pdf_d, _ = np.histogram(data_d, bins=x_interp)
+pdf_e, _ = np.histogram(data_e, bins=x_interp)
+
+<span style=color:#aaa;font-style:italic># Normalise these PDFs</span>
+pdf_d = pdf_d / pdf_d.sum()
+pdf_e = pdf_e / pdf_e.sum()
+
+<span style=color:#aaa;font-style:italic># Plot them as histograms to see what they look like</span>
+<span style=color:#aaa;font-style:italic># compared to each other</span>
+plt.hist(data_a, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;A&#39;</span>)
+plt.hist(data_d, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;D&#39;</span>)
+plt.hist(data_e, bins=<span style=color:#099>20</span>, density=<span style=color:#00a>True</span>, alpha=<span style=color:#099>0.4</span>, label=<span style=color:#a50>&#39;E&#39;</span>)
+plt.legend()
+plt.yticks([])
+plt.show()
+</code></pre></div><p><img src=output_24_0.png alt=png></p>
+<p>Now run all of our tests again and plot the statistics on a bar chart. For comparison purposes, we will normalise the statistics.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#aaa;font-style:italic># Calculate all of the statistics we covered above!</span>
+mean_a_d = data_d.mean() - data_a.mean()
+mean_a_e = data_e.mean() - data_a.mean()
+ks_a_d = stats.kstest(data_a, data_d)
+ks_a_e = stats.kstest(data_a, data_e)
+ad_a_d = stats.anderson_ksamp([data_a, data_d])
+ad_a_e = stats.anderson_ksamp([data_a, data_e])
+wd_a_d = stats.wasserstein_distance(data_a, data_d)
+wd_a_e = stats.wasserstein_distance(data_a, data_e)
+js_a_d = scipy.spatial.distance.jensenshannon(pdf_a, pdf_d)
+js_a_e = scipy.spatial.distance.jensenshannon(pdf_a, pdf_e)
+h_a_d = np.sqrt(<span style=color:#099>1</span> - np.sum(np.sqrt(np.multiply(pdf_a, pdf_d))))
+h_a_e = np.sqrt(<span style=color:#099>1</span> - np.sum(np.sqrt(np.multiply(pdf_a, pdf_e))))
+
+<span style=color:#aaa;font-style:italic># Normalise the tests that aren&#39;t already between 0 and 1</span>
+mean_a_d = mean_a_d / <span style=color:#0aa>max</span>(mean_a_d, mean_a_e)
+mean_a_e = mean_a_e / <span style=color:#0aa>max</span>(mean_a_d, mean_a_e)
+ad_a_d_s = ad_a_d.statistic / <span style=color:#0aa>max</span>(ad_a_d.statistic, ad_a_e.statistic)
+ad_a_e_s = ad_a_e.statistic / <span style=color:#0aa>max</span>(ad_a_e.statistic, ad_a_e.statistic)
+wd_a_d = wd_a_d / <span style=color:#0aa>max</span>(wd_a_d, wd_a_e)
+wd_a_e = wd_a_e / <span style=color:#0aa>max</span>(wd_a_d, wd_a_e)
+js_a_d = js_a_d / <span style=color:#0aa>max</span>(js_a_d, js_a_e)
+js_a_e = js_a_e / <span style=color:#0aa>max</span>(js_a_d, js_a_e)
+
+<span style=color:#aaa;font-style:italic># Plot the statistics</span>
+x = np.arange(<span style=color:#099>6</span>)
+width = <span style=color:#099>0.2</span>
+plt.bar(x - width / <span style=color:#099>2</span>,
+        [mean_a_d, ks_a_d.statistic, ad_a_d_s, wd_a_d, js_a_d, h_a_d],
+        width,
+        label=<span style=color:#a50>&#39;A to D&#39;</span>)
+plt.bar(x + width / <span style=color:#099>2</span>,
+        [mean_a_e, ks_a_e.statistic, ad_a_e_s, wd_a_e, js_a_e, h_a_e],
+        width,
+        label=<span style=color:#a50>&#39;A to E&#39;</span>)
+plt.xticks(x, [<span style=color:#a50>&#39;Mean&#39;</span>, <span style=color:#a50>&#39;K-S&#39;</span>, <span style=color:#a50>&#39;A-D&#39;</span>, <span style=color:#a50>&#39;WD&#39;</span>, <span style=color:#a50>&#39;J-S&#39;</span>, <span style=color:#a50>&#39;H&#39;</span>])
+plt.legend()
+plt.yticks([])
+plt.show()
+</code></pre></div><p><img src=output_26_1.png alt=png></p>
+<p>As you can see, K-S and A-D tests reach their maximum value as soon as the distributions no longer overlap, and are therefore not useful for comparing far apart distributions. On the other hand, the mean, Wasserstein distance, J-S distance and Hellinger distance all do a good job of determining that \(E\) is further from \(A\) than \(D\) is.</p>
+<h2 id=what-other-tests-are-there>
+What other tests are there?
+<a class=heading-link href=#what-other-tests-are-there>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Far too many to list here! But as a rough summary of the popular ones I haven&rsquo;t included:</p>
+<ul>
+<li>Simpler tests like the <a href=https://en.wikipedia.org/wiki/Mean_absolute_error target=_blank>mean absolute error</a>, <a href=https://en.wikipedia.org/wiki/Coefficient_of_determination target=_blank>R-squared test</a> and <a href=https://en.wikipedia.org/wiki/Chi-squared_test target=_blank>Chi-squared test</a>, which are more often used for testing observations to a continuous distribution (such as modelled data).</li>
+<li><a href=https://machinelearningmastery.com/vector-norms-machine-learning target=_blank>L1 and L2 distances</a>, which are popular for data science and machine learning applications.</li>
+<li>Other <em>f</em>-divergence tests such as the <a href=https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures target=_blank>total variation distance</a>.</li>
+<li>And others - <a href=https://en.wikipedia.org/wiki/Statistical_distance target=_blank>check out this Wikipedia article</a>.</li>
+</ul>
+<h2 id=summary>
+Summary
+<a class=heading-link href=#summary>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Here I have shown a small selection of the most commonly used statistical tests that you can use to compare empirical distributions. Which test you choose ultimately depends on your data and what hypothesis you are testing, but I hope this brief overview has at least highlighted a few options that you may wish to explore further.</p>
+</div>
+<footer>
+<span class=mr1>Found this post useful?</span>
+<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init('Buy me a coffee','#29abe0','B0B1ACSFJ'),kofiwidget2.draw()</script>
+<h3>Comments</h3>
+<div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div>
+<div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div>
+</footer>
+</article>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:!0},{left:'$',right:'$',display:!1},{left:'\\(',right:'\\)',display:!1},{left:'\\[',right:'\\]',display:!0}]})"></script>
+</section>
+</div>
+<footer class=footer>
+<section class=container>
+©
+2022
+Sam Harrison
+·
+Powered by <a href=https://gohugo.io/>Hugo</a> & lovingly adapted from the <a href=https://github.com/luizdepra/hugo-coder/>Coder</a> theme
+·
+<a href=https://samharrison.science/about>About this site.</a>
+</section>
+</footer>
+</main>
+<script src=/js/coder.min.39a51230dce2ac866c049b52573e38bf60666af4bc63c1bdf203b9b2d95b1cd6.js integrity="sha256-OaUSMNzirIZsBJtSVz44v2BmavS8Y8G98gO5stlbHNY="></script>
+<script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script>
+</body>
+</html>
