@@ -4,7 +4,7 @@ date = 2022-06-11T09:17:22+01:00
 title = "Create and hosting an interactive app with Jupyter, Voilà and Heroku"
 description = "Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app"
 tags = ["jupyter", "voila", "heroku"]
-images = ["quadratic-app-ss2.png"]
+images = ["posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png"]
 +++
 
 In this article, I will demonstrate how easy it is to create an interactive web app using Jupyter Notebooks, Voilà and Heroku. We will use Jupyter to create a simple notebook that plots a graph based on user input, turn this into an interactive dashboard using Voilà, and host it online using Heroku.

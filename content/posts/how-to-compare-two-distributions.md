@@ -3,7 +3,7 @@ title = "How to compare two empirical distributions"
 date = "2022-05-14"
 tags = ["probability", "python", "scipy", "stats"]
 description = "A comparison of common methods to compare two empirical probability distributions in Python"
-images = ["output_4_0.png"]
+images = ["posts/how-to-compare-two-distributions/output_4_0.png"]
 draft = "false"
 +++
 
