@@ -1,0 +1,9 @@
+{{ if eq (len .Params) 0 }}
+<div class="highlight command">
+    <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code>{{ range split .Inner "\n" }}{{ if ne . "" }}<span class="command">{{ printf "%s\n" . }}</span>{{ end }}{{ end }}</code></pre>
+</div>
+{{ else }}
+<div class="highlight command">
+    <pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span class="command">{{ .Get 0 }}</span><span class="output">{{ .Inner }}</span></code></pre>
+</div>
+{{ end }}

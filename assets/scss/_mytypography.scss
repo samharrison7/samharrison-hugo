@@ -28,3 +28,12 @@ h1, h2, h3, h4, h5, h6 {
 code {
     font-family: 'Source Code Pro', monospace;
 }
+.highlight code {
+    .command::before {
+        content: "$ ";
+        color: $color-dark-gray;
+    }
+    .output {
+        color: $color-dark-gray;
+    }
+}
