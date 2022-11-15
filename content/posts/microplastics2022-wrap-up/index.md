@@ -11,7 +11,7 @@ Sitting on the TGV from Zurich to Paris, returning from an exciting and educatio
 
 And then I thought these thoughts might just about be useful enough to others to warrant publishing, and so here is a brief post along those lines. I’ve tried to categorise into somewhat arbitrarily chosen categories, but really this is just a disparate collection of things that popped into my head as I read through my notes. Enjoy 🙂
 
-{{< notice >}}
+{{< notice question "Comments?" >}}
 Got any thoughts, comments, criticisms? Please do comment below - you’ll need a GitHub account, but seeing as we’re all moving towards FAIR data and software, you’ll probably want a GitHub account anyway to start open-sourcing your scripts, data analysis and models 😉
 {{< /notice >}}
 
