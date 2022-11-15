@@ -63,4 +63,4 @@ Got any thoughts, comments, criticisms? Please do comment below - you’ll need 
 - Running a conference #2: A speed dating session at the start of the week is a great way to get to know people a little better, and it makes it so much easier to casually approach people during coffee breaks etc. Splitting into small groups to discuss a certain topic for 30 minutes worked really well.
 - Running a conference #3: 20 minutes per talk is *so* much better than 15 minutes. 20 minutes gives time for an in-depth 15 minute talk and then 5 minutes for a proper Q&A session. 15 minutes means people overrun and have 1 or 0 minutes for questions.
 
-{{< figure src="group-photo.jpeg" caption="Photo stolen from [Denise Mitrano 🙂](https://twitter.com/DeniseMitrano/status/1592175305485332481)" alt="Photo of a large group of people posing for a group photo infront of a lake" >}}
+{{< figure src="group-photo.jpeg" caption="Photo stolen from [Denise Mitrano](https://twitter.com/DeniseMitrano/status/1592175305485332481) 🙂" alt="Photo of a large group of people posing for a group photo infront of a lake" >}}
