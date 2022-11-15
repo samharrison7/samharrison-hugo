@@ -1,6 +1,6 @@
 +++ 
-draft = true
-date = 2022-11-14T22:12:00+01:00
+draft = false
+date = 2022-11-15T11:32:00+00:00
 title = "Microplastics2022 conference wrap-up"
 description = "A few scattered reflections on the Microplastics2022 conference in Monte Verita"
 tags = ["microplastics"]
@@ -14,6 +14,8 @@ And then I thought these thoughts might just about be useful enough to others to
 {{< notice >}}
 Got any thoughts, comments, criticisms? Please do comment below - you’ll need a GitHub account, but seeing as we’re all moving towards FAIR data and software, you’ll probably want a GitHub account anyway to start open-sourcing your scripts, data analysis and models 😉
 {{< /notice >}}
+
+{{< bannerimage src="panorama.jpg" alt="Photo of a lake surrounded by mountains with a large coniferous tree in the foreground" >}}
 
 ## Exposure and release modelling
 
@@ -59,3 +61,5 @@ Got any thoughts, comments, criticisms? Please do comment below - you’ll need 
 - Also see previous point about overlapping exposure modelling work. Do we need a platform to discuss this work?
 - Running a conference #1: Long breaks are great! A 0830-1900 agenda is completely okay with 1.5 hour lunches, 50 min coffee breaks and 2 hour poster sessions. Long breaks = much more time for networking. I thought 0830-1900 would burn me out, but with the breaks it felt really relaxed and I left feeling much less drained (and much more energised about the science) than most other conferences.
 - Running a conference #2: 20 minutes per talk is *so* much better than 15 minutes. 20 minutes gives time for an in-depth 15 minute talk and then 5 minutes for a proper Q&A session. 15 minutes means people overrun and have 1 or 0 minutes for questions.
+
+{{< figure src="group-photo.jpeg" alt="Photo of a large group of people posing for a group photo infront of a lake" >}}
