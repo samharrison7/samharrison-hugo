@@ -11,7 +11,7 @@ Sitting on the TGV from Zurich to Paris, returning from an exciting and educatio
 
 And then I thought these thoughts might just about be useful enough to others to warrant publishing, and so here is a brief post along those lines. I’ve tried to categorise into somewhat arbitrarily chosen categories, but really this is just a disparate collection of things that popped into my head as I read through my notes. Enjoy 🙂
 
-{{< notice question "Comments?" >}}
+{{< notice question "Comments and questions" >}}
 Got any thoughts, comments, criticisms? Please do comment below - you’ll need a GitHub account, but seeing as we’re all moving towards FAIR data and software, you’ll probably want a GitHub account anyway to start open-sourcing your scripts, data analysis and models 😉
 {{< /notice >}}
 
@@ -38,7 +38,7 @@ Got any thoughts, comments, criticisms? Please do comment below - you’ll need 
 
 - Plastic fragments aren’t spherical, and there is work ongoing to quantify the distribution of shapes present in the environment.
 - Because of this, think about the relevance of using polystyrene spheres in your experiment, or assuming sphericity in your models ([oops 😳](https://github.com/microplastics-cluster/fragment-mnp/blob/dc0c29edaccf1845d0d998c7f37a20a6eb649112/src/fragmentmnp/fragmentmnp.py#L120-L124)). Models could easily use form factors to have more realistic representations of shape.
-- Settling of non-spherical particles is slower than Stokes' Law. Settling of fibres is *much* slower. Even alternative adaptations of Stokes’ Law (e.g. [Zhiyao, 2018](https://doi.org/10.1016/S1674-2370(15)30017-X)) don’t work well for fibres.
+- Settling of non-spherical particles is slower than Stokes' Law. Settling of fibres is *much* slower. Even alternative adaptations of Stokes' Law (e.g. [Zhiyao, 2018](https://doi.org/10.1016/S1674-2370(15)30017-X)) don’t work well for fibres.
 - Instead of using binned size, shape and density classes to describe your polymer, [consider using continuous probability distributions](https://doi.org/10.1021/acs.estlett.9b00379) to fully reflect the continuous nature of plastics in the environment (again, [oops 😳](https://github.com/microplastics-cluster/fragment-mnp/blob/dc0c29edaccf1845d0d998c7f37a20a6eb649112/src/fragmentmnp/examples.py#L20)).
 - Volume and surface area should be reported as part of risk assessments.
 - Additive leaching can happen over decades (e.g. [leaching of phthalates from PVC in the aquatic environment](https://doi.org/10.1021/acs.est.2c05108)). Don’t assume additives quickly leach from polymers!
@@ -59,7 +59,8 @@ Got any thoughts, comments, criticisms? Please do comment below - you’ll need 
 
 - The environmental microplastic community doesn’t have a central network like the NanoSafety Cluster was for nanoscience. Human microplastics research has [CUSP](https://cusp-research.eu/). Do we need one?
 - Also see previous point about overlapping exposure modelling work. Do we need a platform to discuss this work?
-- Running a conference #1: Long breaks are great! A 0830-1900 agenda is completely okay with 1.5 hour lunches, 50 min coffee breaks and 2 hour poster sessions. Long breaks = much more time for networking. I thought 0830-1900 would burn me out, but with the breaks it felt really relaxed and I left feeling much less drained (and much more energised about the science) than most other conferences.
-- Running a conference #2: 20 minutes per talk is *so* much better than 15 minutes. 20 minutes gives time for an in-depth 15 minute talk and then 5 minutes for a proper Q&A session. 15 minutes means people overrun and have 1 or 0 minutes for questions.
+- Running a conference #1: Long breaks are great! A 0830-1900 agenda is completely okay with 1.5 hour lunches, 50 min coffee breaks and 2 hour poster and speed dating sessions. Long breaks = much more time for networking. I thought 0830-1900 would burn me out, but with the breaks it felt really relaxed and I left feeling much less drained (and much more energised about the science) than most other conferences.
+- Running a conference #2: A speed dating session at the start of the week is a great way to get to know people a little better, and it makes it so much easier to casually approach people during coffee breaks etc. Splitting into small groups to discuss a certain topic for 30 minutes worked really well.
+- Running a conference #3: 20 minutes per talk is *so* much better than 15 minutes. 20 minutes gives time for an in-depth 15 minute talk and then 5 minutes for a proper Q&A session. 15 minutes means people overrun and have 1 or 0 minutes for questions.
 
-{{< figure src="group-photo.jpeg" alt="Photo of a large group of people posing for a group photo infront of a lake" >}}
+{{< figure src="group-photo.jpeg" caption="Photo stolen from [Denise Mitrano 🙂](https://twitter.com/DeniseMitrano/status/1592175305485332481)" alt="Photo of a large group of people posing for a group photo infront of a lake" >}}
