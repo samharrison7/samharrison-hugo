@@ -111,6 +111,15 @@ name = "Github"
 icon = "fa fa-2x fa-github"
 weight = 1
 url = "https://github.com/samharrison7/"
+target = "_blank"
+
+[[params.social]]
+name = "Mastodon"
+icon = "fa fa-2x fa-mastodon"
+weight = 1
+url = "https://mas.to/@samharrison7"
+rel = "me"
+target = "_blank"
 
 # [[params.social]]
 # name = "Gitlab"
@@ -123,12 +132,14 @@ name = "Twitter"
 icon = "fa fa-2x fa-twitter"
 weight = 3
 url = "https://twitter.com/samharrison7/"
+target = "_blank"
 
 [[params.social]]
 name = "LinkedIn"
 icon = "fa fa-2x fa-linkedin"
 weight = 4
 url = "https://www.linkedin.com/in/samharrison7/"
+target = "_blank"
 
 # [[params.social]]
 # name = "Medium"
