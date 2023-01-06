@@ -134,7 +134,7 @@ If you are SSHed into another machine and don't have access to a web browser, th
 
 Now we tell Heroku to create a new app from your repo:
 
-{{< command "heroku create" >}}
+{{< command command="heroku create" >}}
 Creating app... done, ⬢ quiet-meadow-91848
 https://quiet-meadow-91848.herokuapp.com/ | https://git.heroku.com/quiet-meadow-91848.git
 {{< /command >}}

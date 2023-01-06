@@ -36,4 +36,12 @@ code {
     .output {
         color: $color-dark-gray;
     }
+    .command.win::before {
+        content: "> ";
+        color: $color-dark-gray;
+    }
+    .custom {
+        color: $color-dark-gray;
+        user-select: none;
+    }
 }
