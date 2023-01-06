@@ -397,7 +397,7 @@ Create a Conda build recipe
 mkdir -p <span style=color:#a00>$LIB_DIR</span>
 
 <span style=color:#aaa;font-style:italic># Compile the library using GFortran</span>
-gfortran -shared ./src/pyf/quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>LIB_DIR</span><span style=color:#a50>}</span><span style=color:#a50>/quadratic.so&#34;</span>
+<span style=color:#a00>$GFORTRAN</span> -shared ./src/pyf/quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>LIB_DIR</span><span style=color:#a50>}</span><span style=color:#a50>/quadratic.so&#34;</span>
 
 <span style=color:#aaa;font-style:italic># Install the Python package, but without dependencies,</span>
 <span style=color:#aaa;font-style:italic># because Conda takes care of that</span>
