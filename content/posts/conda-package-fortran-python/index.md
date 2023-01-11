@@ -323,7 +323,7 @@ LIB_DIR="${PREFIX}/lib"
 mkdir -p $LIB_DIR
 
 # Compile the library using GFortran
-$GFORTRAN -shared ./src/pyf/quadratic.f90 -o "${LIB_DIR}/quadratic.so"
+$FC -shared ./src/pyf/quadratic.f90 -o "${LIB_DIR}/quadratic.so"
 
 # Install the Python package, but without dependencies,
 # because Conda takes care of that
