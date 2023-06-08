@@ -10,4 +10,4 @@ package:
   repo: PyPI
   url: https://pypi.org/project/json2netcdf/1.1.2/
 date: 2022-03-27
-selected: true 
+selected: false 

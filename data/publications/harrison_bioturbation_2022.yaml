@@ -13,5 +13,5 @@ package:
   repo: PyPI
   url: https://pypi.org/project/bioturbation/1.0.1/
 date: 2022-03-27
-selected: true
+selected: false
 tags: ['nanofase', 'speed']
