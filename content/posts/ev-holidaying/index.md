@@ -1,6 +1,6 @@
 +++ 
 draft = false
-date = 2023-09-23T09:19:00+00:00
+date = 2023-09-23T08:19:00+00:00
 title = "An honest review of going on holiday in an electric vehicle"
 description = "An account of a recent holiday to Northumberland in an electric vehicle"
 tags = ["EV"]
@@ -31,7 +31,7 @@ The next few days went similarly uneventfully, at least from a charging point of
 
 So - perfectly normal, and far from the horror stories that you might have read. Were there any disadvantages? Maybe, or at least “nuances” that are worth considering, so here is an honest run through of them:
 
-{{< figure src="craster.jpeg" caption="One of the Type 2 chargers along the Northumberland coast, this one in Craster delivering us 7 kW whilst we went for a walk to Dunstanburgh Castle" alt="Photo of the author in front of a car plugged into an electric vehicle charger" >}}
+{{< figure src="craster.jpg" caption="One of the Type 2 chargers along the Northumberland coast, this one in Craster delivering us 7 kW whilst we went for a walk to Dunstanburgh Castle" alt="Photo of the author in front of a car plugged into an electric vehicle charger" >}}
 
 ### The nuances
 
