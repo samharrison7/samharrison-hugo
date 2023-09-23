@@ -31,6 +31,8 @@ The next few days went similarly uneventfully, at least from a charging point of
 
 So - perfectly normal, and far from the horror stories that you might have read. Were there any disadvantages? Maybe, or at least “nuances” that are worth considering, so here is an honest run through of them:
 
+{{< figure src="craster.jpeg" caption="One of the Type 2 chargers along the Northumberland coast, this one in Craster delivering us 7 kW whilst we went for a walk to Dunstanburgh Castle" alt="Photo of the author in front of a car plugged into an electric vehicle charger" >}}
+
 ### The nuances
 
 - Timing your charges can be a little awkward. The problem is that rapid chargers can be a bit *too* rapid. Charging a 50 kWh battery from 20% to 80% will only take around 40 minutes, which might be a bit too long to sit around doing nothing, but a bit too short to have a proper explore around where you’re parked. Slower chargers give the chance for a longer exploration, but you still have to time your exploration to not be longer than it takes to charge your car.
@@ -40,3 +42,5 @@ So - perfectly normal, and far from the horror stories that you might have read.
 - Reliance on internet: As well as some chargers requiring an internet connection to charge, you will also need internet to browse the Zapmap for the nearest chargers. Unlike petrol stations, EV charging points can be quite hidden away - good luck finding them without the exact pinpoint on the Zapmap!
 
 Time will tell whether our experiences so far will pan out to be the norm, but so far so good. I am certainly a lot more optimistic about a full transition to EVs than before the trip, and hopefully as the charger network grows and matures, a lot of the nuances will be ironed out.
+
+{{< bannerimage src="dunstanburgh.jpg" alt="Photo of a beach and the sea, with a castle on a headland across the sea" >}}
