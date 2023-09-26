@@ -97,7 +97,7 @@ scriptsrc = ["'self'", "'unsafe-inline'", "https://gc.zgo.at",
              "https://storage.ko-fi.com", "https://cdn.jsdelivr.net", "https://utteranc.es"]
 prefetchsrc = ["'self'"]
 # connect-src directive – defines valid targets for to XMLHttpRequest (AJAX), WebSockets or EventSource
-connectsrc = ["'self'"]
+connectsrc = ["'self'", "https://samharrison7.goatcounter.com/count"]
 
 [taxonomies]
 category = "categories"
