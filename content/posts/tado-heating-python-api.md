@@ -3,7 +3,7 @@ title = "Getting more out of your Tado heating system with Python and the Tado A
 date = "2023-10-30"
 tags = ["api", "tado", "python"]
 description = "How to control your Tado heating system with Python and the Tado API"
-image = "tado-api.png"
+images = ["posts/tado-heating-python-api/tado-api.png"]
 draft = "false"
 +++
 
