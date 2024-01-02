@@ -3,7 +3,7 @@ title = "Getting more out of your Tado heating system with Python and the Tado A
 date = "2023-10-30"
 tags = ["api", "tado", "python"]
 description = "How to control your Tado heating system with Python and the Tado API"
-images = ["posts/tado-heating-python-api/tado-api.png"]
+image = "tado-api.png"
 draft = "false"
 +++
 
@@ -354,7 +354,7 @@ for h in range(7, 22):
 blocks.append(set_block('22:00', '00:00', 14.0))
 ```
 
-`libtado` has a `set_schedule_blocks()` function. However, I have not managed to get this to work without a 403 error (see [this issue](https://github.com/germainlefebvre4/libtado/issues/201) - maybe it will be closed by the time you're reading this!). Instead, I am going to access the internal `libtado.api` function `_api_call`, and pass a slightly different URL to that used by `set_schedule_blocks()`. Notably, a "day type" parameter is also passed, which is either "MONDAY_TO_SUNDAY", "MONDAY_TO_FRIDAY" or a day of the week, depending on whether you are setting a one (Monday to Sunday), three (Monday to Friday, Saturday, Sunday) or seven day schedule. 
+`libtado` has a `set_schedule_blocks()` function. However, I have not managed to get this to work without a 403 error (see [this issue](https://github.com/germainlefebvre4/libtado/issues/201) - <strike>maybe it will be closed by the time you're reading this!</strike> this issue has now been solved in [release 3.7.8](https://github.com/germainlefebvre4/libtado/releases/tag/3.7.8)!). Instead, I am going to access the internal `libtado.api` function `_api_call`, and pass a slightly different URL to that used by `set_schedule_blocks()`. Notably, a "day type" parameter is also passed, which is either "MONDAY_TO_SUNDAY", "MONDAY_TO_FRIDAY" or a day of the week, depending on whether you are setting a one (Monday to Sunday), three (Monday to Friday, Saturday, Sunday) or seven day schedule. 
 
 
 ```python
