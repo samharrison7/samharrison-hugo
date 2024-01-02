@@ -9,13 +9,13 @@
 <meta name=description content="How to control your Tado heating system with Python and the Tado API">
 <meta name=keywords content="environmental scientist,environmental modelling,research software,blog">
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://samharrison.science/posts/tado-heating-python-api/tado-api.png">
+<meta name=twitter:image content="https://samharrison.science/images/sam.jpg">
 <meta name=twitter:title content="Getting more out of your Tado heating system with Python and the Tado API">
 <meta name=twitter:description content="How to control your Tado heating system with Python and the Tado API">
 <meta property="og:title" content="Getting more out of your Tado heating system with Python and the Tado API">
 <meta property="og:description" content="How to control your Tado heating system with Python and the Tado API">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://samharrison.science/posts/tado-heating-python-api/"><meta property="og:image" content="https://samharrison.science/posts/tado-heating-python-api/tado-api.png"><meta property="article:section" content="posts">
+<meta property="og:url" content="https://samharrison.science/posts/tado-heating-python-api/"><meta property="og:image" content="https://samharrison.science/images/sam.jpg"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2023-10-30T00:00:00+00:00">
 <meta property="article:modified_time" content="2023-10-30T00:00:00+00:00">
 <title>
@@ -365,7 +365,7 @@ blocks.append(set_block(<span style=color:#a50>&#39;00:00&#39;</span>, <span sty
 
 <span style=color:#aaa;font-style:italic># Set the end block (10pm to midnight)</span>
 blocks.append(set_block(<span style=color:#a50>&#39;22:00&#39;</span>, <span style=color:#a50>&#39;00:00&#39;</span>, <span style=color:#099>14.0</span>))
-</code></pre></div><p><code>libtado</code> has a <code>set_schedule_blocks()</code> function. However, I have not managed to get this to work without a 403 error (see <a href=https://github.com/germainlefebvre4/libtado/issues/201 target=_blank>this issue</a> - maybe it will be closed by the time you&rsquo;re reading this!). Instead, I am going to access the internal <code>libtado.api</code> function <code>_api_call</code>, and pass a slightly different URL to that used by <code>set_schedule_blocks()</code>. Notably, a &ldquo;day type&rdquo; parameter is also passed, which is either &ldquo;MONDAY_TO_SUNDAY&rdquo;, &ldquo;MONDAY_TO_FRIDAY&rdquo; or a day of the week, depending on whether you are setting a one (Monday to Sunday), three (Monday to Friday, Saturday, Sunday) or seven day schedule.</p>
+</code></pre></div><p><code>libtado</code> has a <code>set_schedule_blocks()</code> function. However, I have not managed to get this to work without a 403 error (see <a href=https://github.com/germainlefebvre4/libtado/issues/201 target=_blank>this issue</a> - <strike>maybe it will be closed by the time you&rsquo;re reading this!</strike> this issue has now been solved in <a href=https://github.com/germainlefebvre4/libtado/releases/tag/3.7.8 target=_blank>release 3.7.8</a>!). Instead, I am going to access the internal <code>libtado.api</code> function <code>_api_call</code>, and pass a slightly different URL to that used by <code>set_schedule_blocks()</code>. Notably, a &ldquo;day type&rdquo; parameter is also passed, which is either &ldquo;MONDAY_TO_SUNDAY&rdquo;, &ldquo;MONDAY_TO_FRIDAY&rdquo; or a day of the week, depending on whether you are setting a one (Monday to Sunday), three (Monday to Friday, Saturday, Sunday) or seven day schedule.</p>
 <div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>_ = api._api_call(
     <span style=color:#a50>&#34;homes/</span><span style=color:#a50>%i</span><span style=color:#a50>/zones/</span><span style=color:#a50>%i</span><span style=color:#a50>/schedule/timetables/</span><span style=color:#a50>%i</span><span style=color:#a50>/blocks/MONDAY_TO_SUNDAY&#34;</span> % (api.id, <span style=color:#099>1</span>, schedule_id),
     blocks,
@@ -398,7 +398,7 @@ What next?
 <section class=container>
 ©
 2022 -
-2023
+2024
 Sam Harrison
 ·
 Powered by <a href=https://gohugo.io/>Hugo</a> & lovingly adapted from the <a href=https://github.com/luizdepra/hugo-coder/>Coder</a> theme
