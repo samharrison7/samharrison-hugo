@@ -1,0 +1,264 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=content-language content="en">
+<meta name=color-scheme content="light dark">
+<meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; prefetch-src 'self'; connect-src 'self' https://samharrison7.goatcounter.com/count;">
+<meta name=author content="Sam Harrison">
+<meta name=description content="A walk-through of using PythonAnywhere and cron-job.org to schedule a Python script">
+<meta name=keywords content="environmental scientist,environmental modelling,research software,blog">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://samharrison.science/images/sam.jpg">
+<meta name=twitter:title content="Scheduling a Python script using PythonAnywhere and cron-job.org">
+<meta name=twitter:description content="A walk-through of using PythonAnywhere and cron-job.org to schedule a Python script">
+<meta property="og:title" content="Scheduling a Python script using PythonAnywhere and cron-job.org">
+<meta property="og:description" content="A walk-through of using PythonAnywhere and cron-job.org to schedule a Python script">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://samharrison.science/posts/scheduling-python-scripts/"><meta property="og:image" content="https://samharrison.science/images/sam.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2024-07-02T10:07:12+01:00">
+<meta property="article:modified_time" content="2024-07-02T10:07:12+01:00">
+<title>
+Scheduling a Python script using PythonAnywhere and cron-job.org · Sam Harrison
+</title>
+<link rel=canonical href=https://samharrison.science/posts/scheduling-python-scripts/>
+<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/scss/override.min.5966b1cd95b422e6410b0b668fece5c4f1c6c04250905dd4d545214f8af42265.css integrity="sha256-WWaxzZW0IuZBCwtmj+zlxPHGwEJQkF3U1UUhT4r0ImU=" crossorigin=anonymous media=screen>
+<link rel=icon type=image/png href=/images/favicon32.png sizes=32x32>
+<link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16>
+<link rel=apple-touch-icon href=/images/apple-touch-icon.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.92.1">
+</head>
+<body class="preload-transitions colorscheme-auto">
+<div class=float-container>
+<a id=dark-mode-toggle class=colorscheme-toggle>
+<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
+</a>
+</div>
+<main class=wrapper>
+<nav class=navigation>
+<section class=container>
+<img class=header-avatar src=/images/sam-header.jpg>
+<a class=navigation-title href=/>
+Sam Harrison
+</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle>
+<i class="fa fa-bars fa-fw" aria-hidden=true></i>
+</label>
+<ul class=navigation-list>
+<li class=navigation-item>
+<a class=navigation-link href=/my-research/>My Research</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/posts/>Blog</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/contact/>Contact</a>
+</li>
+</ul>
+</section>
+</nav>
+<div class=content>
+<section class="container post">
+<article>
+<header>
+<div class=post-title>
+<h1 class=title>
+<a class=title-link href=https://samharrison.science/posts/scheduling-python-scripts/>
+Scheduling a Python script using PythonAnywhere and cron-job.org
+</a>
+</h1>
+</div>
+<div class=post-meta>
+<div class=date>
+<span class=posted-on>
+<i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2024-07-02T10:07:12+01:00>
+2 July 2024
+</time>
+</span>
+<span class=reading-time>
+<i class="fa fa-clock-o" aria-hidden=true></i>
+8-minute read
+</span>
+</div>
+<div class=tags><span class=tag>
+<a href=/tags/python/>python</a>
+</span><span class=tag>
+<a href=/tags/cron/>cron</a>
+</span></div>
+</div>
+</header>
+<div>
+<p>Scheduling a script is one of those jobs that sounds like it should be easy, but is surprisingly tricky. Here, I walk you through one of the easier ways of doing so, by hosting the script on <a href=https://www.pythonanywhere.com/ target=_blank>PythonAnywhere</a> to give it a URL, and scheduling it to run using <a href=https://cron-job.org target=_blank>cron-job.org</a>, both of which offer free services.</p>
+<h2 id=whats-so-difficult>
+What&rsquo;s so difficult?
+<a class=heading-link href=#whats-so-difficult>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Scheduling scripts is when, instead of manually running a script whenever you need to, you tell a scheduler to run it at a given frequency or based on other events. There are many uses, such as running a forecasting model to provide regular forecasts, or pulling in the latest observations data to parameterise that model.</p>
+<p>You could do this manually, but that&rsquo;s just a pain. You could write scheduling into your script with liberal use of <code>sleep()</code>, but that relies on your script constantly running, which is hardly ideal. Schedulers like <a href=https://en.wikipedia.org/wiki/Cron target=_blank><code>cron</code></a> on Linux give you the ability to automate the running of scripts at given frequencies, so why can&rsquo;t you just set that going on your computer? You could, but that relies on your computer being on when you want the script to run, which again, is hardly ideal.</p>
+<p>There are countless options for getting around this, but most revolve around hosting the script on a server instead. That could be a local server, for example if you have a Raspberry Pi or similar, or a cloud server. For this example, we will use the excellent <a href=https://www.pythonanywhere.com/ target=_blank>PythonAnywhere</a>, which provides a very straightforward (and free) way of hosting Python apps. We will use <a href=https://flask.palletsprojects.com/en/3.0.x/ target=_blank>Flask</a> to give a URL to our script (that is, a URL that, when someone accesses it, the script runs).</p>
+<p>Hosting your script is only one part of the solution though - you still need a scheduler to run the script. If you have sufficient access to your server, you could of course set a <code>cron</code> job going on it. In fact, PythonAnywhere offers a limited scheduling service via its interface. A more general (and arguably robust) solution is to use a separate scheduler, such as the free <a href=https://cron-job.org target=_blank>cron-job.org</a>, and that is what we explore here.</p>
+<p>So, the simple &ldquo;I just need to schedule this script&rdquo; has turned into:</p>
+<ul>
+<li>Write the script</li>
+<li>Write a web app around the script to enable it to be run (using Flask)</li>
+<li>Host that app on a cloud server (PythonAnywhere)</li>
+<li>Use a scheduler (cron-job.org) to issue a request to your app&rsquo;s URL at a given frequency</li>
+</ul>
+<div class="notice tip">
+<div class=notice-title>
+<i class="fa fa-lightbulb-o" aria-hidden=true></i>Requirements
+</div>
+<div class=notice-content>All you need installed to run through this tutorial is a relatively recent version of Python and the Flask library. To set up a Conda/Mamba environment called <code>schedule</code> that uses these, simply run <code>mamba create -n schedule -c conda-forge python flask</code>.</div>
+</div>
+<h2 id=the-script>
+The script
+<a class=heading-link href=#the-script>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>For demonstrative purposes, let&rsquo;s keep it simple: We want to get the current temperature at a given location, using the excellent open-source weather API <a href=https://open-meteo.com/ target=_blank>Open-Meteo</a>, and save that to a local file, which we call <code>meteo.py</code>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>requests</span>
+<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>datetime</span> <span style=color:#00a>import</span> datetime
+
+<span style=color:#00a>def</span> <span style=color:#0a0>log_current_temperature</span>():
+    <span style=color:#a50>&#34;&#34;&#34;
+</span><span style=color:#a50>    Log the current temperature at the specified location
+</span><span style=color:#a50>    to a data file.
+</span><span style=color:#a50>    &#34;&#34;&#34;</span>
+
+    <span style=color:#aaa;font-style:italic># What location are we interested in?</span>
+    lat, lon = <span style=color:#099>54.05</span>, -<span style=color:#099>2.80</span>
+
+    <span style=color:#aaa;font-style:italic># Get the current surface temperature at that location</span>
+    <span style=color:#aaa;font-style:italic># using Open-Meteo</span>
+    r = requests.get(<span style=color:#a50>f</span><span style=color:#a50>&#39;https://api.open-meteo.com/v1/forecast?latitude=</span><span style=color:#a50>{</span>lat<span style=color:#a50>}</span><span style=color:#a50>&amp;longitude=</span><span style=color:#a50>{</span>lon<span style=color:#a50>}</span><span style=color:#a50>&amp;current=temperature_2m&#39;</span>)
+
+    <span style=color:#aaa;font-style:italic># If successful, append to the data file</span>
+    <span style=color:#00a>if</span> r.status_code == <span style=color:#099>200</span>:
+        <span style=color:#aaa;font-style:italic># Get the temperature from the returned data</span>
+        temperature = r.json()[<span style=color:#a50>&#39;current&#39;</span>][<span style=color:#a50>&#39;temperature_2m&#39;</span>]
+        <span style=color:#aaa;font-style:italic># Write this and the current time to the file</span>
+        <span style=color:#00a>with</span> <span style=color:#0aa>open</span>(<span style=color:#a50>&#39;data.csv&#39;</span>, <span style=color:#a50>&#39;a&#39;</span>) <span style=color:#00a>as</span> f:
+            f.write(<span style=color:#a50>f</span><span style=color:#a50>&#39;</span><span style=color:#a50>{</span>datetime.now().strftime(<span style=color:#a50>&#34;%Y-%m-</span><span style=color:#a50>%d</span><span style=color:#a50> %H:%M:%S&#34;</span>)<span style=color:#a50>}</span><span style=color:#a50>,</span><span style=color:#a50>{</span>temperature<span style=color:#a50>}</span><span style=color:#a50>\n</span><span style=color:#a50>&#39;</span>)
+</code></pre></div><p>This file defines a function <code>log_current_temperature()</code>, which sends a request to the Open-Meteo API, gets the current temperature from the response, and appends a CSV file with the current timestamp and this temperature.</p>
+<h2 id=the-flask-app>
+The Flask app
+<a class=heading-link href=#the-flask-app>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Because we are going to be running this script on a server, we need something to tell the server to run our function when the user goes to a particular URL. <a href=https://flask.palletsprojects.com/en/3.0.x/ target=_blank>Flask</a> is a &ldquo;micro web framework&rdquo; that makes this incredibly easy, so we will use that here. All we need to do is write an application file, <code>app.py</code>, that defines our endpoint (the URI that runs <code>log_current_temperature()</code>):</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>flask</span> <span style=color:#00a>import</span> Flask
+<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>meteo</span> <span style=color:#00a>import</span> log_current_temperature
+
+<span style=color:#aaa;font-style:italic># Create the Flask app</span>
+app = Flask(__name__)
+
+<span style=color:#aaa;font-style:italic># Define the endpoint to log the current temperature</span>
+<span style=color:#888>@app</span>.route(<span style=color:#a50>&#39;/log&#39;</span>)
+<span style=color:#00a>def</span> <span style=color:#0a0>log_temperature</span>():
+    <span style=color:#aaa;font-style:italic># Call the function to log the temperature</span>
+    log_current_temperature()
+    <span style=color:#aaa;font-style:italic># We return an empty string because we don&#39;t actually</span>
+    <span style=color:#aaa;font-style:italic># need to return anything to the user</span>
+    <span style=color:#00a>return</span> <span style=color:#a50>&#39;&#39;</span>
+
+<span style=color:#00a>if</span> __name__ == <span style=color:#a50>&#39;__main__&#39;</span>:
+    app.run()
+</code></pre></div><p>We can test our Flask app locally:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ flask run
+</code></pre></div><p>This will start Flask as a local server, usually at port 5000. In the app, we defined our endpoint as <code>/log</code>, meaning you that you can trigger the current temperature to be logged by going to https://localhost:5000/log.</p>
+<div class="notice tip">
+<div class=notice-title>
+<i class="fa fa-lightbulb-o" aria-hidden=true></i>Tip
+</div>
+<div class=notice-content>If you don&rsquo;t have admin permissions and get a message along the lines of &ldquo;An attempt was made to access a socket in a way forbidden by its access permissions&rdquo;, then try a different port number by using the <code>-p</code> flag - sometimes lower port numbers are reserved for admin only. For example, try <code>flask run -p 8000</code>.</div>
+</div>
+<p>Your app directory should now look like this, with the newly created <code>data.csv</code> file containing a record for the current temperature:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>.
+├── app.py
+├── data.csv
+└── meteo.py
+</code></pre></div><h2 id=hosting-the-app>
+Hosting the app
+<a class=heading-link href=#hosting-the-app>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>We will host the app on <a href=https://www.pythonanywhere.com/ target=_blank>PythonAnywhere</a>, which makes hosting Flask apps very straightforward. Head to the website and create yourself an account. We then need to upload our scripts to the server, which can either be done via the online interface or programmatically via a Bash console, which again can be opened via the online interface (paid accounts also get SSH access).</p>
+<p>Place your files in a new directory on the server, which we&rsquo;ll call <code>openmeteo-demo</code>. We then need to tell PythonAnywhere about our app, which can be done via the &ldquo;Web&rdquo; tab, at the URL <code>https://www.pythonanywhere.com/user/&lt;your-username>/webapps/</code>. Click the &ldquo;+ Add a new web app&rdquo; button and (if you have a free account), acknowledge the notice that you are not allowed a custom domain. When prompted, choose to create a Flask app and choose a Python version - I tested Python 3.10 with this demo, so that is a safe bet. When prompted to enter the path for a new Flask project, leave it as default - if we specify the path to our app, it will be overwritten.</p>
+<div class="notice tip">
+<div class=notice-title>
+<i class="fa fa-lightbulb-o" aria-hidden=true></i>Using a virtual environment?
+</div>
+<div class=notice-content>Our app is simple enough to not rely on external packages (except for Flask), but if yours does, then you will want to set up a virtual environment to manage this. PythonAnywhere supports using <code>virtualenv</code>, and there are thorough <a href=https://help.pythonanywhere.com/pages/Virtualenvs/ target=_blank>instructions on how to do so here</a>.</div>
+</div>
+<p>On the dashboard page for the web app, scroll down to the &ldquo;Code&rdquo; section, which is where we tell PythonAnywhere where our app is. Change &ldquo;Source code&rdquo; to <code>/home/&lt;username>/openmeteo-demo</code> (where <code>&lt;username></code> is your username), &ldquo;Working directory&rdquo; to the same, and then click on the &ldquo;WSGI configuration file&rdquo; to edit it - this is where we tell the server where exactly the Flask app is. We need to change the project home to <code>/home/&lt;username>/openmeteo-demo</code>, and import our Flask app from the file <code>app.py</code>. Your WGSI config file should now look something like this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>sys</span>
+
+<span style=color:#aaa;font-style:italic># add your project directory to the sys.path</span>
+project_home = <span style=color:#a50>&#39;/home/&lt;username&gt;/openmeteo-demo&#39;</span>
+<span style=color:#00a>if</span> project_home <span style=color:#00a>not</span> <span style=color:#00a>in</span> sys.path:
+    sys.path = [project_home] + sys.path
+
+<span style=color:#aaa;font-style:italic># import flask app but need to call it &#34;application&#34; for WSGI to work</span>
+<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>app</span> <span style=color:#00a>import</span> app <span style=color:#00a>as</span> application  <span style=color:#aaa;font-style:italic># noqa</span>
+</code></pre></div><p>At the top of the app dashboard, click the button to reload the app. We can now visit our app&rsquo;s URL to check that a new data file is created on the server. Your URL should be <code>https://&lt;username>.pythonanywhere.com/log</code> - visit this and then check that the <code>data.csv</code> file has been created and has one entry with the current temperature. If all is good, you can delete this file ready to be re-created when you set up your cron job.</p>
+<h2 id=scheduling-via-cron-joborg>
+Scheduling via cron-job.org
+<a class=heading-link href=#scheduling-via-cron-joborg>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>Now that we have a URL that runs our script, we need something to run it periodically. PythonAnywhere offers a very limited ability to run scripts on a daily basis on its free tier, but to give ourselves more flexibility, we will use <a href=https://cron-job.org target=_blank>cron-job.org</a>. Head to the website, create yourself an account and click the button to &ldquo;Create Cronjob&rdquo;. Give your job a name, then add the URL <code>https://&lt;username>.pythonanywhere.com/log</code> and choose a schedule of your choice - bearing in mind that Open-Meteo is a free service who requests that you keep daily requests below 10,000 (roughly once every 10 seconds). Once you have created your job, you can view its status via the Conjobs tab.</p>
+<p>And we&rsquo;re done! Of course, this example is arbitrary, and one big improvement that we could make would be to do something more meaningful with the temperature data, rather than just saving it to a local server file. If you want a challenge, try and use the Google Cloud API to save the data to a Google Spreadsheet instead of the local file.</p>
+<h2 id=final-words>
+Final words
+<a class=heading-link href=#final-words>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>I hope that you have found this post useful! I have placed a copy of the scripts that I created in this post on Codeberg*, so if you simply want to test the steps above without creating your own app, feel free to clone this and have a play around:</p>
+<a href=https://codeberg.org/samharrison7/openmeteo-demo class=button target=_blank>
+<i class="fa fa-code fa-fw"></i>Get the code
+</a>
+<p>*Like GitHub, but open-source - because why should you host open-source software on a closed-source service?</p>
+</div>
+<footer>
+<span class=mr1>Found this post useful?</span>
+<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init('Buy me a coffee','#29abe0','B0B1ACSFJ'),kofiwidget2.draw()</script>
+<h3>Comments</h3>
+<div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div>
+<div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div>
+</footer>
+</article>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:!0},{left:'$',right:'$',display:!1},{left:'\\(',right:'\\)',display:!1},{left:'\\[',right:'\\]',display:!0}]})"></script>
+</section>
+</div>
+<footer class=footer>
+<section class=container>
+©
+2022 -
+2024
+Sam Harrison
+·
+Powered by <a href=https://gohugo.io/>Hugo</a> & lovingly adapted from the <a href=https://github.com/luizdepra/hugo-coder/>Coder</a> theme
+·
+<a href=https://samharrison.science/about>About this site.</a>
+</section>
+</footer>
+</main>
+<script src=/js/coder.min.39a51230dce2ac866c049b52573e38bf60666af4bc63c1bdf203b9b2d95b1cd6.js integrity="sha256-OaUSMNzirIZsBJtSVz44v2BmavS8Y8G98gO5stlbHNY="></script>
+<script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script>
+</body>
+</html>
