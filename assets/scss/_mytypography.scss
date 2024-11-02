@@ -25,6 +25,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: $color-light-gray !important;
     font-family: 'Source Code Pro', monospace;
 }
+.colorscheme-dark .highlight > div,
+.colorscheme-dark .highlight > pre {
+    background-color: $color-inverted-light-gray !important;
+}
 code {
     font-family: 'Source Code Pro', monospace;
 }
