@@ -1,0 +1,11 @@
+[project]
+channels = ["conda-forge"]
+description = "My website"
+name = "samharrison-hugo"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+hugo = ">=0.136.5,<0.137"

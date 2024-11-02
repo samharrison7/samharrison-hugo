@@ -13,7 +13,7 @@ In my free time, I can usually be found running, walking, climbing or cycling in
 
 {{< button href="../CV.pdf" icon="file" text="CV" target="_blank" >}}
 {{< button href="../publications" icon="book" text="Publications" >}}
-{{< button href="https://orcid.org/0000-0001-8491-4720" target="_blank" icon="orcid" text="Orcid" color="orcid" >}}
+{{< button href="https://orcid.org/0000-0001-8491-4720" target="_blank" icon-brand="orcid" text="Orcid" color="orcid" >}}
 {{< button href="https://github.com/samharrison7" target="_blank" icon="github" text="GitHub" color="black" >}}
 {{< button href="https://twitter.com/samharrison7" target="_blank" icon="twitter" text="Twitter" color="twitter" >}}
 

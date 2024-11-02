@@ -36,7 +36,7 @@ a.button {
     &:first-of-type {
         margin-left: 0rem;
     }
-    i.fa {
+    i.fa, i.fa-brands {
         margin-right: 0.8rem;
     }
     &.button-black {
@@ -278,7 +278,7 @@ table.dataframe {
         padding: 1rem 0 1rem 2rem;
         align-items: center;
     }
-    i.fa {
+    i.fa, i.fa-brands {
         display: flex;
         align-items: center;
         justify-content: center;

@@ -21,12 +21,14 @@ a:hover > sub {
 }
 
 article :not(.item) > a[target="_blank"]:not(.kofi-button, .button)::after {
-    font-family: 'ForkAwesome';
-    content: "\f08e";
+    font: var(--fa-font-solid);
+    content: '\f08e';
     color: $color-dark-gray;
     padding: 0.5rem;
     line-height: normal;
     display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
 }
 article :not(.item) > a[target="_blank"]:not(.kofi-button, .button):hover::after {
     text-decoration: none !important;
@@ -44,4 +46,8 @@ code {
 
 .content figcaption p {
     text-align: center !important;
+}
+
+p {
+    white-space: normal;
 }

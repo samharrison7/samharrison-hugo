@@ -1,3 +1,3 @@
 <a href="{{ .Get "href" }}" class="button {{ with .Get "class" }}{{ . }}{{ end }} {{ with .Get "color" }}button-{{ . }}{{ end }}" {{ with .Get "target" }}target="{{ . }}"{{ end }}>
-    {{ with .Get "icon" }}<i class="fa fa-{{ . }} fa-fw"></i>{{ end }}{{ .Get "text" }}
+    {{ with .Get "icon" }}<i class="fa fa-{{ . }} fa-fw"></i>{{ end }}{{ with .Get "icon-brand" }}<i class="fa-brands fa-{{ . }} fa-fw"></i>{{ end }}{{ .Get "text" }}
 </a>

@@ -115,7 +115,7 @@ target = "_blank"
 
 [[params.social]]
 name = "Mastodon"
-icon = "fa fa-2x fa-mastodon"
+icon = "fa-brands fa-2x fa-mastodon"
 weight = 1
 url = "https://mas.to/@samharrison7"
 rel = "me"
@@ -128,10 +128,10 @@ target = "_blank"
 # url = "https://gitlab.com/samharrison7/"
 
 [[params.social]]
-name = "Twitter"
-icon = "fa fa-2x fa-twitter"
+name = "Bluesky"
+icon = "fa-brands fa-2x fa-bluesky"
 weight = 3
-url = "https://twitter.com/samharrison7/"
+url = "https://bsky.app/profile/samharrison7.bsky.social"
 target = "_blank"
 
 [[params.social]]

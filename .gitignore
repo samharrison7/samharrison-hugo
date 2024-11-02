@@ -3,3 +3,7 @@ resources/_gen/
 notebooks/.ipynb_checkpoints/
 *.swp
 *~
+
+# pixi environments
+.pixi
+*.egg-info
