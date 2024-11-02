@@ -1,3 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>voila on Sam Harrison</title><link>https://samharrison.science/tags/voila/</link><description>Recent content in voila on Sam Harrison</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 11 Jun 2022 09:17:22 +0100</lastBuildDate><atom:link href="https://samharrison.science/tags/voila/index.xml" rel="self" type="application/rss+xml"/><item><title>Create and hosting an interactive app with Jupyter, Voilà and Heroku</title><link>https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/</link><pubDate>Sat, 11 Jun 2022 09:17:22 +0100</pubDate><guid>https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/</guid><description>In this article, I will demonstrate how easy it is to create an interactive web app using Jupyter Notebooks, Voilà and Heroku. We will use Jupyter to create a simple notebook that plots a graph based on user input, turn this into an interactive dashboard using Voilà, and host it online using Heroku.
-Before we get started, there are a few prerequisites:
-I am presuming that you already have Jupyter installed and are familiar with using it and Python in general.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Voila on Sam Harrison</title><link>https://samharrison.science/tags/voila/</link><description>Recent content in Voila on Sam Harrison</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sat, 11 Jun 2022 09:17:22 +0100</lastBuildDate><atom:link href="https://samharrison.science/tags/voila/index.xml" rel="self" type="application/rss+xml"/><item><title>Create and hosting an interactive app with Jupyter, Voilà and Heroku</title><link>https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/</link><pubDate>Sat, 11 Jun 2022 09:17:22 +0100</pubDate><guid>https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/</guid><description>&lt;p>In this article, I will demonstrate how easy it is to create an interactive web app using Jupyter Notebooks, Voilà and Heroku. We will use Jupyter to create a simple notebook that plots a graph based on user input, turn this into an interactive dashboard using Voilà, and host it online using Heroku.&lt;/p>
+&lt;p>Before we get started, there are a few prerequisites:&lt;/p>
+&lt;ul>
+&lt;li>I am presuming that you already have Jupyter installed and are familiar with using it and Python in general.&lt;/li>
+&lt;li>I am also presuming you&amp;rsquo;re familiar with Git and package managers Conda and Pip. Having Git and Conda installed is needed to follow all of the steps.&lt;/li>
+&lt;li>We are using ipywidgets to provide the interactivity, so familiarity with these would be useful.&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-app">
+ The app
+ &lt;a class="heading-link" href="#the-app">
+ &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
+ &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;/a>
+&lt;/h2>
+&lt;p>The goal of our app is to let the user explore how changing the coefficients $a$, $b$ and $c$ to the quadratic equation alters the shape of the curve:&lt;/p></description></item></channel></rss>

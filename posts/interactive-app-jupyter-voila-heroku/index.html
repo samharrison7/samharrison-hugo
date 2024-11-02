@@ -1,342 +1,88 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=content-language content="en">
-<meta name=color-scheme content="light dark">
-<meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; prefetch-src 'self'; connect-src 'self' https://samharrison7.goatcounter.com/count;">
-<meta name=author content="Sam Harrison">
-<meta name=description content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app">
-<meta name=keywords content="environmental scientist,environmental modelling,research software,blog">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png">
-<meta name=twitter:title content="Create and hosting an interactive app with Jupyter, Voilà and Heroku">
-<meta name=twitter:description content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app">
-<meta property="og:title" content="Create and hosting an interactive app with Jupyter, Voilà and Heroku">
-<meta property="og:description" content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/"><meta property="og:image" content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2022-06-11T09:17:22+01:00">
-<meta property="article:modified_time" content="2022-06-11T09:17:22+01:00">
-<title>
-Create and hosting an interactive app with Jupyter, Voilà and Heroku · Sam Harrison
-</title>
-<link rel=canonical href=https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/>
-<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/scss/override.min.5966b1cd95b422e6410b0b668fece5c4f1c6c04250905dd4d545214f8af42265.css integrity="sha256-WWaxzZW0IuZBCwtmj+zlxPHGwEJQkF3U1UUhT4r0ImU=" crossorigin=anonymous media=screen>
-<link rel=icon type=image/png href=/images/favicon32.png sizes=32x32>
-<link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16>
-<link rel=apple-touch-icon href=/images/apple-touch-icon.png>
-<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
-<meta name=generator content="Hugo 0.92.1">
-</head>
-<body class="preload-transitions colorscheme-auto">
-<div class=float-container>
-<a id=dark-mode-toggle class=colorscheme-toggle>
-<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
-</a>
-</div>
-<main class=wrapper>
-<nav class=navigation>
-<section class=container>
-<img class=header-avatar src=/images/sam-header.jpg>
-<a class=navigation-title href=/>
-Sam Harrison
-</a>
-<input type=checkbox id=menu-toggle>
-<label class="menu-button float-right" for=menu-toggle>
-<i class="fa fa-bars fa-fw" aria-hidden=true></i>
-</label>
-<ul class=navigation-list>
-<li class=navigation-item>
-<a class=navigation-link href=/my-research/>My Research</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/posts/>Blog</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/contact/>Contact</a>
-</li>
-</ul>
-</section>
-</nav>
-<div class=content>
-<section class="container post">
-<article>
-<header>
-<div class=post-title>
-<h1 class=title>
-<a class=title-link href=https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/>
-Create and hosting an interactive app with Jupyter, Voilà and Heroku
-</a>
-</h1>
-</div>
-<div class=post-meta>
-<div class=date>
-<span class=posted-on>
-<i class="fa fa-calendar" aria-hidden=true></i>
-<time datetime=2022-06-11T09:17:22+01:00>
-11 June 2022
-</time>
-</span>
-<span class=reading-time>
-<i class="fa fa-clock-o" aria-hidden=true></i>
-9-minute read
-</span>
-</div>
-<div class=tags><span class=tag>
-<a href=/tags/jupyter/>jupyter</a>
-</span><span class=tag>
-<a href=/tags/voila/>voila</a>
-</span><span class=tag>
-<a href=/tags/heroku/>heroku</a>
-</span></div>
-</div>
-</header>
-<div>
-<p>In this article, I will demonstrate how easy it is to create an interactive web app using Jupyter Notebooks, Voilà and Heroku. We will use Jupyter to create a simple notebook that plots a graph based on user input, turn this into an interactive dashboard using Voilà, and host it online using Heroku.</p>
-<p>Before we get started, there are a few prerequisites:</p>
-<ul>
-<li>I am presuming that you already have Jupyter installed and are familiar with using it and Python in general.</li>
-<li>I am also presuming you&rsquo;re familiar with Git and package managers Conda and Pip. Having Git and Conda installed is needed to follow all of the steps.</li>
-<li>We are using ipywidgets to provide the interactivity, so familiarity with these would be useful.</li>
-</ul>
-<h2 id=the-app>
-The app
-<a class=heading-link href=#the-app>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>The goal of our app is to let the user explore how changing the coefficients $a$, $b$ and $c$ to the quadratic equation alters the shape of the curve:</p>
-<p>$$
+<!doctype html><html lang=en><head><title>Create and hosting an interactive app with Jupyter, Voilà and Heroku · Sam Harrison
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta http-equiv=Content-Security-Policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; connect-src 'self' https://samharrison7.goatcounter.com/count;"><meta name=author content="Sam Harrison"><meta name=description content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app"><meta name=keywords content="environmental scientist,environmental modelling,research software,blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png"><meta name=twitter:title content="Create and hosting an interactive app with Jupyter, Voilà and Heroku"><meta name=twitter:description content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app"><meta property="og:url" content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/"><meta property="og:site_name" content="Sam Harrison"><meta property="og:title" content="Create and hosting an interactive app with Jupyter, Voilà and Heroku"><meta property="og:description" content="Using Jupyter Notebooks, Voilà and Heroku to create and host an interactive web app"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-06-11T09:17:22+01:00"><meta property="article:modified_time" content="2022-06-11T09:17:22+01:00"><meta property="article:tag" content="Jupyter"><meta property="article:tag" content="Voila"><meta property="article:tag" content="Heroku"><meta property="og:image" content="https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png"><link rel=canonical href=https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.aa5ef26fa979d6793724ae2dbd71efa94fd16cb1c5c7db3b6651f21f9892a5fd.css integrity="sha256-ql7yb6l51nk3JK4tvXHvqU/RbLHFx9s7ZlHyH5iSpf0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=stylesheet href=/scss/override.min.be92b2e630c61b2ff2a49f696efd16cea99ec1d9b7b40d65da4fd30ab09796bd.css integrity="sha256-vpKy5jDGGy/ypJ9pbv0Wzqmewdm3tA1l2k/TCrCXlr0=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><img class=header-avatar src=/images/sam-header.jpg>
+<a class=navigation-title href=/>Sam Harrison
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/my-research/>My Research</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li><li class=navigation-item><a class=navigation-link href=/contact/>Contact</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://samharrison.science/posts/interactive-app-jupyter-voila-heroku/>Create and hosting an interactive app with Jupyter, Voilà and Heroku</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2022-06-11T09:17:22+01:00>11 June 2022
+</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+9-minute read</span></div><div class=tags><span class=tag><a href=/tags/jupyter/>jupyter</a>
+</span><span class=tag><a href=/tags/voila/>voila</a>
+</span><span class=tag><a href=/tags/heroku/>heroku</a></span></div></div></header><div><p>In this article, I will demonstrate how easy it is to create an interactive web app using Jupyter Notebooks, Voilà and Heroku. We will use Jupyter to create a simple notebook that plots a graph based on user input, turn this into an interactive dashboard using Voilà, and host it online using Heroku.</p><p>Before we get started, there are a few prerequisites:</p><ul><li>I am presuming that you already have Jupyter installed and are familiar with using it and Python in general.</li><li>I am also presuming you&rsquo;re familiar with Git and package managers Conda and Pip. Having Git and Conda installed is needed to follow all of the steps.</li><li>We are using ipywidgets to provide the interactivity, so familiarity with these would be useful.</li></ul><h2 id=the-app>The app
+<a class=heading-link href=#the-app><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The goal of our app is to let the user explore how changing the coefficients $a$, $b$ and $c$ to the quadratic equation alters the shape of the curve:</p><p>$$
 y = ax^2 + bx + c
-$$</p>
-<p>A quintessential maths problem if ever there was one!</p>
-<h2 id=starting-from-scratch>
-Starting from scratch
-<a class=heading-link href=#starting-from-scratch>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>We will be housing our notebook in a Git repository, which is the easiest way of pushing code to Heroku. So let&rsquo;s create a new folder to put our notebook in and initialise it as a Git repo:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>mkdir quadratic-app
+$$</p><p>A quintessential maths problem if ever there was one!</p><h2 id=starting-from-scratch>Starting from scratch
+<a class=heading-link href=#starting-from-scratch><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>We will be housing our notebook in a Git repository, which is the easiest way of pushing code to Heroku. So let&rsquo;s create a new folder to put our notebook in and initialise it as a Git repo:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>mkdir quadratic-app
 </span><span class=command>cd quadratic-app
 </span><span class=command>git init
-</span></code></pre>
-</div>
-<p>I like to keep things clean by creating a new virtual environment to install the packages required by my code. You will need this to tell Heroku what packages to install later. I am going to use Conda to create a new environment with the specific version of Python that I wish to use, and then use Pip to install all the packages I need within that environment. Why? I use Conda because it lets me test my app locally with exactly the same version of Python that is installed on Heroku (in contrast, Pip and virtual environments like <code>virtualenv</code> use the version of Python you already have installed and don&rsquo;t provide easy ways of installing arbitrary Python versions). But, Heroku requires a Pip <code>requirements.txt</code> file to install dependencies on the server, and this is why I use Pip to install everything except Python.</p>
-<div class="notice warning">
-<div class=notice-title>
-<i class="fa fa-exclamation-triangle" aria-hidden=true></i>Warning
-</div>
-<div class=notice-content>It might sound like overkill installing the specific Python version to match the Heroku server, but I have stumbled across issues not doing this enough times to warrant this small extra step! As you&rsquo;ll see later, debugging on Heroku is a little tricky, and so it is best to give our app the best chance of working from the start.</div>
-</div>
-<p><a href=https://devcenter.heroku.com/articles/python-support target=_blank>This page</a> shows the latest versions of Python supported. At the time of writing, this is Python 3.10.4, and so we will use Conda to create a new environment with this locally:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n quadratic-app -c conda-forge python=3.10.4
+</span></code></pre></div><p>I like to keep things clean by creating a new virtual environment to install the packages required by my code. You will need this to tell Heroku what packages to install later. I am going to use Conda to create a new environment with the specific version of Python that I wish to use, and then use Pip to install all the packages I need within that environment. Why? I use Conda because it lets me test my app locally with exactly the same version of Python that is installed on Heroku (in contrast, Pip and virtual environments like <code>virtualenv</code> use the version of Python you already have installed and don&rsquo;t provide easy ways of installing arbitrary Python versions). But, Heroku requires a Pip <code>requirements.txt</code> file to install dependencies on the server, and this is why I use Pip to install everything except Python.</p><div class="notice warning"><div class=notice-title><i class="fa-solid fa-exclamation-triangle" aria-hidden=true></i>Warning</div><div class=notice-content>It might sound like overkill installing the specific Python version to match the Heroku server, but I have stumbled across issues not doing this enough times to warrant this small extra step! As you&rsquo;ll see later, debugging on Heroku is a little tricky, and so it is best to give our app the best chance of working from the start.</div></div><p><a href=https://devcenter.heroku.com/articles/python-support target=_blank>This page</a> shows the latest versions of Python supported. At the time of writing, this is Python 3.10.4, and so we will use Conda to create a new environment with this locally:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n quadratic-app -c conda-forge python=3.10.4
 </span><span class=command>conda activate quadratic-app
-</span></code></pre>
-</div>
-<p>Here we have created an environment called <code>quadratic-app</code>, and then installed Python 3.10.4 in it from the conda-forge channel.</p>
-<p>For this app, we are going to use NumPy, ipywidgets and Plotly Express (which also requires Pandas). Because we are building a Voilà app, we also need to install Voilà:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>pip install numpy ipywidgets plotly pandas voila
-</span></code></pre>
-</div>
-<p>As I already said, Heroku requires a <code>requirements.txt</code> file, so we can use Pip to create one based on what we have just installed:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>pip freeze &gt; requirements.txt
-</span></code></pre>
-</div>
-<p>If you&rsquo;re not familiar with Pip, what this basically does is write a list of the packages and their versions to a file, such that they can be installed elsewhere (i.e. on the Heroku server).</p>
-<h2 id=creating-the-notebook>
-Creating the notebook
-<a class=heading-link href=#creating-the-notebook>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Okay, now we&rsquo;ve got our environment set up, we can create the Jupyter Notebook itself.</p>
-<p>We will use ipywidgets to let the user choose $a$, $b$, $c$ and x range values, then plot the function using Plotly. I chose <a href=https://plotly.com/python/ target=_blank>Plotly</a>, as opposed to the more ubiquitous matplotlib, as it is a bit more interactive and therefore suits the remit of an interactive web app a bit better.</p>
-<p>This is our code:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>numpy</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>np</span>
-<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>ipywidgets</span> <span style=color:#00a>import</span> interact
-<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>ipywidgets</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>widgets</span>
-<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>plotly.express</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>px</span>
-
-<span style=color:#aaa;font-style:italic># Use ipywidgets to let the user input values for a, b, c and the x range</span>
-<span style=color:#888>@interact</span>(a=widgets.FloatText(<span style=color:#099>1.0</span>),
-          b=widgets.FloatText(<span style=color:#099>1.0</span>),
-          c=widgets.FloatText(<span style=color:#099>1.0</span>),
-          x_limits=widgets.IntRangeSlider(value=[-<span style=color:#099>10</span>, <span style=color:#099>10</span>], <span style=color:#0aa>min</span>=-<span style=color:#099>100</span>, <span style=color:#0aa>max</span>=<span style=color:#099>100</span>))
-<span style=color:#00a>def</span> <span style=color:#0a0>plot_quadratic</span>(a, b, c, x_limits):
-
-    <span style=color:#aaa;font-style:italic># Create a range of x values over which to evaluate the function</span>
-    x = np.linspace(*x_limits, <span style=color:#099>100</span>)
-
-    <span style=color:#aaa;font-style:italic># Define the quadratic function</span>
-    <span style=color:#00a>def</span> <span style=color:#0a0>f</span>(x, a, b, c):
-        <span style=color:#00a>return</span> a * x**<span style=color:#099>2</span> + b * x + c
-
-    <span style=color:#aaa;font-style:italic># Evaluate the function over the x range</span>
-    y = f(x, a, b, c)
-
-    <span style=color:#aaa;font-style:italic># Plot using Plotly</span>
-    fig = px.line(x=x, y=y)
-    fig.show()
-</code></pre></div><p>Let&rsquo;s create a Jupyter Notebook called <code>quadratic-app.ipynb</code> to run the code. Using Jupyter Lab, this might look something like this:</p>
-<p><img src=./quadratic-app-ss1.png alt="Screenshot of the app in Jupyter Lab"></p>
-<h2 id=testing-in-voilà>
-Testing in Voilà
-<a class=heading-link href=#testing-in-voil%c3%a0>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Now we have created our app, we can make sure it runs locally using Voilà. For more detailed info on using Voilà, check out <a href=https://voila.readthedocs.io/en/stable/ target=_blank>their docs</a>, but for this simple demo, all we need to do is point Voilà towards our notebook:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>voila quadratic-app.ipynb
-</span></code></pre>
-</div>
-<p>This will launch a local server, probably using port 8866 (though it will tell you), and so all you need to do is open up <code>http://localhost:8866</code> in your web browser.</p>
-<p><img src=./quadratic-app-ss2.png alt="Screenshot of the Voila app"></p>
-<h2 id=from-local-to-heroku>
-From local to Heroku
-<a class=heading-link href=#from-local-to-heroku>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Okay, so now we have created our notebook and used Voilà to render it as an interactive app. Now it is time to upload it to Heroku so that the world can access it.</p>
-<p>Firstly, you need to <a href=https://signup.heroku.com/ target=_blank>create a Heroku account</a> and install the Heroku CLI. There are very thorough details on installing the Heroku CLI on all platforms over at the <a href=https://devcenter.heroku.com/articles/heroku-cli target=_blank>Heroku Dev Center</a>.</p>
-<p>Once you have done this, you need to login to your account via the CLI. Running this command will open up a web browser for you to enter your credentials:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku login
-</span></code></pre>
-</div>
-<div class="notice note">
-<div class=notice-title>
-<i class="fa fa-sticky-note" aria-hidden=true></i>Note
-</div>
-<div class=notice-content>If you are SSHed into another machine and don&rsquo;t have access to a web browser, then you can use the <code>-i</code> flag to login via the command line: <code>heroku login -i</code>. However, if you have multifactor authentication (MFA) enabled on your account (which Heroku strongly encourages), this option isn&rsquo;t available. If you absolutely need to login via the command line, you may wish to not opt for MFA.</div>
-</div>
-<p>Now we tell Heroku to create a new app from your repo:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku create</span><span class=output>
+</span></code></pre></div><p>Here we have created an environment called <code>quadratic-app</code>, and then installed Python 3.10.4 in it from the conda-forge channel.</p><p>For this app, we are going to use NumPy, ipywidgets and Plotly Express (which also requires Pandas). Because we are building a Voilà app, we also need to install Voilà:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>pip install numpy ipywidgets plotly pandas voila
+</span></code></pre></div><p>As I already said, Heroku requires a <code>requirements.txt</code> file, so we can use Pip to create one based on what we have just installed:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>pip freeze &gt; requirements.txt
+</span></code></pre></div><p>If you&rsquo;re not familiar with Pip, what this basically does is write a list of the packages and their versions to a file, such that they can be installed elsewhere (i.e. on the Heroku server).</p><h2 id=creating-the-notebook>Creating the notebook
+<a class=heading-link href=#creating-the-notebook><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Okay, now we&rsquo;ve got our environment set up, we can create the Jupyter Notebook itself.</p><p>We will use ipywidgets to let the user choose $a$, $b$, $c$ and x range values, then plot the function using Plotly. I chose <a href=https://plotly.com/python/ target=_blank>Plotly</a>, as opposed to the more ubiquitous matplotlib, as it is a bit more interactive and therefore suits the remit of an interactive web app a bit better.</p><p>This is our code:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>numpy</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>np</span>
+</span></span><span style=display:flex><span><span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>ipywidgets</span> <span style=color:#00a>import</span> interact
+</span></span><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>ipywidgets</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>widgets</span>
+</span></span><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>plotly.express</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>px</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic># Use ipywidgets to let the user input values for a, b, c and the x range</span>
+</span></span><span style=display:flex><span><span style=color:#888>@interact</span>(a=widgets.FloatText(<span style=color:#099>1.0</span>),
+</span></span><span style=display:flex><span>          b=widgets.FloatText(<span style=color:#099>1.0</span>),
+</span></span><span style=display:flex><span>          c=widgets.FloatText(<span style=color:#099>1.0</span>),
+</span></span><span style=display:flex><span>          x_limits=widgets.IntRangeSlider(value=[-<span style=color:#099>10</span>, <span style=color:#099>10</span>], <span style=color:#0aa>min</span>=-<span style=color:#099>100</span>, <span style=color:#0aa>max</span>=<span style=color:#099>100</span>))
+</span></span><span style=display:flex><span><span style=color:#00a>def</span> <span style=color:#0a0>plot_quadratic</span>(a, b, c, x_limits):
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Create a range of x values over which to evaluate the function</span>
+</span></span><span style=display:flex><span>    x = np.linspace(*x_limits, <span style=color:#099>100</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Define the quadratic function</span>
+</span></span><span style=display:flex><span>    <span style=color:#00a>def</span> <span style=color:#0a0>f</span>(x, a, b, c):
+</span></span><span style=display:flex><span>        <span style=color:#00a>return</span> a * x**<span style=color:#099>2</span> + b * x + c
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Evaluate the function over the x range</span>
+</span></span><span style=display:flex><span>    y = f(x, a, b, c)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Plot using Plotly</span>
+</span></span><span style=display:flex><span>    fig = px.line(x=x, y=y)
+</span></span><span style=display:flex><span>    fig.show()
+</span></span></code></pre></div><p>Let&rsquo;s create a Jupyter Notebook called <code>quadratic-app.ipynb</code> to run the code. Using Jupyter Lab, this might look something like this:</p><p><img alt="Screenshot of the app in Jupyter Lab" src=/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss1.png></p><h2 id=testing-in-voilà>Testing in Voilà
+<a class=heading-link href=#testing-in-voil%c3%a0><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Now we have created our app, we can make sure it runs locally using Voilà. For more detailed info on using Voilà, check out <a href=https://voila.readthedocs.io/en/stable/ target=_blank>their docs</a>, but for this simple demo, all we need to do is point Voilà towards our notebook:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>voila quadratic-app.ipynb
+</span></code></pre></div><p>This will launch a local server, probably using port 8866 (though it will tell you), and so all you need to do is open up <code>http://localhost:8866</code> in your web browser.</p><p><img alt="Screenshot of the Voila app" src=/posts/interactive-app-jupyter-voila-heroku/quadratic-app-ss2.png></p><h2 id=from-local-to-heroku>From local to Heroku
+<a class=heading-link href=#from-local-to-heroku><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Okay, so now we have created our notebook and used Voilà to render it as an interactive app. Now it is time to upload it to Heroku so that the world can access it.</p><p>Firstly, you need to <a href=https://signup.heroku.com/ target=_blank>create a Heroku account</a> and install the Heroku CLI. There are very thorough details on installing the Heroku CLI on all platforms over at the <a href=https://devcenter.heroku.com/articles/heroku-cli target=_blank>Heroku Dev Center</a>.</p><p>Once you have done this, you need to login to your account via the CLI. Running this command will open up a web browser for you to enter your credentials:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku login
+</span></code></pre></div><div class="notice note"><div class=notice-title><i class="fa-solid fa-sticky-note" aria-hidden=true></i>Note</div><div class=notice-content>If you are SSHed into another machine and don&rsquo;t have access to a web browser, then you can use the <code>-i</code> flag to login via the command line: <code>heroku login -i</code>. However, if you have multifactor authentication (MFA) enabled on your account (which Heroku strongly encourages), this option isn&rsquo;t available. If you absolutely need to login via the command line, you may wish to not opt for MFA.</div></div><p>Now we tell Heroku to create a new app from your repo:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku create</span><span class=output>
 Creating app... done, ⬢ quiet-meadow-91848
 https://quiet-meadow-91848.herokuapp.com/ | https://git.heroku.com/quiet-meadow-91848.git
-</span></code></pre>
-</div>
-<p>As you will see, Heroku has created our app and given it a unique web URL through which to access it. Before we do that though, we need to give Heroku some info about our app so it knows how to run it. This is done via two new files: <code>Procfile</code> and <code>runtime.txt</code>.</p>
-<h2 id=telling-heroku-about-our-app>
-Telling Heroku about our app
-<a class=heading-link href=#telling-heroku-about-our-app>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>First, we need to tell Heroku which Python runtime to use. You&rsquo;ll remember that above, we installed Python 3.10.4. To tell Heroku to use this Python version, add <code>python-3.10.4</code> to the <code>runtime.txt</code> file, either via your favourite text editor or using this command:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>echo &#34;python-3.10.4&#34; &gt; runtime.txt
-</span></code></pre>
-</div>
-<p>We also need to tell Heroku to run Voilà when we start the app, which is done by adding <code>web: voila --port=$PORT --Voila.ip=0.0.0.0 --no-browser quadratic-app.ipynb</code> to a file named <code>Procfile</code>. You can <a href=https://devcenter.heroku.com/articles/procfile target=_blank>read more about Procfiles here</a>.</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>echo &#34;web: voila --port=\$PORT --Voila.ip=0.0.0.0 --no-browser quadratic-app.ipynb&#34; &gt; Procfile
-</span></code></pre>
-</div>
-<p>Let&rsquo;s dissect what&rsquo;s going on here:</p>
-<ul>
-<li><code>web</code> is a &ldquo;process type&rdquo; that tells Heroku that we will be starting up a web server (Voilà) and expecting external traffic to it. Everything after <code>web: </code>  is run as a command on the server when our <a href=https://www.heroku.com/dynos target=_blank>dyno</a> starts up.</li>
-<li><code>voila</code> is the command we saw before, which starts the Voilà server.</li>
-<li><code>--port=$PORT</code> tells Voilà to bind your app to the environment variable <code>$PORT</code>. Heroku opens a specific port for you and sets <code>$PORT</code> to tell you what this is, hence you need to explicitly specify this.</li>
-<li><code>--Voila.ip=0.0.0.0</code> is required from Voilà v0.3 and upwards as Voilà no longer listens on all interfaces by default (<a href=https://github.com/voila-dashboards/voila/issues/1047 target=_blank>see here</a>). At the time of writing, this isn&rsquo;t yet reflected in <a href=https://voila.readthedocs.io/en/stable/deploy.html target=_blank>the docs</a>, though I have a <a href=https://github.com/voila-dashboards/voila/pull/1158 target=_blank>pull request</a> in to fix this.</li>
-<li><code>-no-browser</code> simply tells Voilà not to try and open up a web browser on the server.</li>
-<li><code>quadratic-app.ipynb</code> tells Voilà which notebook to load. If we want to load all notebooks, simply leave this filename out of the command.</li>
-</ul>
-<p>Specifying the <code>--debug</code> parameter might also be useful if you need extra debugging information from Voilà.</p>
-<p>Heroku will automatically detect the <code>requirements.txt</code> file that we created earlier and install the required dependencies.</p>
-<h2 id=testing-it-out>
-Testing it out
-<a class=heading-link href=#testing-it-out>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Before we push this code to the remote server, it&rsquo;s a good idea to test it locally. Make sure the Conda environment we created earlier is activated, and run:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku local
-</span></code></pre>
-</div>
-<p>Heroku will tell you which local port to use to access your app, and this is usually 5000 (and so your app can be accessed at <code>http://localhost:5000</code>).</p>
-<h2 id=were-good-to-go>
-We&rsquo;re good to go!
-<a class=heading-link href=#were-good-to-go>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>The final step is to commit your code and push to Heroku. This is as simple as:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>git add .
+</span></code></pre></div><p>As you will see, Heroku has created our app and given it a unique web URL through which to access it. Before we do that though, we need to give Heroku some info about our app so it knows how to run it. This is done via two new files: <code>Procfile</code> and <code>runtime.txt</code>.</p><h2 id=telling-heroku-about-our-app>Telling Heroku about our app
+<a class=heading-link href=#telling-heroku-about-our-app><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>First, we need to tell Heroku which Python runtime to use. You&rsquo;ll remember that above, we installed Python 3.10.4. To tell Heroku to use this Python version, add <code>python-3.10.4</code> to the <code>runtime.txt</code> file, either via your favourite text editor or using this command:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>echo &#34;python-3.10.4&#34; &gt; runtime.txt
+</span></code></pre></div><p>We also need to tell Heroku to run Voilà when we start the app, which is done by adding <code>web: voila --port=$PORT --Voila.ip=0.0.0.0 --no-browser quadratic-app.ipynb</code> to a file named <code>Procfile</code>. You can <a href=https://devcenter.heroku.com/articles/procfile target=_blank>read more about Procfiles here</a>.</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>echo &#34;web: voila --port=\$PORT --Voila.ip=0.0.0.0 --no-browser quadratic-app.ipynb&#34; &gt; Procfile
+</span></code></pre></div><p>Let&rsquo;s dissect what&rsquo;s going on here:</p><ul><li><code>web</code> is a &ldquo;process type&rdquo; that tells Heroku that we will be starting up a web server (Voilà) and expecting external traffic to it. Everything after <code>web: </code> is run as a command on the server when our <a href=https://www.heroku.com/dynos target=_blank>dyno</a> starts up.</li><li><code>voila</code> is the command we saw before, which starts the Voilà server.</li><li><code>--port=$PORT</code> tells Voilà to bind your app to the environment variable <code>$PORT</code>. Heroku opens a specific port for you and sets <code>$PORT</code> to tell you what this is, hence you need to explicitly specify this.</li><li><code>--Voila.ip=0.0.0.0</code> is required from Voilà v0.3 and upwards as Voilà no longer listens on all interfaces by default (<a href=https://github.com/voila-dashboards/voila/issues/1047 target=_blank>see here</a>). At the time of writing, this isn&rsquo;t yet reflected in <a href=https://voila.readthedocs.io/en/stable/deploy.html target=_blank>the docs</a>, though I have a <a href=https://github.com/voila-dashboards/voila/pull/1158 target=_blank>pull request</a> in to fix this.</li><li><code>-no-browser</code> simply tells Voilà not to try and open up a web browser on the server.</li><li><code>quadratic-app.ipynb</code> tells Voilà which notebook to load. If we want to load all notebooks, simply leave this filename out of the command.</li></ul><p>Specifying the <code>--debug</code> parameter might also be useful if you need extra debugging information from Voilà.</p><p>Heroku will automatically detect the <code>requirements.txt</code> file that we created earlier and install the required dependencies.</p><h2 id=testing-it-out>Testing it out
+<a class=heading-link href=#testing-it-out><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Before we push this code to the remote server, it&rsquo;s a good idea to test it locally. Make sure the Conda environment we created earlier is activated, and run:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>heroku local
+</span></code></pre></div><p>Heroku will tell you which local port to use to access your app, and this is usually 5000 (and so your app can be accessed at <code>http://localhost:5000</code>).</p><h2 id=were-good-to-go>We&rsquo;re good to go!
+<a class=heading-link href=#were-good-to-go><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The final step is to commit your code and push to Heroku. This is as simple as:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>git add .
 </span><span class=command>git commit -m &#34;Initial commit&#34;
 </span><span class=command>git push heroku master
-</span></code></pre>
-</div>
-<p>Heroku will now print out lots of info as it sets up your server and installs all of your dependencies. If successful, it will tell you the URL that your app has been deployed to:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>remote:        https://quiet-meadow-91848.herokuapp.com/ deployed to Heroku
-remote:
-remote: Verifying deploy... done.
-To https://git.heroku.com/quiet-meadow-91848.git
- * [new branch]      master -&gt; master
-</code></pre></div><p>You can now head to that URL to check that your app is working as expected!</p>
-<h2 id=debugging>
-Debugging
-<a class=heading-link href=#debugging>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Unfortunately, it&rsquo;s rare that everything works as seamlessly as this simple example, and debugging Voilà-Heroku setups can be a bit tricky. Here are a few tips that might help:</p>
-<ul>
-<li>Use the <code>heroku logs --tail</code> command to show the server logs, which might give you some ideas.</li>
-<li>Specify the <code>--debug</code> flag in your Procfile command to get more detailed debugging info from Voilà.</li>
-<li>If your app works locally (<code>heroku local</code>) but not online, <em>make sure your environments are exactly the same</em>. Are you using the same version of Python? (Compare <code>python --version</code> to that specified in <code>runtime.txt</code>.) Are the same versions of all of the dependencies installed? If you have installed new packages since generating your <code>requirements.txt</code> file, then try re-creating this (<code>pip freeze > requirements.txt</code>).</li>
-</ul>
-<h2 id=final-words>
-Final words
-<a class=heading-link href=#final-words>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>I hope you have found this post useful! I have placed a copy of the repo I created in this post on GitHub, so if you simply want to test the steps above without creating your own app, feel free to clone this and have a play around:</p>
-<a href=https://github.com/samharrison7/quadratic-app class=button target=_blank>
-<i class="fa fa-github fa-fw"></i>Get the code
-</a>
-</div>
-<footer>
-<span class=mr1>Found this post useful?</span>
-<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init('Buy me a coffee','#29abe0','B0B1ACSFJ'),kofiwidget2.draw()</script>
-<h3>Comments</h3>
-<div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div>
-<div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div>
-</footer>
-</article>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:!0},{left:'$',right:'$',display:!1},{left:'\\(',right:'\\)',display:!1},{left:'\\[',right:'\\]',display:!0}]})"></script>
-</section>
-</div>
-<footer class=footer>
-<section class=container>
-©
+</span></code></pre></div><p>Heroku will now print out lots of info as it sets up your server and installs all of your dependencies. If successful, it will tell you the URL that your app has been deployed to:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>remote:        https://quiet-meadow-91848.herokuapp.com/ deployed to Heroku
+</span></span><span style=display:flex><span>remote:
+</span></span><span style=display:flex><span>remote: Verifying deploy... done.
+</span></span><span style=display:flex><span>To https://git.heroku.com/quiet-meadow-91848.git
+</span></span><span style=display:flex><span> * [new branch]      master -&gt; master
+</span></span></code></pre></div><p>You can now head to that URL to check that your app is working as expected!</p><h2 id=debugging>Debugging
+<a class=heading-link href=#debugging><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Unfortunately, it&rsquo;s rare that everything works as seamlessly as this simple example, and debugging Voilà-Heroku setups can be a bit tricky. Here are a few tips that might help:</p><ul><li>Use the <code>heroku logs --tail</code> command to show the server logs, which might give you some ideas.</li><li>Specify the <code>--debug</code> flag in your Procfile command to get more detailed debugging info from Voilà.</li><li>If your app works locally (<code>heroku local</code>) but not online, <em>make sure your environments are exactly the same</em>. Are you using the same version of Python? (Compare <code>python --version</code> to that specified in <code>runtime.txt</code>.) Are the same versions of all of the dependencies installed? If you have installed new packages since generating your <code>requirements.txt</code> file, then try re-creating this (<code>pip freeze > requirements.txt</code>).</li></ul><h2 id=final-words>Final words
+<a class=heading-link href=#final-words><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>I hope you have found this post useful! I have placed a copy of the repo I created in this post on GitHub, so if you simply want to test the steps above without creating your own app, feel free to clone this and have a play around:</p><a href=https://github.com/samharrison7/quadratic-app class=button target=_blank><i class="fa fa-github fa-fw"></i>Get the code</a></div><footer><span class=mr1>Found this post useful?</span>
+<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init("Buy me a coffee","#29abe0","B0B1ACSFJ"),kofiwidget2.draw()</script><h3>Comments</h3><div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div><div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div></footer></article><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css integrity=sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0 crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js integrity=sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous onload='renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})'></script></section></div><footer class=footer><section class=container>©
 2022 -
 2024
 Sam Harrison
 ·
 Powered by <a href=https://gohugo.io/>Hugo</a> & lovingly adapted from the <a href=https://github.com/luizdepra/hugo-coder/>Coder</a> theme
 ·
-<a href=https://samharrison.science/about>About this site.</a>
-</section>
-</footer>
-</main>
-<script src=/js/coder.min.39a51230dce2ac866c049b52573e38bf60666af4bc63c1bdf203b9b2d95b1cd6.js integrity="sha256-OaUSMNzirIZsBJtSVz44v2BmavS8Y8G98gO5stlbHNY="></script>
-<script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script>
-</body>
-</html>
+<a href=https://samharrison.science//about>About this site.</a></section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script></body></html>

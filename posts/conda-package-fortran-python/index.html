@@ -1,523 +1,217 @@
-<!doctype html><html lang=en>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=content-language content="en">
-<meta name=color-scheme content="light dark">
-<meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; prefetch-src 'self'; connect-src 'self' https://samharrison7.goatcounter.com/count;">
-<meta name=author content="Sam Harrison">
-<meta name=description content="How to build and distribute a Conda package from a project with Fortran and Python code">
-<meta name=keywords content="environmental scientist,environmental modelling,research software,blog">
-<meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="https://samharrison.science/posts/conda-package-fortran-python/conda-recipe.png">
-<meta name=twitter:title content="Creating a Conda package for a project with Fortran and Python code">
-<meta name=twitter:description content="How to build and distribute a Conda package from a project with Fortran and Python code">
-<meta property="og:title" content="Creating a Conda package for a project with Fortran and Python code">
-<meta property="og:description" content="How to build and distribute a Conda package from a project with Fortran and Python code">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://samharrison.science/posts/conda-package-fortran-python/"><meta property="og:image" content="https://samharrison.science/posts/conda-package-fortran-python/conda-recipe.png"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2023-01-06T16:02:35+00:00">
-<meta property="article:modified_time" content="2023-01-06T16:02:35+00:00">
-<title>
-Creating a Conda package for a project with Fortran and Python code · Sam Harrison
-</title>
-<link rel=canonical href=https://samharrison.science/posts/conda-package-fortran-python/>
-<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
-<link rel=stylesheet href=/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css integrity="sha256-2f3b/+byfmmYXcX+BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin=anonymous media=screen>
-<link rel=stylesheet href=/scss/override.min.5966b1cd95b422e6410b0b668fece5c4f1c6c04250905dd4d545214f8af42265.css integrity="sha256-WWaxzZW0IuZBCwtmj+zlxPHGwEJQkF3U1UUhT4r0ImU=" crossorigin=anonymous media=screen>
-<link rel=icon type=image/png href=/images/favicon32.png sizes=32x32>
-<link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16>
-<link rel=apple-touch-icon href=/images/apple-touch-icon.png>
-<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
-<meta name=generator content="Hugo 0.92.1">
-</head>
-<body class="preload-transitions colorscheme-auto">
-<div class=float-container>
-<a id=dark-mode-toggle class=colorscheme-toggle>
-<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
-</a>
-</div>
-<main class=wrapper>
-<nav class=navigation>
-<section class=container>
-<img class=header-avatar src=/images/sam-header.jpg>
-<a class=navigation-title href=/>
-Sam Harrison
-</a>
-<input type=checkbox id=menu-toggle>
-<label class="menu-button float-right" for=menu-toggle>
-<i class="fa fa-bars fa-fw" aria-hidden=true></i>
-</label>
-<ul class=navigation-list>
-<li class=navigation-item>
-<a class=navigation-link href=/my-research/>My Research</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/posts/>Blog</a>
-</li>
-<li class=navigation-item>
-<a class=navigation-link href=/contact/>Contact</a>
-</li>
-</ul>
-</section>
-</nav>
-<div class=content>
-<section class="container post">
-<article>
-<header>
-<div class=post-title>
-<h1 class=title>
-<a class=title-link href=https://samharrison.science/posts/conda-package-fortran-python/>
-Creating a Conda package for a project with Fortran and Python code
-</a>
-</h1>
-</div>
-<div class=post-meta>
-<div class=date>
-<span class=posted-on>
-<i class="fa fa-calendar" aria-hidden=true></i>
-<time datetime=2023-01-06T16:02:35Z>
-6 January 2023
-</time>
-</span>
-<span class=reading-time>
-<i class="fa fa-clock-o" aria-hidden=true></i>
-16-minute read
-</span>
-</div>
-<div class=tags><span class=tag>
-<a href=/tags/fortran/>fortran</a>
-</span><span class=tag>
-<a href=/tags/python/>python</a>
-</span><span class=tag>
-<a href=/tags/conda/>conda</a>
-</span></div>
-</div>
-</header>
-<div>
-<p>Creating a Conda package is a great way to package and distribute your project’s software and its dependencies in a platform- and language-agnostic way. As Conda packages distribute compiled binaries, rather than your source code, they are not limited to specific programming languages (e.g. unlike Python packages distributed via PyPI). This makes them particularly suited to complex projects that might use a selection of different languages.</p>
-<p>One common paradigm in scientific computing is the combined use of Fortran and Python. Fortran is often used for underlying models and algorithms that are computationally intensive, whilst the plethora of data processing packages available in Python are leveraged to provide advanced data parsing and visualisation capabilities. This is a paradigm I often use in my own work.</p>
-<p>Despite this, there is not a huge amount of info out there on packaging Fortran with Conda, let alone packaging it alongside Python code. So I thought a simple tutorial along these lines might be a useful resource.</p>
-<div class="notice tip">
-<div class=notice-title>
-<i class="fa fa-lightbulb-o" aria-hidden=true></i>Prerequisites
-</div>
-<div class=notice-content>Some knowledge of Python packaging would be useful (I will use <code>setuptools</code> here, but the concepts introduced will be generally applicable to whichever packaging tool you wish to use). If you&rsquo;ve never packaged a Python project before, it might be worth checking out <a href=https://packaging.python.org/en/latest/tutorials/packaging-projects/ target=_blank>this tutorial</a> and/or <a href=https://setuptools.pypa.io/en/latest/userguide/index.html target=_blank>this documentation</a>. Basic knowledge of Conda, Git and Fortran development would also be useful.</div>
-</div>
-<div class="notice warning">
-<div class=notice-title>
-<i class="fa fa-exclamation-triangle" aria-hidden=true></i>Warning
-</div>
-<div class=notice-content>I have written this tutorial to be cross-platform, but I have only tested it on Linux (Ubuntu 22.04) and Windows 10. Slight tweaks might be needed to make it work on MacOS.</div>
-</div>
-<h2 id=the-project>
-The project
-<a class=heading-link href=#the-project>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>The repo for this tutorial is on GitHub, so feel free to head over there to see the complete example:</p>
-<a href=https://github.com/samharrison7/py-f-conda-package class=button target=_blank>
-<i class="fa fa-github fa-fw"></i>See the complete package
-</a>
-<p>Let&rsquo;s take a really simple example: We have some Fortran code that calculates a quadratic curve, then we have some Python code that uses this to plot a graph of the quadratic curve, based on some input parameters from the user.</p>
-<p>Our project code will be structured like this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>src/
-	pyf/
-		quadratic.f90
-		plot.py
-		cli.py
-README.md
-LICENSE
-</code></pre></div><p>The <code>quadratic.f90</code> file is the Fortran code that calculates the quadratic curve. <code>plot.py</code> calls this Fortran code and plots the curve, and <code>cli.py</code> provides a command line interface to the Python code (and thus, indirectly, the Fortran library).</p>
-<p>If you&rsquo;re wondering about the seemingly overcomplicated <code>src/py-f-conda-package</code> structure, this is a standard way of structuring a Python package, and is needed when we use <code>pip</code> install the package later.</p>
-<p>If you plan to distribute your package or upload to somewhere like GitHub, then you will want to provide at least README and LICENSE files too.</p>
-<h3 id=the-fortran-code>
-The Fortran code
-<a class=heading-link href=#the-fortran-code>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>The goal of the Fortran code is to calculate a curve based on the standard quadratic equation:</p>
-<p>$$
+<!doctype html><html lang=en><head><title>Creating a Conda package for a project with Fortran and Python code · Sam Harrison
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta http-equiv=Content-Security-Policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self' https://utteranc.es; img-src 'self' https://storage.ko-fi.com https://samharrison7.goatcounter.com/count; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://gc.zgo.at https://storage.ko-fi.com https://cdn.jsdelivr.net https://utteranc.es; connect-src 'self' https://samharrison7.goatcounter.com/count;"><meta name=author content="Sam Harrison"><meta name=description content="How to build and distribute a Conda package from a project with Fortran and Python code"><meta name=keywords content="environmental scientist,environmental modelling,research software,blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://samharrison.science/posts/conda-package-fortran-python/conda-recipe.png"><meta name=twitter:title content="Creating a Conda package for a project with Fortran and Python code"><meta name=twitter:description content="How to build and distribute a Conda package from a project with Fortran and Python code"><meta property="og:url" content="https://samharrison.science/posts/conda-package-fortran-python/"><meta property="og:site_name" content="Sam Harrison"><meta property="og:title" content="Creating a Conda package for a project with Fortran and Python code"><meta property="og:description" content="How to build and distribute a Conda package from a project with Fortran and Python code"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-01-06T16:02:35+00:00"><meta property="article:modified_time" content="2023-01-06T16:02:35+00:00"><meta property="article:tag" content="Fortran"><meta property="article:tag" content="Python"><meta property="article:tag" content="Conda"><meta property="og:image" content="https://samharrison.science/posts/conda-package-fortran-python/conda-recipe.png"><link rel=canonical href=https://samharrison.science/posts/conda-package-fortran-python/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.aa5ef26fa979d6793724ae2dbd71efa94fd16cb1c5c7db3b6651f21f9892a5fd.css integrity="sha256-ql7yb6l51nk3JK4tvXHvqU/RbLHFx9s7ZlHyH5iSpf0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=stylesheet href=/scss/override.min.be92b2e630c61b2ff2a49f696efd16cea99ec1d9b7b40d65da4fd30ab09796bd.css integrity="sha256-vpKy5jDGGy/ypJ9pbv0Wzqmewdm3tA1l2k/TCrCXlr0=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><img class=header-avatar src=/images/sam-header.jpg>
+<a class=navigation-title href=/>Sam Harrison
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/my-research/>My Research</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li><li class=navigation-item><a class=navigation-link href=/contact/>Contact</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://samharrison.science/posts/conda-package-fortran-python/>Creating a Conda package for a project with Fortran and Python code</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2023-01-06T16:02:35Z>6 January 2023
+</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+16-minute read</span></div><div class=tags><span class=tag><a href=/tags/fortran/>fortran</a>
+</span><span class=tag><a href=/tags/python/>python</a>
+</span><span class=tag><a href=/tags/conda/>conda</a></span></div></div></header><div><p>Creating a Conda package is a great way to package and distribute your project’s software and its dependencies in a platform- and language-agnostic way. As Conda packages distribute compiled binaries, rather than your source code, they are not limited to specific programming languages (e.g. unlike Python packages distributed via PyPI). This makes them particularly suited to complex projects that might use a selection of different languages.</p><p>One common paradigm in scientific computing is the combined use of Fortran and Python. Fortran is often used for underlying models and algorithms that are computationally intensive, whilst the plethora of data processing packages available in Python are leveraged to provide advanced data parsing and visualisation capabilities. This is a paradigm I often use in my own work.</p><p>Despite this, there is not a huge amount of info out there on packaging Fortran with Conda, let alone packaging it alongside Python code. So I thought a simple tutorial along these lines might be a useful resource.</p><div class="notice tip"><div class=notice-title><i class="fa-solid fa-lightbulb" aria-hidden=true></i>Prerequisites</div><div class=notice-content>Some knowledge of Python packaging would be useful (I will use <code>setuptools</code> here, but the concepts introduced will be generally applicable to whichever packaging tool you wish to use). If you&rsquo;ve never packaged a Python project before, it might be worth checking out <a href=https://packaging.python.org/en/latest/tutorials/packaging-projects/ target=_blank>this tutorial</a> and/or <a href=https://setuptools.pypa.io/en/latest/userguide/index.html target=_blank>this documentation</a>. Basic knowledge of Conda, Git and Fortran development would also be useful.</div></div><div class="notice warning"><div class=notice-title><i class="fa-solid fa-exclamation-triangle" aria-hidden=true></i>Warning</div><div class=notice-content>I have written this tutorial to be cross-platform, but I have only tested it on Linux (Ubuntu 22.04) and Windows 10. Slight tweaks might be needed to make it work on MacOS.</div></div><h2 id=the-project>The project
+<a class=heading-link href=#the-project><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The repo for this tutorial is on GitHub, so feel free to head over there to see the complete example:</p><a href=https://github.com/samharrison7/py-f-conda-package class=button target=_blank><i class="fa fa-github fa-fw"></i>See the complete package</a><p>Let&rsquo;s take a really simple example: We have some Fortran code that calculates a quadratic curve, then we have some Python code that uses this to plot a graph of the quadratic curve, based on some input parameters from the user.</p><p>Our project code will be structured like this:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>src/
+</span></span><span style=display:flex><span>	pyf/
+</span></span><span style=display:flex><span>		quadratic.f90
+</span></span><span style=display:flex><span>		plot.py
+</span></span><span style=display:flex><span>		cli.py
+</span></span><span style=display:flex><span>README.md
+</span></span><span style=display:flex><span>LICENSE
+</span></span></code></pre></div><p>The <code>quadratic.f90</code> file is the Fortran code that calculates the quadratic curve. <code>plot.py</code> calls this Fortran code and plots the curve, and <code>cli.py</code> provides a command line interface to the Python code (and thus, indirectly, the Fortran library).</p><p>If you&rsquo;re wondering about the seemingly overcomplicated <code>src/py-f-conda-package</code> structure, this is a standard way of structuring a Python package, and is needed when we use <code>pip</code> install the package later.</p><p>If you plan to distribute your package or upload to somewhere like GitHub, then you will want to provide at least README and LICENSE files too.</p><h3 id=the-fortran-code>The Fortran code
+<a class=heading-link href=#the-fortran-code><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>The goal of the Fortran code is to calculate a curve based on the standard quadratic equation:</p><p>$$
 y=ax^2 + bx + c
-$$</p>
-<p>Therefore, we will create a Fortran subroutine that reads in $a$, $b$ and $c$ as parameters, alongside the $x$-range over which to evaluate the function, given by <code>x_min</code>, <code>x_max</code> and <code>N</code> (number of steps):</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fortran data-lang=fortran><span style=color:#00a>subroutine </span>calc_quadratic(a, b, c, x_min, x_max, N, y) <span style=color:#00a>bind</span>(c, name=<span style=color:#a50>&#39;calc_quadratic&#39;</span>)
-    <span style=color:#00a>use </span><span style=color:#0aa>iso_c_binding</span>, only: <span style=color:#0aa>c_double</span>, <span style=color:#0aa>c_int
-</span><span style=color:#0aa>    </span><span style=color:#00a>implicit none</span>
-
-    <span style=color:#aaa;font-style:italic>! Input parameters
-</span><span style=color:#aaa;font-style:italic></span>    <span style=color:#0aa>real</span>(<span style=color:#0aa>c_double</span>), <span style=color:#00a>intent</span>(in), <span style=color:#00a>value</span> <span style=color:#00a>::</span> a, b, c, x_min, x_max
-    <span style=color:#aaa;font-style:italic>! Number of steps over which to calculate y
-</span><span style=color:#aaa;font-style:italic></span>    <span style=color:#0aa>integer</span>(<span style=color:#0aa>c_int</span>), <span style=color:#00a>intent</span>(in), <span style=color:#00a>value</span> <span style=color:#00a>::</span> N
-    <span style=color:#aaa;font-style:italic>! Array representing y
-</span><span style=color:#aaa;font-style:italic></span>    <span style=color:#0aa>real</span>(<span style=color:#0aa>c_double</span>), <span style=color:#00a>intent</span>(out) <span style=color:#00a>::</span> y(N)
-    <span style=color:#0aa>integer</span> <span style=color:#00a>::</span> i            <span style=color:#aaa;font-style:italic>! Iterator
-</span><span style=color:#aaa;font-style:italic></span>    <span style=color:#0aa>real</span>(<span style=color:#0aa>c_double</span>) <span style=color:#00a>::</span> x     <span style=color:#aaa;font-style:italic>! Temporary x for each iteration
-</span><span style=color:#aaa;font-style:italic></span>
-    <span style=color:#aaa;font-style:italic>! Iterate over our x range and calculate y at each step
-</span><span style=color:#aaa;font-style:italic></span>    <span style=color:#00a>do </span>i = <span style=color:#099>1</span>, N
-        x = x_min + (i - <span style=color:#099>1</span>) * (x_max - x_min) / <span style=color:#0aa>real</span>(N)
-        y(i) = a * x ** <span style=color:#099>2</span> + b * x + c
-    <span style=color:#00a>end do
-</span><span style=color:#00a>end subroutine</span>
-</code></pre></div><p>To call our function from Python, we are going to use <code>iso_c_binding</code> on the Fortran side, and the <code>ctypes</code> package on the Python side, which combined allow us to create an interface between Fortran and Python, with C as the intermediary. In the above, we use <code>bind(c, name='calc_quadratic')</code> after the subroutine declaration to bind our Fortran function to a C function named <code>calc_quadratic</code>, and we use the <code>c_double</code> and <code>c_int</code> type declarations to make our Fortran variables compatible with C types. Note that the return type of a C-interoperable Fortran function cannot be an array, so we use a subroutine instead and pass back the calculated quadratic curve via the <code>y</code> parameter. The <code>value</code> keywords for our input parameters are important.</p>
-<p>If you want to learn more about Fortran-Python interoperability, check out this <a href=https://www.matecdev.com/posts/fortran-in-python.html target=_blank>excellent intro post</a>, this <a href=https://www.fortran90.org/src/best-practices.html#interfacing-with-python target=_blank>Fortran90.org documentation</a>, or a <a href=https://numpy.org/doc/stable/user/c-info.python-as-glue.html target=_blank>fuller description from NumPy here</a>. The method used here is one of a few different options, but digging further into this is beyond the scope of this tutorial.</p>
-<h3 id=compiling-the-fortran-to-a-library>
-Compiling the Fortran to a library
-<a class=heading-link href=#compiling-the-fortran-to-a-library>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>You can use whichever <a href=https://fortran-lang.org/en/compilers/ target=_blank>Fortran compiler</a> you are most comfortable with to create a shared library from the <code>quadratic.f90</code> file. For this demo, I will use GFortran. There are detailed instructions on <a href=https://fortran-lang.org/en/learn/os_setup/install_gfortran/ target=_blank>how to install GFortran on Windows, Linux and MacOS</a> and <a href=https://fortran-lang.org/en/learn/building_programs/managing_libraries/ target=_blank>how to create libraries</a> on the Fortran Lang website.</p>
-<p>From the root directory of our project, <strong>on Linux/MacOS:</strong></p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>gfortran -shared src/pyf/quadratic.f90 -o quadratic.so
-</span></code></pre>
-</div>
-<p><strong>On Windows:</strong></p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class="command win">gfortran -shared src\pyf\quadratic.f90 -o quadratic.dll
-</span></code></pre>
-</div>
-<p>We should now have a <code>quadratic.[so|dll]</code> file in the project root.</p>
-<h2 id=the-python-wrapper>
-The Python wrapper
-<a class=heading-link href=#the-python-wrapper>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>Now we can write the <code>plot.py</code> file, which acts as a wrapper for our Fortran library and uses the quadratic curve it calculates to plot a graph, using Matplotlib. We encapsulate this all in a function <code>plot_quadratic</code> so that it can be used by the command line interface we will create in <code>cli.py</code>.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>platform</span>
-<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>ctypes</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>ct</span>
-<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>matplotlib.pyplot</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>plt</span>
-<span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>numpy</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>np</span>
-
-<span style=color:#00a>def</span> <span style=color:#0a0>plot_quadratic</span>(a, b, c, x_min, x_max, N):
-    <span style=color:#aaa;font-style:italic># Get the extension for the library, depending on which OS we&#39;re on</span>
-    lib_ext = <span style=color:#a50>&#39;dll&#39;</span> <span style=color:#00a>if</span> platform.system()==<span style=color:#a50>&#39;Windows&#39;</span> <span style=color:#00a>else</span> <span style=color:#a50>&#39;so&#39;</span>
-		<span style=color:#aaa;font-style:italic># Load the library and get the calc_quadratic function</span>
-    calc_quadratic = ct.CDLL(<span style=color:#a50>f</span><span style=color:#a50>&#39;quadratic.</span><span style=color:#a50>{</span>lib_ext<span style=color:#a50>}</span><span style=color:#a50>&#39;</span>, winmode=<span style=color:#099>1</span>).calc_quadratic
-    <span style=color:#aaa;font-style:italic># Create an empty array to store the result in</span>
-    y = np.empty(N, dtype=<span style=color:#a50>&#39;double&#39;</span>)
-    <span style=color:#aaa;font-style:italic># Call the Fortran function</span>
-    calc_quadratic(ct.c_double(a),
-                   ct.c_double(b),
-                   ct.c_double(c),
-                   ct.c_double(x_min),
-                   ct.c_double(x_max),
-                   ct.c_int(N),
-                   y.ctypes.data_as(ct.POINTER(ct.c_double)))
-    <span style=color:#aaa;font-style:italic># Plot the quadratic curve</span>
-    plt.plot(np.linspace(x_min, x_max, N), y)
-    plt.show()
-</code></pre></div><p>First, we use <code>platform.system()</code> to check if we’re on Windows and therefore whether the library extension is <code>dll</code> or <code>so</code>. Then we use the <code>ctypes</code> library to load the library and store the <code>calc_quadratic</code> function in its own variable. Note that this relies on the <code>quadratic.[so|dll]</code> file being somewhere that your system searches for libraries (such as in the <code>LD_LIBRARY_PATH</code> environment variable on Linux). When we build the package later, Conda will take care of setting this environment variable to include the path we will install the library to. We specify the <code>winmode</code> parameter above to enable DLLs to be loaded from the <code>PATH</code> environment variable and current directory on Windows (by default, since Python 3.8, it does not search <code>PATH</code> for DLLs). More on this later.</p>
-<p>Before calling the function, we define an empty array <code>y</code> to pass to it, which is what the $y$ array will be returned in. Then we call the function, passing the parameters as the appropriate C types by using the <code>ctypes</code> module. Note that we pass the array <code>y</code> as a pointer, using <a href=https://numpy.org/doc/stable/reference/generated/numpy.ndarray.ctypes.html target=_blank>NumPy’s <code>ctypes</code> capability</a>.</p>
-<p>The final two lines of code simply plot the returned quadratic curve using Matplotlib. <code>np.linspace()</code> is used to recreate the $x$-domain over which $y$ was calculated.</p>
-<h3 id=the-command-line-interface>
-The command line interface
-<a class=heading-link href=#the-command-line-interface>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>Because we ultimately want to call this package via the command line, we create a final Python file <code>cli.py</code>, which is responsible for parsing command line arguments and passing them to our <code>plot_quadratic</code> function. We use the <a href=https://docs.python.org/3/library/argparse.html target=_blank>Python <code>argparse</code> library</a> for this:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>argparse</span>
-<span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>.plot</span> <span style=color:#00a>import</span> plot_quadratic
-
-<span style=color:#00a>def</span> <span style=color:#0a0>run</span>():
-    
-    <span style=color:#aaa;font-style:italic># Parse the command line arguments to get the quadratic parameters</span>
-    parser = argparse.ArgumentParser(description=<span style=color:#a50>&#39;Plot a quadratic function y = ax^2 + bx + c&#39;</span>)
-    parser.add_argument(<span style=color:#a50>&#39;-a&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;a&#39;</span>)
-    parser.add_argument(<span style=color:#a50>&#39;-b&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;b&#39;</span>)
-    parser.add_argument(<span style=color:#a50>&#39;-c&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;c&#39;</span>)
-    parser.add_argument(<span style=color:#a50>&#39;--xrange&#39;</span>, <span style=color:#a50>&#39;-x&#39;</span>, nargs=<span style=color:#099>2</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;x range to calculate y over&#39;</span>)
-    args = parser.parse_args()
-
-    <span style=color:#aaa;font-style:italic># Pass these parameters to the function to plot the quadratic</span>
-    plot_quadratic(a=args.a,
-                   b=args.b,
-                   c=args.c,
-                   x_min=args.xrange[<span style=color:#099>0</span>],
-                   x_max=args.xrange[<span style=color:#099>1</span>],
-                   N=<span style=color:#099>1000</span>)
-</code></pre></div><h2 id=installing-the-python-bits-of-the-package>
-Installing the Python bits of the package
-<a class=heading-link href=#installing-the-python-bits-of-the-package>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>We will build our final Conda package in two steps, firstly by creating a pure Python package using <code>setuptools</code> and testing this by manually compiling our Fortran code (like we did above). Then we will write the build scripts to automate the compilation of the Fortran code so that, when the Conda package is installed, the Fortran library is automatically built.</p>
-<p>In this section, we will create this pure Python part of the package and use <code>pip</code> to install it locally, such that we can test out its functionality with a manually compiled Fortran library. Ultimately, we will also use <code>setuptools</code> and <code>pip</code> in the Conda build scripts to build the full Conda package, so this is a useful step towards our end goal.</p>
-<p>We provide <code>setuptools</code> with information about our package via a <code>pyproject.toml</code> file (which is now the PEP-recommended way of providing project metadata, over and above <code>setup.cfg</code> or <code>setup.py</code> files). I am assuming some familiarity with Python packaging, but if this is new to you, then hopefully the following <code>pyproject.toml</code> file will be relatively self-explanatory. The <a href=https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html target=_blank><code>setuptools</code> documentation</a> is a great resource for learning more.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml>[build-system]
-requires = [<span style=color:#a50>&#34;setuptools&#34;</span>, <span style=color:#a50>&#34;setuptools-scm&#34;</span>]
-build-backend = <span style=color:#a50>&#34;setuptools.build_meta&#34;</span>
-
-[project]
-name = <span style=color:#a50>&#34;pyf&#34;</span>
-version = <span style=color:#a50>&#34;1.0.0&#34;</span>
-description = <span style=color:#a50>&#34;A demo package showing how to build a Conda package with Fortran and Python code&#34;</span>
-readme = <span style=color:#a50>&#34;README.md&#34;</span>
-requires-python = <span style=color:#a50>&#34;&gt;=3.7&#34;</span>
-license = {text = <span style=color:#a50>&#34;MIT License&#34;</span>}
-dependencies = [
-    <span style=color:#a50>&#34;numpy&#34;</span>,
-    <span style=color:#a50>&#34;matplotlib&#34;</span>
-]
-
-[project.scripts]
-pyf = <span style=color:#a50>&#34;pyf.cli:run&#34;</span>
-</code></pre></div><p>We place this file in the root of our project. Notable sections in the above are the <code>dependencies</code> section, where we say that our package is dependent on <code>numpy</code> and <code>matplotlib</code>, and <code>project.scripts</code>, where we specify a command line script <code>pyf</code>, which runs the <code>run()</code> function we just defined in the <code>cli.py</code> file.</p>
-<p>The package can now be installed in &ldquo;editable&rdquo; mode using <code>pip</code>. To keep things nice and tidy, let&rsquo;s do this within a new Conda environment, in which we just need to install Python and <code>pip</code>:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n pyf-dev -c conda-forge python=3.11 pip
+$$</p><p>Therefore, we will create a Fortran subroutine that reads in $a$, $b$ and $c$ as parameters, alongside the $x$-range over which to evaluate the function, given by <code>x_min</code>, <code>x_max</code> and <code>N</code> (number of steps):</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fortran data-lang=fortran><span style=display:flex><span><span style=color:#00a>subroutine</span><span style=color:#bbb> </span>calc_quadratic(a,<span style=color:#bbb> </span>b,<span style=color:#bbb> </span>c,<span style=color:#bbb> </span>x_min,<span style=color:#bbb> </span>x_max,<span style=color:#bbb> </span>N,<span style=color:#bbb> </span>y)<span style=color:#bbb> </span><span style=color:#00a>bind</span>(c,<span style=color:#bbb> </span>name=<span style=color:#a50>&#39;calc_quadratic&#39;</span>)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#00a>use</span><span style=color:#bbb> </span><span style=color:#0aa>iso_c_binding</span>,<span style=color:#bbb> </span><span style=color:#00a>only</span>:<span style=color:#bbb> </span><span style=color:#00a>c_double</span>,<span style=color:#bbb> </span><span style=color:#00a>c_int</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#00a>implicit</span><span style=color:#bbb> </span><span style=color:#00a>none</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#aaa;font-style:italic>! Input parameters
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#00a>real</span>(<span style=color:#00a>c_double</span>),<span style=color:#bbb> </span><span style=color:#00a>intent</span>(in),<span style=color:#bbb> </span><span style=color:#00a>value</span><span style=color:#bbb> </span><span style=color:#00a>::</span><span style=color:#bbb> </span>a,<span style=color:#bbb> </span>b,<span style=color:#bbb> </span>c,<span style=color:#bbb> </span>x_min,<span style=color:#bbb> </span>x_max<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#aaa;font-style:italic>! Number of steps over which to calculate y
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#00a>integer</span>(<span style=color:#00a>c_int</span>),<span style=color:#bbb> </span><span style=color:#00a>intent</span>(in),<span style=color:#bbb> </span><span style=color:#00a>value</span><span style=color:#bbb> </span><span style=color:#00a>::</span><span style=color:#bbb> </span>N<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#aaa;font-style:italic>! Array representing y
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#00a>real</span>(<span style=color:#00a>c_double</span>),<span style=color:#bbb> </span><span style=color:#00a>intent</span>(out)<span style=color:#bbb> </span><span style=color:#00a>::</span><span style=color:#bbb> </span>y(N)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#00a>integer</span><span style=color:#bbb> </span><span style=color:#00a>::</span><span style=color:#bbb> </span>i<span style=color:#bbb>            </span><span style=color:#aaa;font-style:italic>! Iterator
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#00a>real</span>(<span style=color:#00a>c_double</span>)<span style=color:#bbb> </span><span style=color:#00a>::</span><span style=color:#bbb> </span>x<span style=color:#bbb>     </span><span style=color:#aaa;font-style:italic>! Temporary x for each iteration
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#aaa;font-style:italic>! Iterate over our x range and calculate y at each step
+</span></span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic></span><span style=color:#bbb>    </span><span style=color:#00a>do</span><span style=color:#bbb> </span>i<span style=color:#bbb> </span>=<span style=color:#bbb> </span><span style=color:#099>1</span>,<span style=color:#bbb> </span>N<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>x<span style=color:#bbb> </span>=<span style=color:#bbb> </span>x_min<span style=color:#bbb> </span>+<span style=color:#bbb> </span>(i<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#099>1</span>)<span style=color:#bbb> </span>*<span style=color:#bbb> </span>(x_max<span style=color:#bbb> </span>-<span style=color:#bbb> </span>x_min)<span style=color:#bbb> </span>/<span style=color:#bbb> </span><span style=color:#00a>real</span>(N)<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>        </span>y(i)<span style=color:#bbb> </span>=<span style=color:#bbb> </span>a<span style=color:#bbb> </span>*<span style=color:#bbb> </span>x<span style=color:#bbb> </span>**<span style=color:#bbb> </span><span style=color:#099>2</span><span style=color:#bbb> </span>+<span style=color:#bbb> </span>b<span style=color:#bbb> </span>*<span style=color:#bbb> </span>x<span style=color:#bbb> </span>+<span style=color:#bbb> </span>c<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span><span style=color:#00a>end</span><span style=color:#bbb> </span><span style=color:#00a>do</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#00a>end</span><span style=color:#bbb> </span><span style=color:#00a>subroutine</span><span style=color:#bbb>
+</span></span></span></code></pre></div><p>To call our function from Python, we are going to use <code>iso_c_binding</code> on the Fortran side, and the <code>ctypes</code> package on the Python side, which combined allow us to create an interface between Fortran and Python, with C as the intermediary. In the above, we use <code>bind(c, name='calc_quadratic')</code> after the subroutine declaration to bind our Fortran function to a C function named <code>calc_quadratic</code>, and we use the <code>c_double</code> and <code>c_int</code> type declarations to make our Fortran variables compatible with C types. Note that the return type of a C-interoperable Fortran function cannot be an array, so we use a subroutine instead and pass back the calculated quadratic curve via the <code>y</code> parameter. The <code>value</code> keywords for our input parameters are important.</p><p>If you want to learn more about Fortran-Python interoperability, check out this <a href=https://www.matecdev.com/posts/fortran-in-python.html target=_blank>excellent intro post</a>, this <a href=https://www.fortran90.org/src/best-practices.html#interfacing-with-python target=_blank>Fortran90.org documentation</a>, or a <a href=https://numpy.org/doc/stable/user/c-info.python-as-glue.html target=_blank>fuller description from NumPy here</a>. The method used here is one of a few different options, but digging further into this is beyond the scope of this tutorial.</p><h3 id=compiling-the-fortran-to-a-library>Compiling the Fortran to a library
+<a class=heading-link href=#compiling-the-fortran-to-a-library><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>You can use whichever <a href=https://fortran-lang.org/en/compilers/ target=_blank>Fortran compiler</a> you are most comfortable with to create a shared library from the <code>quadratic.f90</code> file. For this demo, I will use GFortran. There are detailed instructions on <a href=https://fortran-lang.org/en/learn/os_setup/install_gfortran/ target=_blank>how to install GFortran on Windows, Linux and MacOS</a> and <a href=https://fortran-lang.org/en/learn/building_programs/managing_libraries/ target=_blank>how to create libraries</a> on the Fortran Lang website.</p><p>From the root directory of our project, <strong>on Linux/MacOS:</strong></p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>gfortran -shared src/pyf/quadratic.f90 -o quadratic.so
+</span></code></pre></div><p><strong>On Windows:</strong></p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class="command win">gfortran -shared src\pyf\quadratic.f90 -o quadratic.dll
+</span></code></pre></div><p>We should now have a <code>quadratic.[so|dll]</code> file in the project root.</p><h2 id=the-python-wrapper>The Python wrapper
+<a class=heading-link href=#the-python-wrapper><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Now we can write the <code>plot.py</code> file, which acts as a wrapper for our Fortran library and uses the quadratic curve it calculates to plot a graph, using Matplotlib. We encapsulate this all in a function <code>plot_quadratic</code> so that it can be used by the command line interface we will create in <code>cli.py</code>.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>platform</span>
+</span></span><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>ctypes</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>ct</span>
+</span></span><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>matplotlib.pyplot</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>plt</span>
+</span></span><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>numpy</span> <span style=color:#00a>as</span> <span style=color:#0aa;text-decoration:underline>np</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00a>def</span> <span style=color:#0a0>plot_quadratic</span>(a, b, c, x_min, x_max, N):
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Get the extension for the library, depending on which OS we&#39;re on</span>
+</span></span><span style=display:flex><span>    lib_ext = <span style=color:#a50>&#39;dll&#39;</span> <span style=color:#00a>if</span> platform.system()==<span style=color:#a50>&#39;Windows&#39;</span> <span style=color:#00a>else</span> <span style=color:#a50>&#39;so&#39;</span>
+</span></span><span style=display:flex><span>		<span style=color:#aaa;font-style:italic># Load the library and get the calc_quadratic function</span>
+</span></span><span style=display:flex><span>    calc_quadratic = ct.CDLL(<span style=color:#a50>f</span><span style=color:#a50>&#39;quadratic.</span><span style=color:#a50>{</span>lib_ext<span style=color:#a50>}</span><span style=color:#a50>&#39;</span>, winmode=<span style=color:#099>1</span>).calc_quadratic
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Create an empty array to store the result in</span>
+</span></span><span style=display:flex><span>    y = np.empty(N, dtype=<span style=color:#a50>&#39;double&#39;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Call the Fortran function</span>
+</span></span><span style=display:flex><span>    calc_quadratic(ct.c_double(a),
+</span></span><span style=display:flex><span>                   ct.c_double(b),
+</span></span><span style=display:flex><span>                   ct.c_double(c),
+</span></span><span style=display:flex><span>                   ct.c_double(x_min),
+</span></span><span style=display:flex><span>                   ct.c_double(x_max),
+</span></span><span style=display:flex><span>                   ct.c_int(N),
+</span></span><span style=display:flex><span>                   y.ctypes.data_as(ct.POINTER(ct.c_double)))
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Plot the quadratic curve</span>
+</span></span><span style=display:flex><span>    plt.plot(np.linspace(x_min, x_max, N), y)
+</span></span><span style=display:flex><span>    plt.show()
+</span></span></code></pre></div><p>First, we use <code>platform.system()</code> to check if we’re on Windows and therefore whether the library extension is <code>dll</code> or <code>so</code>. Then we use the <code>ctypes</code> library to load the library and store the <code>calc_quadratic</code> function in its own variable. Note that this relies on the <code>quadratic.[so|dll]</code> file being somewhere that your system searches for libraries (such as in the <code>LD_LIBRARY_PATH</code> environment variable on Linux). When we build the package later, Conda will take care of setting this environment variable to include the path we will install the library to. We specify the <code>winmode</code> parameter above to enable DLLs to be loaded from the <code>PATH</code> environment variable and current directory on Windows (by default, since Python 3.8, it does not search <code>PATH</code> for DLLs). More on this later.</p><p>Before calling the function, we define an empty array <code>y</code> to pass to it, which is what the $y$ array will be returned in. Then we call the function, passing the parameters as the appropriate C types by using the <code>ctypes</code> module. Note that we pass the array <code>y</code> as a pointer, using <a href=https://numpy.org/doc/stable/reference/generated/numpy.ndarray.ctypes.html target=_blank>NumPy’s <code>ctypes</code> capability</a>.</p><p>The final two lines of code simply plot the returned quadratic curve using Matplotlib. <code>np.linspace()</code> is used to recreate the $x$-domain over which $y$ was calculated.</p><h3 id=the-command-line-interface>The command line interface
+<a class=heading-link href=#the-command-line-interface><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Because we ultimately want to call this package via the command line, we create a final Python file <code>cli.py</code>, which is responsible for parsing command line arguments and passing them to our <code>plot_quadratic</code> function. We use the <a href=https://docs.python.org/3/library/argparse.html target=_blank>Python <code>argparse</code> library</a> for this:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#00a>import</span> <span style=color:#0aa;text-decoration:underline>argparse</span>
+</span></span><span style=display:flex><span><span style=color:#00a>from</span> <span style=color:#0aa;text-decoration:underline>.plot</span> <span style=color:#00a>import</span> plot_quadratic
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#00a>def</span> <span style=color:#0a0>run</span>():
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Parse the command line arguments to get the quadratic parameters</span>
+</span></span><span style=display:flex><span>    parser = argparse.ArgumentParser(description=<span style=color:#a50>&#39;Plot a quadratic function y = ax^2 + bx + c&#39;</span>)
+</span></span><span style=display:flex><span>    parser.add_argument(<span style=color:#a50>&#39;-a&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;a&#39;</span>)
+</span></span><span style=display:flex><span>    parser.add_argument(<span style=color:#a50>&#39;-b&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;b&#39;</span>)
+</span></span><span style=display:flex><span>    parser.add_argument(<span style=color:#a50>&#39;-c&#39;</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;c&#39;</span>)
+</span></span><span style=display:flex><span>    parser.add_argument(<span style=color:#a50>&#39;--xrange&#39;</span>, <span style=color:#a50>&#39;-x&#39;</span>, nargs=<span style=color:#099>2</span>, <span style=color:#0aa>type</span>=<span style=color:#0aa>float</span>, help=<span style=color:#a50>&#39;x range to calculate y over&#39;</span>)
+</span></span><span style=display:flex><span>    args = parser.parse_args()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#aaa;font-style:italic># Pass these parameters to the function to plot the quadratic</span>
+</span></span><span style=display:flex><span>    plot_quadratic(a=args.a,
+</span></span><span style=display:flex><span>                   b=args.b,
+</span></span><span style=display:flex><span>                   c=args.c,
+</span></span><span style=display:flex><span>                   x_min=args.xrange[<span style=color:#099>0</span>],
+</span></span><span style=display:flex><span>                   x_max=args.xrange[<span style=color:#099>1</span>],
+</span></span><span style=display:flex><span>                   N=<span style=color:#099>1000</span>)
+</span></span></code></pre></div><h2 id=installing-the-python-bits-of-the-package>Installing the Python bits of the package
+<a class=heading-link href=#installing-the-python-bits-of-the-package><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>We will build our final Conda package in two steps, firstly by creating a pure Python package using <code>setuptools</code> and testing this by manually compiling our Fortran code (like we did above). Then we will write the build scripts to automate the compilation of the Fortran code so that, when the Conda package is installed, the Fortran library is automatically built.</p><p>In this section, we will create this pure Python part of the package and use <code>pip</code> to install it locally, such that we can test out its functionality with a manually compiled Fortran library. Ultimately, we will also use <code>setuptools</code> and <code>pip</code> in the Conda build scripts to build the full Conda package, so this is a useful step towards our end goal.</p><p>We provide <code>setuptools</code> with information about our package via a <code>pyproject.toml</code> file (which is now the PEP-recommended way of providing project metadata, over and above <code>setup.cfg</code> or <code>setup.py</code> files). I am assuming some familiarity with Python packaging, but if this is new to you, then hopefully the following <code>pyproject.toml</code> file will be relatively self-explanatory. The <a href=https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html target=_blank><code>setuptools</code> documentation</a> is a great resource for learning more.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml><span style=display:flex><span>[build-system]
+</span></span><span style=display:flex><span>requires = [<span style=color:#a50>&#34;setuptools&#34;</span>, <span style=color:#a50>&#34;setuptools-scm&#34;</span>]
+</span></span><span style=display:flex><span>build-backend = <span style=color:#a50>&#34;setuptools.build_meta&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[project]
+</span></span><span style=display:flex><span>name = <span style=color:#a50>&#34;pyf&#34;</span>
+</span></span><span style=display:flex><span>version = <span style=color:#a50>&#34;1.0.0&#34;</span>
+</span></span><span style=display:flex><span>description = <span style=color:#a50>&#34;A demo package showing how to build a Conda package with Fortran and Python code&#34;</span>
+</span></span><span style=display:flex><span>readme = <span style=color:#a50>&#34;README.md&#34;</span>
+</span></span><span style=display:flex><span>requires-python = <span style=color:#a50>&#34;&gt;=3.7&#34;</span>
+</span></span><span style=display:flex><span>license = {text = <span style=color:#a50>&#34;MIT License&#34;</span>}
+</span></span><span style=display:flex><span>dependencies = [
+</span></span><span style=display:flex><span>    <span style=color:#a50>&#34;numpy&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a50>&#34;matplotlib&#34;</span>
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[project.scripts]
+</span></span><span style=display:flex><span>pyf = <span style=color:#a50>&#34;pyf.cli:run&#34;</span>
+</span></span></code></pre></div><p>We place this file in the root of our project. Notable sections in the above are the <code>dependencies</code> section, where we say that our package is dependent on <code>numpy</code> and <code>matplotlib</code>, and <code>project.scripts</code>, where we specify a command line script <code>pyf</code>, which runs the <code>run()</code> function we just defined in the <code>cli.py</code> file.</p><p>The package can now be installed in &ldquo;editable&rdquo; mode using <code>pip</code>. To keep things nice and tidy, let&rsquo;s do this within a new Conda environment, in which we just need to install Python and <code>pip</code>:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n pyf-dev -c conda-forge python=3.11 pip
 </span><span class=command>conda activate pyf-dev
-</span></code></pre>
-</div>
-<div class="notice tip">
-<div class=notice-title>
-<i class="fa fa-lightbulb-o" aria-hidden=true></i>Tip
-</div>
-<div class=notice-content>Big Conda user? Checkout <a href=https://mamba.readthedocs.io/en/latest/index.html target=_blank>Mamba</a> as a drop-in replacement that offers much higher speed and more reliable environment solutions than Conda.</div>
-</div>
-<p>From your project root (the same place as the <code>pyproject.toml</code> file), run:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>pip install -e .
-</code></pre>
-</div>
-<p>This will install all of the required dependencies and our <code>pyf</code> package. You can check the <code>pyf</code> command line script can been installed by running it:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>pyf -a 1 -b 0 -c 0 -x -10 10
-</code></pre>
-</div>
-<p>You should now see the quadratic curve $y=x^2$ plotted between $x=-10$ and $10$:</p>
-<p><img src=./yx2.png alt="A graph of the function y=x^2, plotted between x=-10 and 10"></p>
-<p><strong>On Linux/MacOS</strong>, you will likely have to set your <code>LD_LIBRARY_PATH</code> variable to point to the directory that your <code>quadratic.so</code> file is in. Presuming you followed the instructions above and placed it in your root project directory (the directory you are currently in), on Linux you can simply run:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>LD_LIBRARY_PATH=. pyf -a 1 -b 0 -c 0 -x -10 10
-</code></pre>
-</div>
-<p>And on MacOS:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>DYLD_LIBRARY_PATH=. pyf -a 1 -b 0 -c 0 -x -10 10
-</code></pre>
-</div>
-<p>On Windows, specifying the <code>winmode=1</code> parameter above means <code>ctypes</code> automatically searches the current directory. If your library is in another directory, this can be specified by modifying your <code>PATH</code>.</p>
-<p>Just to reiterate: Specifying the path to the library is only important when testing the package locally. When we build the full package later, Conda will take care of making the library available (<a href=https://docs.conda.io/projects/conda-build/en/stable/resources/use-shared-libraries.html target=_blank>more details of this here</a>).</p>
-<div class="notice info">
-<div class=notice-title>
-<i class="fa fa-exclamation-circle" aria-hidden=true></i>Installing dependencies
-</div>
-<div class=notice-content>You will notice that we installed the two dependencies of the project (<code>numpy</code> and <code>matplotlib</code>) using <code>pip</code>, when we ran the <code>pip install</code> command, instead of Conda. When it comes to building our Conda package, we will be instead installing the dependencies with Conda and running the <code>pip</code> install with the <code>--no-deps</code> flag. Because we only have simple dependencies here, this discrepancy doesn’t really matter, but if you want a more robust development workflow, you might consider using Conda to install your develop-time dependencies too.</div>
-</div>
-<h2 id=creating-and-building-the-conda-package>
-Creating and building the Conda package
-<a class=heading-link href=#creating-and-building-the-conda-package>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>To build our Conda package, we use a tool called <code>conda-build</code>. Here we will only cover a very small subset of what can be achieved with <code>conda-build</code> - check out its <a href=https://docs.conda.io/projects/conda-build/en/stable/ target=_blank>full documentation</a> for more use cases.</p>
-<h3 id=install-conda-build>
-Install <code>conda-build</code>
-<a class=heading-link href=#install-conda-build>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>First, we install <code>conda-build</code> into our <code>base</code> environment, alongside another tool <code>conda-verify</code>, which is an optional dependency of <code>conda-build</code> that verifies Conda recipes:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -n base -c conda-forge conda-build conda-verify
-</span></code></pre>
-</div>
-<h3 id=create-a-conda-build-recipe>
-Create a Conda build recipe
-<a class=heading-link href=#create-a-conda-build-recipe>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>Conda builds are controlled through a <code>meta.yaml</code> file and (optional) build scripts <code>build.sh</code> (Linux and MacOS) and <code>bld.bat</code> (Windows). For cleanliness, let&rsquo;s place the build recipe in a new directory:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>mkdir conda.recipe
-</span></code></pre>
-</div>
-<p>Now we can create the <code>meta.yaml</code> file and place it in this directory. <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html target=_blank>See here</a> for the full available taxonomy of <code>meta.yaml</code> files.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml>{% set version = &#34;1.0.0&#34; %}<span style=color:#bbb>
-</span><span style=color:#bbb>
-</span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>package</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>name</span>:<span style=color:#bbb> </span>pyf<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>version</span>:<span style=color:#bbb> </span>{{<span style=color:#bbb> </span>version }}<span style=color:#bbb>
-</span><span style=color:#bbb>
-</span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>source</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>path</span>:<span style=color:#bbb> </span>..<span style=color:#bbb>
-</span><span style=color:#bbb>
-</span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>build</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>entry_points</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- pyf = pyf.cli:run<span style=color:#bbb>
-</span><span style=color:#bbb>
-</span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>requirements</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>build</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- {{<span style=color:#bbb> </span>compiler(&#39;fortran&#39;) }}  <span style=color:#bbb> </span><span style=color:#aaa;font-style:italic># [not win]</span><span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- m2w64-gcc-fortran          <span style=color:#bbb> </span><span style=color:#aaa;font-style:italic># [win]</span><span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>host</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- python<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- pip<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>run</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- python<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- numpy<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- matplotlib<span style=color:#bbb>
-</span><span style=color:#bbb>
-</span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>test</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>imports</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- pyf<span style=color:#bbb>
-</span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>commands</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span>- pyf --help<span style=color:#bbb>
-</span></code></pre></div><div class="notice tip">
-<div class=notice-title>
-<i class="fa fa-lightbulb-o" aria-hidden=true></i>Tip
-</div>
-<div class=notice-content>Don&rsquo;t start from scratch! There are lots of example recipes out there, and a few useful tools to help the process. For example, <a href=https://github.com/conda-incubator/grayskull target=_blank>Grayskull</a> can be used to generate <code>conda-build</code> recipes from PyPI packages or GitHub repos (and is intended as a replacement for <a href=https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html target=_blank>Conda skeleton</a>, which has similar functionality).</div>
-</div>
-<p>The <code>package</code> section provides some basic metadata about our package and is the only required section. The <code>source</code> section tells <code>conda-build</code> where the source is. In our case, we provide a local path relative to the recipe location (we could have instead created our recipe separate to the source code and specified its location by providing e.g. <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#source-section target=_blank>a GitHub or PyPI URL</a>). In the <code>build</code> section, we define our command line script, like we did in the <code>pyproject.toml</code> file. Note that we must define this entry point in the <code>meta.yaml</code> file and not rely solely on it being installed correctly from the <code>pyproject.toml</code> file, otherwise you <a href=https://github.com/conda/conda-build/issues/3927 target=_blank>might get issues like this.</a></p>
-<p>The <code>requirements</code> section is a little complex, particularly the distinction between &ldquo;build&rdquo; and &ldquo;host&rdquo; - <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#requirements-section target=_blank>see here for a full explanation</a>. In short, build requirements are the tools required to build the package on the build system (i.e. the computer you are building the package on), whilst host requirements are packages specific to the target platform (where the package will be installed) when this is not necessarily the same platform as the build platform. In our case, Fortran compilers go in the build requirements, whilst Python and <code>pip</code> go in host requirements. The &ldquo;run&rdquo; requirements are those required to run the package, and for our package are the same as we defined in <code>pyproject.toml</code>, with the addition of Python (because Conda packages don&rsquo;t have to include Python). Note that adding comments like <code># [win]</code> and <code># [not win]</code> after a specific requirement indicates on which platform the requirement is needed.</p>
-<div class="notice info">
-<div class=notice-title>
-<i class="fa fa-exclamation-circle" aria-hidden=true></i>Fortran compiler
-</div>
-<div class=notice-content>Conda build provides its <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#requirements-section target=_blank>own toolsets with compilers</a>. These can be used as requirements using the <code>{{ compiler('fortran') }}</code> tag. However, these are somewhat ancient versions: GFortran 5 on Linux/MacOS and classic Flang 5 on Windows. <a href=https://anaconda.org/conda-forge/gfortran target=_blank>Newer versions of GFortran have been packaged by Conda Forge</a> for Linux/MacOS, and these could be used as a build requirements instead. However, the Windows situation <a href=https://fortran-lang.discourse.group/t/distributing-fortran-projects-for-windows-macos/760 target=_blank>remains</a> <a href=https://fortran-lang.discourse.group/t/conda-toolchain-for-fortran-on-windows/3206/3 target=_blank>difficult</a>. The best options over and above classic Flang are <a href=https://anaconda.org/conda-forge/m2w64-gcc-fortran target=_blank>GFortran 5.3 for MinGW</a> (which is what I use here) or the not-yet-fully-mature LLVM-backed compilers LLVM-<a href=https://anaconda.org/conda-forge/flang target=_blank>Flang</a> and <a href=https://anaconda.org/conda-forge/lfortran target=_blank>LFortran</a>. For simple Fortran programs, one of these options should suffice, but more complex programs that fully leverage the latest modern Fortran features, building for Windows may prove particularly problematic for the time being.</div>
-</div>
-<p>Now we need to create build scripts for Linux/MacOS (<code>build.sh</code>) and Windows (<code>bld.bat</code>). These scripts will compile the Fortran code to the shared library, place this in the correct directory, and install the Python package using <code>pip</code>.</p>
-<p><strong>For Linux/MacOS</strong> (<code>build.sh</code>):</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#4c8317>#!/usr/bin/env bash
-</span><span style=color:#4c8317></span><span style=color:#0aa>set</span> -ex
-
-<span style=color:#aaa;font-style:italic># Create the lib directory to store the Fortran library in</span>
-<span style=color:#a00>LIB_DIR</span>=<span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>PREFIX</span><span style=color:#a50>}</span><span style=color:#a50>/lib&#34;</span>
-mkdir -p <span style=color:#a00>$LIB_DIR</span>
-
-<span style=color:#aaa;font-style:italic># Compile the library using GFortran</span>
-<span style=color:#a00>$FC</span> -shared ./src/pyf/quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>LIB_DIR</span><span style=color:#a50>}</span><span style=color:#a50>/quadratic.so&#34;</span>
-
-<span style=color:#aaa;font-style:italic># Install the Python package, but without dependencies,</span>
-<span style=color:#aaa;font-style:italic># because Conda takes care of that</span>
-<span style=color:#a00>$PYTHON</span> -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
-</code></pre></div><p>And <strong>for Windows</strong> (<code>bld.bat</code>):</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-batch data-lang=batch>:<span style=color:#aaa;font-style:italic>: Compile the library using GFortran. The LIBRARY_BIN</span>
-:<span style=color:#aaa;font-style:italic>: variable is available on Windows (Library/bin) and</span>
-:<span style=color:#aaa;font-style:italic>: Conda adds this to os.environ[&#39;PATH&#39;], so this is the</span>
-:<span style=color:#aaa;font-style:italic>: best place to install DLLs into</span>
-gfortran -shared .\src\pyf\quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a00>%LIBRARY_BIN%</span><span style=color:#a50>/quadratic.dll&#34;</span>
-<span style=color:#00a>if</span> <span style=color:#00a>errorlevel</span> <span style=color:#099>1</span> <span style=color:#00a>exit</span> 1
-
-:<span style=color:#aaa;font-style:italic>: Install the Python package, but without dependencies,</span>
-:<span style=color:#aaa;font-style:italic>: because Conda takes care of that</span>
-<span style=color:#a00>%PYTHON%</span> -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
-<span style=color:#00a>if</span> <span style=color:#00a>errorlevel</span> <span style=color:#099>1</span> <span style=color:#00a>exit</span> 1
-</code></pre></div><p>These scripts use <code>gfortran</code> to build the shared library, and places these in the correct directory based on the <a href=https://docs.conda.io/projects/conda-build/en/latest/user-guide/environment-variables.html target=_blank>environment variables that <code>conda-build</code> provides</a>. They then run <code>pip install</code> to install the Python elements of the package. This uses the <code>PYTHON</code> variable to make sure the install is done using the correct version of Python. The Windows <code>bld.bat</code> file has <code>if errorlevel 1 exit 1</code> to make sure the script exits if an error is encountered, which is not default behaviour for batch scripts.</p>
-<p>Our complete package now has the same structure as in the <a href=https://github.com/samharrison7/py-f-conda-package target=_blank>demo GitHub repo</a>:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>conda.recipe/
-	blt.bat
-	build.sh
-	meta.yaml
-src/
-	pyf/
-		quadratic.f90
-		plot.py
-		cli.py
-LICENSE
-README.md
-pyproject.toml	
-</code></pre></div><h3 id=build-the-conda-package>
-Build the Conda package
-<a class=heading-link href=#build-the-conda-package>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>We now have a full Conda recipe and are ready to build the package! From the project root:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda build conda.recipe/
-</span></code></pre>
-</div>
-<p>Conda build will produce a lot of output as it goes through the build process, setting up various environments to perform the build in and running our build scripts. Presuming the build is successful (be patient, it can take a while), the path to the built package will be shown somewhere near the bottom, e.g. on Windows, it might be something like <code>C:\Users\&lt;username>\AppData\Local\Continuum\miniconda3\conda-bld\win-64\pyf-1.0.0-py310_0.tar.bz2</code>.</p>
-<h2 id=testing-and-distributing-the-built-package>
-Testing and distributing the built package
-<a class=heading-link href=#testing-and-distributing-the-built-package>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h2>
-<p>The easiest way of testing the built package is to install it by specifying <code>--use-local</code>. Let’s create a new environment and install the package into it:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n pyf-test --use-local pyf
+</span></code></pre></div><div class="notice tip"><div class=notice-title><i class="fa-solid fa-lightbulb" aria-hidden=true></i>Tip</div><div class=notice-content>Big Conda user? Checkout <a href=https://mamba.readthedocs.io/en/latest/index.html target=_blank>Mamba</a> as a drop-in replacement that offers much higher speed and more reliable environment solutions than Conda.</div></div><p>From your project root (the same place as the <code>pyproject.toml</code> file), run:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>pip install -e .
+</code></pre></div><p>This will install all of the required dependencies and our <code>pyf</code> package. You can check the <code>pyf</code> command line script can been installed by running it:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>pyf -a 1 -b 0 -c 0 -x -10 10
+</code></pre></div><p>You should now see the quadratic curve $y=x^2$ plotted between $x=-10$ and $10$:</p><p><img alt="A graph of the function y=x^2, plotted between x=-10 and 10" src=/posts/conda-package-fortran-python/yx2.png></p><p><strong>On Linux/MacOS</strong>, you will likely have to set your <code>LD_LIBRARY_PATH</code> variable to point to the directory that your <code>quadratic.so</code> file is in. Presuming you followed the instructions above and placed it in your root project directory (the directory you are currently in), on Linux you can simply run:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>LD_LIBRARY_PATH=. pyf -a 1 -b 0 -c 0 -x -10 10
+</code></pre></div><p>And on MacOS:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-dev) $ </span>DYLD_LIBRARY_PATH=. pyf -a 1 -b 0 -c 0 -x -10 10
+</code></pre></div><p>On Windows, specifying the <code>winmode=1</code> parameter above means <code>ctypes</code> automatically searches the current directory. If your library is in another directory, this can be specified by modifying your <code>PATH</code>.</p><p>Just to reiterate: Specifying the path to the library is only important when testing the package locally. When we build the full package later, Conda will take care of making the library available (<a href=https://docs.conda.io/projects/conda-build/en/stable/resources/use-shared-libraries.html target=_blank>more details of this here</a>).</p><div class="notice info"><div class=notice-title><i class="fa-solid fa-exclamation-circle" aria-hidden=true></i>Installing dependencies</div><div class=notice-content>You will notice that we installed the two dependencies of the project (<code>numpy</code> and <code>matplotlib</code>) using <code>pip</code>, when we ran the <code>pip install</code> command, instead of Conda. When it comes to building our Conda package, we will be instead installing the dependencies with Conda and running the <code>pip</code> install with the <code>--no-deps</code> flag. Because we only have simple dependencies here, this discrepancy doesn’t really matter, but if you want a more robust development workflow, you might consider using Conda to install your develop-time dependencies too.</div></div><h2 id=creating-and-building-the-conda-package>Creating and building the Conda package
+<a class=heading-link href=#creating-and-building-the-conda-package><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>To build our Conda package, we use a tool called <code>conda-build</code>. Here we will only cover a very small subset of what can be achieved with <code>conda-build</code> - check out its <a href=https://docs.conda.io/projects/conda-build/en/stable/ target=_blank>full documentation</a> for more use cases.</p><h3 id=install-conda-build>Install <code>conda-build</code>
+<a class=heading-link href=#install-conda-build><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>First, we install <code>conda-build</code> into our <code>base</code> environment, alongside another tool <code>conda-verify</code>, which is an optional dependency of <code>conda-build</code> that verifies Conda recipes:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -n base -c conda-forge conda-build conda-verify
+</span></code></pre></div><h3 id=create-a-conda-build-recipe>Create a Conda build recipe
+<a class=heading-link href=#create-a-conda-build-recipe><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Conda builds are controlled through a <code>meta.yaml</code> file and (optional) build scripts <code>build.sh</code> (Linux and MacOS) and <code>bld.bat</code> (Windows). For cleanliness, let&rsquo;s place the build recipe in a new directory:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>mkdir conda.recipe
+</span></code></pre></div><p>Now we can create the <code>meta.yaml</code> file and place it in this directory. <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html target=_blank>See here</a> for the full available taxonomy of <code>meta.yaml</code> files.</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>{% set version = &#34;1.0.0&#34; %}<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>package</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>name</span>:<span style=color:#bbb> </span>pyf<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>version</span>:<span style=color:#bbb> </span>{{<span style=color:#bbb> </span>version }}<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>source</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>path</span>:<span style=color:#bbb> </span>..<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>build</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>entry_points</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- pyf = pyf.cli:run<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>requirements</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>build</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- {{<span style=color:#bbb> </span>compiler(&#39;fortran&#39;) }}  <span style=color:#bbb> </span><span style=color:#aaa;font-style:italic># [not win]</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- m2w64-gcc-fortran          <span style=color:#bbb> </span><span style=color:#aaa;font-style:italic># [win]</span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>host</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- python<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- pip<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>run</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- python<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- numpy<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- matplotlib<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb></span><span style=color:#1e90ff;font-weight:700>test</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>imports</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- pyf<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>  </span><span style=color:#1e90ff;font-weight:700>commands</span>:<span style=color:#bbb>
+</span></span></span><span style=display:flex><span><span style=color:#bbb>    </span>- pyf --help<span style=color:#bbb>
+</span></span></span></code></pre></div><div class="notice tip"><div class=notice-title><i class="fa-solid fa-lightbulb" aria-hidden=true></i>Tip</div><div class=notice-content>Don&rsquo;t start from scratch! There are lots of example recipes out there, and a few useful tools to help the process. For example, <a href=https://github.com/conda-incubator/grayskull target=_blank>Grayskull</a> can be used to generate <code>conda-build</code> recipes from PyPI packages or GitHub repos (and is intended as a replacement for <a href=https://docs.conda.io/projects/conda-build/en/latest/user-guide/tutorials/build-pkgs-skeleton.html target=_blank>Conda skeleton</a>, which has similar functionality).</div></div><p>The <code>package</code> section provides some basic metadata about our package and is the only required section. The <code>source</code> section tells <code>conda-build</code> where the source is. In our case, we provide a local path relative to the recipe location (we could have instead created our recipe separate to the source code and specified its location by providing e.g. <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#source-section target=_blank>a GitHub or PyPI URL</a>). In the <code>build</code> section, we define our command line script, like we did in the <code>pyproject.toml</code> file. Note that we must define this entry point in the <code>meta.yaml</code> file and not rely solely on it being installed correctly from the <code>pyproject.toml</code> file, otherwise you <a href=https://github.com/conda/conda-build/issues/3927 target=_blank>might get issues like this.</a></p><p>The <code>requirements</code> section is a little complex, particularly the distinction between &ldquo;build&rdquo; and &ldquo;host&rdquo; - <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#requirements-section target=_blank>see here for a full explanation</a>. In short, build requirements are the tools required to build the package on the build system (i.e. the computer you are building the package on), whilst host requirements are packages specific to the target platform (where the package will be installed) when this is not necessarily the same platform as the build platform. In our case, Fortran compilers go in the build requirements, whilst Python and <code>pip</code> go in host requirements. The &ldquo;run&rdquo; requirements are those required to run the package, and for our package are the same as we defined in <code>pyproject.toml</code>, with the addition of Python (because Conda packages don&rsquo;t have to include Python). Note that adding comments like <code># [win]</code> and <code># [not win]</code> after a specific requirement indicates on which platform the requirement is needed.</p><div class="notice info"><div class=notice-title><i class="fa-solid fa-exclamation-circle" aria-hidden=true></i>Fortran compiler</div><div class=notice-content>Conda build provides its <a href=https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#requirements-section target=_blank>own toolsets with compilers</a>. These can be used as requirements using the <code>{{ compiler('fortran') }}</code> tag. However, these are somewhat ancient versions: GFortran 5 on Linux/MacOS and classic Flang 5 on Windows. <a href=https://anaconda.org/conda-forge/gfortran target=_blank>Newer versions of GFortran have been packaged by Conda Forge</a> for Linux/MacOS, and these could be used as a build requirements instead. However, the Windows situation <a href=https://fortran-lang.discourse.group/t/distributing-fortran-projects-for-windows-macos/760 target=_blank>remains</a> <a href=https://fortran-lang.discourse.group/t/conda-toolchain-for-fortran-on-windows/3206/3 target=_blank>difficult</a>. The best options over and above classic Flang are <a href=https://anaconda.org/conda-forge/m2w64-gcc-fortran target=_blank>GFortran 5.3 for MinGW</a> (which is what I use here) or the not-yet-fully-mature LLVM-backed compilers LLVM-<a href=https://anaconda.org/conda-forge/flang target=_blank>Flang</a> and <a href=https://anaconda.org/conda-forge/lfortran target=_blank>LFortran</a>. For simple Fortran programs, one of these options should suffice, but more complex programs that fully leverage the latest modern Fortran features, building for Windows may prove particularly problematic for the time being.</div></div><p>Now we need to create build scripts for Linux/MacOS (<code>build.sh</code>) and Windows (<code>bld.bat</code>). These scripts will compile the Fortran code to the shared library, place this in the correct directory, and install the Python package using <code>pip</code>.</p><p><strong>For Linux/MacOS</strong> (<code>build.sh</code>):</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#4c8317>#!/usr/bin/env bash
+</span></span></span><span style=display:flex><span><span style=color:#4c8317></span><span style=color:#0aa>set</span> -ex
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic># Create the lib directory to store the Fortran library in</span>
+</span></span><span style=display:flex><span><span style=color:#a00>LIB_DIR</span>=<span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>PREFIX</span><span style=color:#a50>}</span><span style=color:#a50>/lib&#34;</span>
+</span></span><span style=display:flex><span>mkdir -p <span style=color:#a00>$LIB_DIR</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic># Compile the library using GFortran</span>
+</span></span><span style=display:flex><span><span style=color:#a00>$FC</span> -shared ./src/pyf/quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a50>${</span><span style=color:#a00>LIB_DIR</span><span style=color:#a50>}</span><span style=color:#a50>/quadratic.so&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic># Install the Python package, but without dependencies,</span>
+</span></span><span style=display:flex><span><span style=color:#aaa;font-style:italic># because Conda takes care of that</span>
+</span></span><span style=display:flex><span><span style=color:#a00>$PYTHON</span> -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+</span></span></code></pre></div><p>And <strong>for Windows</strong> (<code>bld.bat</code>):</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-batch data-lang=batch><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: Compile the library using GFortran. The LIBRARY_BIN</span>
+</span></span><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: variable is available on Windows (Library/bin) and</span>
+</span></span><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: Conda adds this to os.environ[&#39;PATH&#39;], so this is the</span>
+</span></span><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: best place to install DLLs into</span>
+</span></span><span style=display:flex><span>gfortran -shared .\src\pyf\quadratic.f90 -o <span style=color:#a50>&#34;</span><span style=color:#a00>%LIBRARY_BIN%</span><span style=color:#a50>/quadratic.dll&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#00a>if</span> <span style=color:#00a>errorlevel</span> <span style=color:#099>1</span> <span style=color:#00a>exit</span> 1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: Install the Python package, but without dependencies,</span>
+</span></span><span style=display:flex><span>:<span style=color:#aaa;font-style:italic>: because Conda takes care of that</span>
+</span></span><span style=display:flex><span><span style=color:#a00>%PYTHON%</span> -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+</span></span><span style=display:flex><span><span style=color:#00a>if</span> <span style=color:#00a>errorlevel</span> <span style=color:#099>1</span> <span style=color:#00a>exit</span> 1
+</span></span></code></pre></div><p>These scripts use <code>gfortran</code> to build the shared library, and places these in the correct directory based on the <a href=https://docs.conda.io/projects/conda-build/en/latest/user-guide/environment-variables.html target=_blank>environment variables that <code>conda-build</code> provides</a>. They then run <code>pip install</code> to install the Python elements of the package. This uses the <code>PYTHON</code> variable to make sure the install is done using the correct version of Python. The Windows <code>bld.bat</code> file has <code>if errorlevel 1 exit 1</code> to make sure the script exits if an error is encountered, which is not default behaviour for batch scripts.</p><p>Our complete package now has the same structure as in the <a href=https://github.com/samharrison7/py-f-conda-package target=_blank>demo GitHub repo</a>:</p><div class=highlight><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>conda.recipe/
+</span></span><span style=display:flex><span>	blt.bat
+</span></span><span style=display:flex><span>	build.sh
+</span></span><span style=display:flex><span>	meta.yaml
+</span></span><span style=display:flex><span>src/
+</span></span><span style=display:flex><span>	pyf/
+</span></span><span style=display:flex><span>		quadratic.f90
+</span></span><span style=display:flex><span>		plot.py
+</span></span><span style=display:flex><span>		cli.py
+</span></span><span style=display:flex><span>LICENSE
+</span></span><span style=display:flex><span>README.md
+</span></span><span style=display:flex><span>pyproject.toml	
+</span></span></code></pre></div><h3 id=build-the-conda-package>Build the Conda package
+<a class=heading-link href=#build-the-conda-package><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>We now have a full Conda recipe and are ready to build the package! From the project root:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda build conda.recipe/
+</span></code></pre></div><p>Conda build will produce a lot of output as it goes through the build process, setting up various environments to perform the build in and running our build scripts. Presuming the build is successful (be patient, it can take a while), the path to the built package will be shown somewhere near the bottom, e.g. on Windows, it might be something like <code>C:\Users\&lt;username>\AppData\Local\Continuum\miniconda3\conda-bld\win-64\pyf-1.0.0-py310_0.tar.bz2</code>.</p><h2 id=testing-and-distributing-the-built-package>Testing and distributing the built package
+<a class=heading-link href=#testing-and-distributing-the-built-package><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>The easiest way of testing the built package is to install it by specifying <code>--use-local</code>. Let’s create a new environment and install the package into it:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda create -n pyf-test --use-local pyf
 </span><span class=command>conda activate pyf-test
-</span></code></pre>
-</div>
-<p>We can now test that the command line <code>pyf</code> function exists and works as expected:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-test) $ </span>pyf -a -2 -b 0 -c 10 -x -10 10
-</code></pre>
-</div>
-<p>You should now see the curve $y=-2x^2 + 10$:</p>
-<p><img src=./y-x2.png alt="A graph of the function y=-2x^2 + 10, plotted between x=-10 and 10"></p>
-<h3 id=uploading-to-anaconda>
-Uploading to Anaconda
-<a class=heading-link href=#uploading-to-anaconda>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>You are now ready to unleash the full potential of your package by distributing it! The easiest way to do this is to use Anaconda. First, you need to sign up for an account on <a href=http://anaconda.org target=_blank>anaconda.org</a> (if you haven’t already). Then you need to install and login to the Anaconda command line client:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -n base -c conda-forge anaconda-client
+</span></code></pre></div><p>We can now test that the command line <code>pyf</code> function exists and works as expected:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=custom>(pyf-test) $ </span>pyf -a -2 -b 0 -c 10 -x -10 10
+</code></pre></div><p>You should now see the curve $y=-2x^2 + 10$:</p><p><img alt="A graph of the function y=-2x^2 + 10, plotted between x=-10 and 10" src=/posts/conda-package-fortran-python/y-x2.png></p><h3 id=uploading-to-anaconda>Uploading to Anaconda
+<a class=heading-link href=#uploading-to-anaconda><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>You are now ready to unleash the full potential of your package by distributing it! The easiest way to do this is to use Anaconda. First, you need to sign up for an account on <a href=http://anaconda.org target=_blank>anaconda.org</a> (if you haven’t already). Then you need to install and login to the Anaconda command line client:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -n base -c conda-forge anaconda-client
 </span><span class=command>anaconda login
-</span></code></pre>
-</div>
-<p>At the prompt, enter your username and password. You can then upload your package by providing the Anaconda client the path to your built <code>.tar.bz2</code> file. This <code>anaconda upload</code> command is given as a suggestion at the end of the build output (and automatic uploading can be turned out by running <code>conda config --set anaconda_upload yes</code>).</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>anaconda upload /path/to/pyf-package.tar.bz2
-</span></code></pre>
-</div>
-<p>You package will now be available at <code>https://anaconda.org/&lt;username>/pyf</code>, where <code>&lt;username></code> is your Anaconda username. You can now install your package directly from Anaconda by giving your username as the channel:</p>
-<div class="highlight command">
-<pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -c &lt;username&gt; pyf
-</span></code></pre>
-</div>
-<p>For reference, I have placed the packages I built in my own channel: <a href=https://anaconda.org/samharrison7/pyf target=_blank>https://anaconda.org/samharrison7/pyf</a>.</p>
-<h3 id=cleaning-up>
-Cleaning up
-<a class=heading-link href=#cleaning-up>
-<i class="fa fa-link" aria-hidden=true></i>
-</a>
-</h3>
-<p>One final thing: Conda build leaves behind a fair few files which you might want to now clean up by running <code>conda build purge</code>.</p>
-<p>I hope you have found that useful. Let me know in the comments below if you have any questions!</p>
-</div>
-<footer>
-<span class=mr1>Found this post useful?</span>
-<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init('Buy me a coffee','#29abe0','B0B1ACSFJ'),kofiwidget2.draw()</script>
-<h3>Comments</h3>
-<div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div>
-<div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div>
-</footer>
-</article>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:!0},{left:'$',right:'$',display:!1},{left:'\\(',right:'\\)',display:!1},{left:'\\[',right:'\\]',display:!0}]})"></script>
-</section>
-</div>
-<footer class=footer>
-<section class=container>
-©
+</span></code></pre></div><p>At the prompt, enter your username and password. You can then upload your package by providing the Anaconda client the path to your built <code>.tar.bz2</code> file. This <code>anaconda upload</code> command is given as a suggestion at the end of the build output (and automatic uploading can be turned out by running <code>conda config --set anaconda_upload yes</code>).</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>anaconda upload /path/to/pyf-package.tar.bz2
+</span></code></pre></div><p>You package will now be available at <code>https://anaconda.org/&lt;username>/pyf</code>, where <code>&lt;username></code> is your Anaconda username. You can now install your package directly from Anaconda by giving your username as the channel:</p><div class="highlight command"><pre tabindex=0 style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span class=command>conda install -c &lt;username&gt; pyf
+</span></code></pre></div><p>For reference, I have placed the packages I built in my own channel: <a href=https://anaconda.org/samharrison7/pyf target=_blank>https://anaconda.org/samharrison7/pyf</a>.</p><h3 id=cleaning-up>Cleaning up
+<a class=heading-link href=#cleaning-up><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>One final thing: Conda build leaves behind a fair few files which you might want to now clean up by running <code>conda build purge</code>.</p><p>I hope you have found that useful. Let me know in the comments below if you have any questions!</p></div><footer><span class=mr1>Found this post useful?</span>
+<script type=text/javascript src=https://storage.ko-fi.com/cdn/widget/Widget_2.js></script><script type=text/javascript>kofiwidget2.init("Buy me a coffee","#29abe0","B0B1ACSFJ"),kofiwidget2.draw()</script><h3>Comments</h3><div id=utterances-light><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=preferred-color-scheme crossorigin=anonymous async></script></div><div id=utterances-dark><script src=https://utteranc.es/client.js repo=samharrison7/samharrison-hugo issue-term=pathname label=comment theme=github-dark crossorigin=anonymous async></script></div></footer></article><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css integrity=sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0 crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js integrity=sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4 crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous onload='renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})'></script></section></div><footer class=footer><section class=container>©
 2022 -
 2024
 Sam Harrison
 ·
 Powered by <a href=https://gohugo.io/>Hugo</a> & lovingly adapted from the <a href=https://github.com/luizdepra/hugo-coder/>Coder</a> theme
 ·
-<a href=https://samharrison.science/about>About this site.</a>
-</section>
-</footer>
-</main>
-<script src=/js/coder.min.39a51230dce2ac866c049b52573e38bf60666af4bc63c1bdf203b9b2d95b1cd6.js integrity="sha256-OaUSMNzirIZsBJtSVz44v2BmavS8Y8G98gO5stlbHNY="></script>
-<script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script>
-</body>
-</html>
+<a href=https://samharrison.science//about>About this site.</a></section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script data-goatcounter=https://samharrison7.goatcounter.com/count async src=//gc.zgo.at/count.js></script></body></html>
