@@ -1,10 +1,11 @@
 +++ 
-draft = true
+draft = false
 date = 2024-11-02T20:11:48Z
 title = "Creating a Conda package from Fortran using fpm and rattler-build"
 description = "How to create a Conda package from Fortran code using the Fortran Package Manager (fpm) and rattler-build"
 slug = "conda-package-fortran-rattler-fpm"
 tags = ["conda", "fortran", "fpm", "rattler-build", "pixi"]
+images = ["posts/conda-package-fortran-rattler-fpm/rattler-build.png"]
 +++
 
 A while ago, I wrote a [post on how to create a Conda package from Fortran and Python code]({{< relref "conda-package-fortran-python" >}}). Though the main point of the post was to explore including Fortran code in Python, I also delved into Conda build as a way of building Conda packages. There is now a new kid on the block - [rattler-build](https://prefix-dev.github.io/rattler-build/latest/) - which offers a much faster and cleaner build experience for building Conda packages. I thought it was time for a blog post on that.
