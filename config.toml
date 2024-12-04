@@ -131,7 +131,7 @@ target = "_blank"
 name = "Bluesky"
 icon = "fa-brands fa-2x fa-bluesky"
 weight = 3
-url = "https://bsky.app/profile/samharrison7.bsky.social"
+url = "https://bsky.app/profile/samharrison.science"
 target = "_blank"
 
 [[params.social]]
