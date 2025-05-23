@@ -2,15 +2,14 @@ title: FRAGMENT-MNP
 start_date: 2021-10-01
 dates: October 2021 to September 2023
 img: plastic.jpg
-website: https://ceh.ac.uk/our-science/projects/fragment-mnp
-demo: http://fragmentmnp.samharrison.science/
+website: https://fragmentmnp.ceh.ac.uk/
 repo: https://github.com/microplastics-cluster/fragment-mnp
 tag: fragment-mnp
 description: >-
-  I am currently leading this project, funded by the European Chemical
+  I led this project, funded by the European Chemical
   Industry Council’s Long-Range Research Initiative (Cefic-LRI), to develop
   a mechanistic model of micro- and nanoplastic fragmentation in the
-  environment. The model will be a pragmatic, open-source tool to allow
+  environment. The model is a pragmatic, open-source tool to allow
   stakeholders to predict how a broad variety of polymers fragment under
   environmentally realistic ranges of degradation (e.g. photolysis,
   hydrolysis and biodegradation) and mechanical stresses. Understanding
