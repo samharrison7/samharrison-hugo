@@ -5,7 +5,7 @@ img: nanosolveit.png
 tag: nanosolveit
 platform: https://cloud.nanosolveit.eu/
 website: https://nanosolveit.eu 
-selected: true
+selected: false
 tag: nanosolveit
 description: >-
   In the NanoSolveIT project, we are developing an *in silico* Integrated
