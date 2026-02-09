@@ -1,0 +1,16 @@
+title: FRAGMENT-ARTICLE
+start_date: 2026-01-01
+dates: January 2026 to December 2027
+img: plastic.jpg
+website: https://fragmentmnp.ceh.ac.uk/
+repo: https://github.com/microplastics-cluster/fragment-mnp
+tag: fragment-article
+description: >-
+  In this project, we are further developing the FRAGMENT-MNP
+  model to be able to model the degradation and fragmentation
+  of plastic articles with different formulations. Our partners,
+  Fraunhofer IME and BASF, will undertake degradation experiments
+  in soils and ocean water, and these data will enable us to
+  parameterise the FRAGMENT-MNP model to predict fragmentation
+  under environmentally realistic conditions.
+selected: true
