@@ -7,5 +7,20 @@ version = "0.1.0"
 
 [tasks]
 
-[dependencies]
+[feature.hugo.dependencies]
 hugo = ">=0.136.5,<0.137"
+
+[feature.nb2hugo.dependencies]
+python = "*"
+
+[feature.nb.dependencies]
+python = "*"
+polars = "*"
+jupyterlab = "*"
+plotly = ">=6.6.0,<7"
+numpy = ">=2.4.2,<3"
+python-kaleido = "*"
+
+[environments]
+default = ['hugo', 'nb2hugo']
+nb = ['nb']
