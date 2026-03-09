@@ -2,8 +2,7 @@
 &lt;h2 id="whats-so-difficult">
  What&amp;rsquo;s so difficult?
  &lt;a class="heading-link" href="#whats-so-difficult">
- &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
- &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;i class="fa fa-link" aria-hidden="true">&lt;/i>
  &lt;/a>
 &lt;/h2>
 &lt;p>Scheduling scripts is when, instead of manually running a script whenever you need to, you tell a scheduler to run it at a given frequency or based on other events. There are many uses, such as running a forecasting model to provide regular forecasts, or pulling in the latest observations data to parameterise that model.&lt;/p></description></item></channel></rss>

@@ -8,8 +8,7 @@
 &lt;h2 id="the-app">
  The app
  &lt;a class="heading-link" href="#the-app">
- &lt;i class="fa-solid fa-link" aria-hidden="true" title="Link to heading">&lt;/i>
- &lt;span class="sr-only">Link to heading&lt;/span>
+ &lt;i class="fa fa-link" aria-hidden="true">&lt;/i>
  &lt;/a>
 &lt;/h2>
 &lt;p>The goal of our app is to let the user explore how changing the coefficients $a$, $b$ and $c$ to the quadratic equation alters the shape of the curve:&lt;/p></description></item></channel></rss>
