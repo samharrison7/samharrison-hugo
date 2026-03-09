@@ -113,13 +113,13 @@ weight = 1
 url = "https://github.com/samharrison7/"
 target = "_blank"
 
-[[params.social]]
-name = "Mastodon"
-icon = "fa-brands fa-2x fa-mastodon"
-weight = 1
-url = "https://mas.to/@samharrison7"
-rel = "me"
-target = "_blank"
+# [[params.social]]
+# name = "Mastodon"
+# icon = "fa-brands fa-2x fa-mastodon"
+# weight = 1
+# url = "https://mas.to/@samharrison7"
+# rel = "me"
+# target = "_blank"
 
 # [[params.social]]
 # name = "Gitlab"
